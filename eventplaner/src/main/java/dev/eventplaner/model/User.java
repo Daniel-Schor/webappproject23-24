@@ -4,8 +4,8 @@ import java.util.UUID;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class User {
-
-    private UUID userID;
+    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private final UUID userID;
     private String firstName;
     private String lastName;
     private String email;
@@ -26,17 +26,12 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.password = password;
+        this.setPassword(password);
         this.organizer = organizer;
     }
 
     public User(String firstName, String lastName, String email, String password) {
-        this.userID = UUID.randomUUID();
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.organizer = false;
+        this(firstName, lastName, email, password, false);
     }
 
     public UUID getUserID() {
@@ -84,13 +79,13 @@ public class User {
         }
     }
     */
-    
+
     public void setPassword(String password) {
-        this.password = new BCryptPasswordEncoder().encode(password);
+        this.password = encoder.encode(password);
     }
 
     public Boolean checkPassword(String password) {
-        return new BCryptPasswordEncoder().matches(password, this.password);
+        return encoder.matches(password, this.password);
     }
 
     public Boolean isOrganizer() {
