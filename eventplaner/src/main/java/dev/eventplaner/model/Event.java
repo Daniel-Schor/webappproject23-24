@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class Event {
 
-    private UUID eventID;
+    private final UUID eventID;
     private String name;
     private String description;
     private LocalDateTime dateTime;
