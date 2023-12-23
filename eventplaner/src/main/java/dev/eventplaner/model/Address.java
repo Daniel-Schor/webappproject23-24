@@ -5,15 +5,17 @@ public class Address extends Location{
     private String street;
     private String houseNumber;
     private String zipCode;
+    private String city;
     private String country;
 
     public Address() {
     }
 
-    public Address(String street, String houseNumber, String zipCode, String country) {
+    public Address(String street, String houseNumber, String zipCode, String city, String country) {
         this.street = street;
         this.houseNumber = houseNumber;
         this.zipCode = zipCode;
+        this.city = city;
         this.country = country;
     }
 
@@ -29,6 +31,10 @@ public class Address extends Location{
         return this.zipCode;
     }
 
+    public String getCity() {
+        return this.city;
+    }
+
     public String getCountry() {
         return this.country;
     }
@@ -39,6 +45,10 @@ public class Address extends Location{
 
     public void setHouseNumber(String houseNumber) {
         this.houseNumber = houseNumber;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public void setZipCode(String zipCode) {
