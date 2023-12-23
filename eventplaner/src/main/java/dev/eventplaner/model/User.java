@@ -1,10 +1,12 @@
 package dev.eventplaner.model;
 
+import java.util.UUID;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import dev.eventplaner.repository.UserRepository;
 
 public class User {
 
-    private Long userID = 0L;
+    private UUID userID;
     private String firstName;
     private String lastName;
     private String email;
@@ -14,16 +16,16 @@ public class User {
     private static UserRepository userRepository = new UserRepository();
 
     public User() {
-        userID++;
-        firstName="null";
-        lastName="null";
-        email="null";
-        password="null";
-        organizer=false;
+        this.userID=UUID.randomUUID();
+        this.firstName="null";
+        this.lastName="null";
+        this.email="null";
+        this.password="null";
+        this.organizer=false;
     }
 
     public User(String firstName, String lastName, String email, String password, boolean organizer) {
-        userID++;
+        this.userID=UUID.randomUUID();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -32,15 +34,15 @@ public class User {
     }
 
     public User(String firstName, String lastName, String email, String password) {
-        userID++;
+        this.userID=UUID.randomUUID();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        organizer=false;
+        this.organizer=false;
     }
 
-    public Long getUserID() {
+    public UUID getUserID() {
         return userID;
     }
 
@@ -74,7 +76,7 @@ public class User {
         }
     }
 
-    public String getPassword(){
+    /*public String getPassword(){
         return password;
     }
 
@@ -82,6 +84,16 @@ public class User {
         if(password!=null) {
             this.password = password;
         }
+    }
+
+    */
+
+    public void setPassword(String password){
+        this.password=new BCryptPasswordEncoder().encode(password);
+    }
+
+    public Boolean checkPassword(String password){
+        return new BCryptPasswordEncoder().matches(password, this.password);
     }
 
     public Boolean isOrganizer(){
