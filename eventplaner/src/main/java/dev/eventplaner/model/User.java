@@ -13,16 +13,16 @@ public class User {
     private Boolean organizer;
 
     public User() {
-        this.userID=UUID.randomUUID();
-        this.firstName=null;
-        this.lastName=null;
-        this.email=null;
-        this.password=null;
-        this.organizer=false;
+        this.userID = UUID.randomUUID();
+        this.firstName = null;
+        this.lastName = null;
+        this.email = null;
+        this.password = null;
+        this.organizer = false;
     }
 
     public User(String firstName, String lastName, String email, String password, boolean organizer) {
-        this.userID=UUID.randomUUID();
+        this.userID = UUID.randomUUID();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -31,12 +31,12 @@ public class User {
     }
 
     public User(String firstName, String lastName, String email, String password) {
-        this.userID=UUID.randomUUID();
+        this.userID = UUID.randomUUID();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.organizer=false;
+        this.organizer = false;
     }
 
     public UUID getUserID() {
@@ -48,7 +48,7 @@ public class User {
     }
 
     public void setFirstName(String firstName) {
-        if(firstName!=null) {
+        if (firstName != null) {
             this.firstName = firstName;
         }
     }
@@ -58,7 +58,7 @@ public class User {
     }
 
     public void setLastName(String lastName) {
-        if(lastName!=null) {
+        if (lastName != null) {
             this.lastName = lastName;
         }
     }
@@ -68,32 +68,32 @@ public class User {
     }
 
     public void setEmail(String email) {
-        if(email!=null) {
+        if (email != null) {
             this.email = email;
         }
     }
 
-    /*public String getPassword(){
+    /* 
+    public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
-        if(password!=null) {
+        if (password != null) {
             this.password = password;
         }
     }
-
     */
-
-    public void setPassword(String password){
-        this.password=new BCryptPasswordEncoder().encode(password);
+    
+    public void setPassword(String password) {
+        this.password = new BCryptPasswordEncoder().encode(password);
     }
 
-    public Boolean checkPassword(String password){
+    public Boolean checkPassword(String password) {
         return new BCryptPasswordEncoder().matches(password, this.password);
     }
 
-    public Boolean isOrganizer(){
+    public Boolean isOrganizer() {
         return organizer;
     }
 
