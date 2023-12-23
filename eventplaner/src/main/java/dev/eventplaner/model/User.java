@@ -2,7 +2,6 @@ package dev.eventplaner.model;
 
 import java.util.UUID;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import dev.eventplaner.repository.UserRepository;
 
 public class User {
 
@@ -13,14 +12,12 @@ public class User {
     private String password;
     private Boolean organizer;
 
-    private static UserRepository userRepository = new UserRepository();
-
     public User() {
         this.userID=UUID.randomUUID();
-        this.firstName="null";
-        this.lastName="null";
-        this.email="null";
-        this.password="null";
+        this.firstName=null;
+        this.lastName=null;
+        this.email=null;
+        this.password=null;
         this.organizer=false;
     }
 
