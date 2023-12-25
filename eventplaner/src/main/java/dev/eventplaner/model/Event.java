@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import dev.eventplaner.repository.UserRepository;
+
 public class Event {
 
     private final UUID eventID;
@@ -14,7 +16,7 @@ public class Event {
     private LocalDateTime dateTime;
     private Location location;
     private int maxParticipants;
-    private Set<UUID> participants;
+    private UserRepository participants;
     private UUID organizerUserID;
     private int rating;
     private Set<UUID> ratedUserIDs;
@@ -30,7 +32,7 @@ public class Event {
         this.dateTime = LocalDateTime.now();
         this.location = new Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
         this.maxParticipants = 0;
-        this.participants = new HashSet<>();
+        this.participants = new UserRepository();
         this.organizerUserID = null;
         this.rating = 0;
         this.ratedUserIDs = new HashSet<>();
@@ -55,7 +57,7 @@ public class Event {
         this.dateTime = dateTime;
         this.location = location;
         this.maxParticipants = maxParticipants;
-        this.participants = new HashSet<>();
+        this.participants = new UserRepository();
         this.organizerUserID = organizerUserID;
         this.rating = 0;
         this.ratedUserIDs = new HashSet<>();
@@ -75,8 +77,7 @@ public class Event {
      * @param rating          The rating of the event.
      * @param ratedUserIDs    The list of rated user UUIDs for the event.
      */
-    public Event(String name, String description, LocalDateTime dateTime, Location location, int maxParticipants,
-            HashSet<UUID> participants, UUID organizerUserID, int rating, HashSet<UUID> ratedUserIDs) {
+    public Event(String name, String description, LocalDateTime dateTime, Location location, int maxParticipants, UserRepository participants, UUID organizerUserID, int rating, HashSet<UUID> ratedUserIDs) {
         this.eventID = UUID.randomUUID();
         this.name = name;
         this.description = description;
@@ -92,13 +93,14 @@ public class Event {
     /**
         * Adds a participant to the event.
         * 
-        * @param participantID the ID of the participant to be added
-        * @return true if the participant was added successfully, false if the participant limit is reached
+        * @param participant the participant to be added
+        * @return true if the participant was added successfully, false if the participant limit is reached or participant is already in the event
         */
-    public synchronized boolean addParticipant(UUID participantID) {
-        if (participantID != null && participants.size() < maxParticipants) {
-            this.participants.add(participantID);
-            return true;
+    public synchronized boolean addParticipant(User participant) {
+        if (participant.getUserID() != null && participants.size() < maxParticipants) {
+            if (this.participants.put(participant.getUserID(), participant) == null) {
+                return true;
+            }
         }
         return false;
     }
@@ -133,15 +135,19 @@ public class Event {
      * @param userID the ID of the user giving the rating
      * @param rating the rating value to be added
      * @return true if the rating was successfully added, false otherwise (user
-     *         already rated)
+     *         already rated or rating out of bounds)
      */
     public synchronized boolean addRating(UUID userID, int rating) {
-        if (!(userID != null && !this.ratedUserIDs.contains(userID))) {
+        if (!(userID != null && !this.ratedUserIDs.contains(userID)) || (rating < 0 || rating > 5)) {
             return false;
         }
         this.rating += rating;
         this.ratedUserIDs.add(userID);
         return true;
+    }
+
+    public boolean contains(UUID userID) {
+        return this.participants.containsKey(userID);
     }
 
     // -- GETTER AND SETTER --
@@ -170,8 +176,8 @@ public class Event {
         return this.maxParticipants;
     }
 
-    public Set<UUID> getParticipants() {
-        return Collections.unmodifiableSet(this.participants);
+    public UserRepository getParticipants() {
+        return (UserRepository) Collections.unmodifiableMap(this.participants);
     }
 
     public UUID getOrganizerUserID() {
