@@ -16,7 +16,7 @@ public class Event {
     private LocalDateTime dateTime;
     private Location location;
     private int maxParticipants;
-    private UserRepository participants;
+    private Set<UUID> participants;
     private UUID organizerUserID;
     private int rating;
     private Set<UUID> ratedUserIDs;
@@ -32,7 +32,7 @@ public class Event {
         this.dateTime = LocalDateTime.now();
         this.location = new Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
         this.maxParticipants = 0;
-        this.participants = new UserRepository();
+        this.participants = new HashSet<>();
         this.organizerUserID = null;
         this.rating = 0;
         this.ratedUserIDs = new HashSet<>();
@@ -57,7 +57,7 @@ public class Event {
         this.dateTime = dateTime;
         this.location = location;
         this.maxParticipants = maxParticipants;
-        this.participants = new UserRepository();
+        this.participants = new HashSet<>();
         this.organizerUserID = organizerUserID;
         this.rating = 0;
         this.ratedUserIDs = new HashSet<>();
@@ -77,7 +77,7 @@ public class Event {
      * @param rating          The rating of the event.
      * @param ratedUserIDs    The list of rated user UUIDs for the event.
      */
-    public Event(String name, String description, LocalDateTime dateTime, Location location, int maxParticipants, UserRepository participants, UUID organizerUserID, int rating, HashSet<UUID> ratedUserIDs) {
+    public Event(String name, String description, LocalDateTime dateTime, Location location, int maxParticipants, HashSet<UUID> participants, UUID organizerUserID, int rating, HashSet<UUID> ratedUserIDs) {
         this.eventID = UUID.randomUUID();
         this.name = name;
         this.description = description;
@@ -96,11 +96,9 @@ public class Event {
         * @param participant the participant to be added
         * @return true if the participant was added successfully, false if the participant limit is reached or participant is already in the event
         */
-    public synchronized boolean addParticipant(User participant) {
-        if (participant.getUserID() != null && participants.size() < maxParticipants) {
-            if (this.participants.put(participant.getUserID(), participant) == null) {
-                return true;
-            }
+    public synchronized boolean addParticipant(UUID participantID) {
+        if (participantID != null && participants.size() < maxParticipants) {
+            return this.participants.add(participantID);
         }
         return false;
     }
@@ -147,7 +145,7 @@ public class Event {
     }
 
     public boolean contains(UUID userID) {
-        return this.participants.containsKey(userID);
+        return this.participants.contains(userID);
     }
 
     // -- GETTER AND SETTER --
@@ -177,7 +175,7 @@ public class Event {
     }
 
     public UserRepository getParticipants() {
-        return (UserRepository) Collections.unmodifiableMap(this.participants);
+        return (UserRepository) Collections.unmodifiableSet(this.participants);
     }
 
     public UUID getOrganizerUserID() {

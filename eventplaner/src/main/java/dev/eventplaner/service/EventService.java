@@ -84,10 +84,10 @@ public class EventService {
         * @return the updated event after adding the user
         * @throws IllegalArgumentException if the event is not found or failed to add the user
         */
-    public Event addUser(UUID eventID, User user) {
-        log.info("addUser: eventID={}, userID={}", eventID, user.getUserID());
+    public Event addUser(UUID eventID, UUID userID) {
+        log.info("addUser: eventID={}, userID={}", eventID, userID);
         Event event = eventRepository.get(eventID);
-        if (event == null || !event.addParticipant(user)) {
+        if (event == null || !event.addParticipant(userID)) {
             throw new IllegalArgumentException("Failed to add user to event");
         }
         return event;

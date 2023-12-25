@@ -39,14 +39,14 @@ public class InitData {
         User user3 = new User();
 
         log.debug("add user 1 to event 1");
-        eventService.addUser(event1.getEventID(), user1);
+        eventService.addUser(event1.getEventID(), user1.getUserID());
         log.debug("add user 2 to event 1");
-        eventService.addUser(event1.getEventID(), user2);
+        eventService.addUser(event1.getEventID(), user2.getUserID());
 
         log.debug("add user 3 to event 2");
-        eventService.addUser(event2.getEventID(), user3);
+        eventService.addUser(event2.getEventID(), user3.getUserID());
         log.debug("add user 1 to event 2");
-        eventService.addUser(event2.getEventID(), user1);
+        eventService.addUser(event2.getEventID(), user1.getUserID());
 
         log.debug("Rating added from user 1 in event 1. Rating: 5");
         eventService.addRating(event1.getEventID(), user1.getUserID(), 5);
