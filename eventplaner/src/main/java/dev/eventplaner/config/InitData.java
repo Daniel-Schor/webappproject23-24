@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import dev.eventplaner.model.Event;
 import dev.eventplaner.model.User;
 import dev.eventplaner.service.EventService;
+import dev.eventplaner.service.UserService;
 import jakarta.annotation.PostConstruct;
 
 @Component
@@ -17,9 +18,8 @@ public class InitData {
 
     @Autowired
     EventService eventService;
-    // TODO implement UserService
-    //@Autowired
-    //UserService userService;
+    @Autowired
+    UserService userService;
 
     @PostConstruct
     public void init() {
@@ -32,10 +32,13 @@ public class InitData {
 
         // TODO with UserService
         log.debug("create user 1");
+        //User user1 = userService.create(new User());
         User user1 = new User();
         log.debug("create user 2");
+        //User user2 = userService.create(new User());
         User user2 = new User();
         log.debug("create user 3");
+        //User user3 = userService.create(new User());
         User user3 = new User();
 
         log.debug("add user 1 to event 1");
