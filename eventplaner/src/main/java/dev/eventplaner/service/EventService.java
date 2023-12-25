@@ -20,17 +20,14 @@ public class EventService {
     @Autowired
     private EventRepository eventRepository;
 
-    // TODO finish this
     /**
-        * Creates a new Event with the given name.
-        *
-        * @param name the name of the event
-        * @return the created Event object
+        * Creates a new event and adds it to the event repository.
+        * 
+        * @param event the event to be created
+        * @return the created event
         */
-    public Event create(String name){
-        Event event = new Event();
-        log.info("Event Created: {}, {}", name, event.getEventID());
-        event.setName(name);
+    public Event create(Event event){
+        log.info("Event Created: {}, {}", event.getName(), event.getEventID());
         eventRepository.put(event.getEventID(), event);
         return event;
     }
