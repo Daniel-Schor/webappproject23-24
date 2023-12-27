@@ -30,17 +30,15 @@ public class InitData {
         log.debug("create event 2");
         Event event2 = eventService.create(new Event());
 
-        // TODO with UserService
+        /*
         log.debug("create user 1");
-        //User user1 = userService.create(new User());
-        User user1 = new User();
+        User user1 = userService.createUser(new User());
         log.debug("create user 2");
-        //User user2 = userService.create(new User());
-        User user2 = new User();
+        User user2 = userService.createUser(new User());
         log.debug("create user 3");
-        //User user3 = userService.create(new User());
-        User user3 = new User();
-
+        User user3 = userService.createUser(new User());
+        */
+        /* 
         log.debug("add user 1 to event 1");
         eventService.addUser(event1.getEventID(), user1.getUserID());
         log.debug("add user 2 to event 1");
@@ -50,7 +48,8 @@ public class InitData {
         eventService.addUser(event2.getEventID(), user3.getUserID());
         log.debug("add user 1 to event 2");
         eventService.addUser(event2.getEventID(), user1.getUserID());
-
+        */
+        /* 
         log.debug("Rating added from user 1 in event 1. Rating: 5");
         eventService.addRating(event1.getEventID(), user1.getUserID(), 5);
         log.debug("Rating added from user 2 in event 1. Rating: 3");
@@ -61,7 +60,8 @@ public class InitData {
         eventService.addRating(event2.getEventID(), user3.getUserID(), 2);
         log.debug("Rating added from user 1 in event 2. Rating: 1");
         eventService.addRating(event2.getEventID(), user1.getUserID(), 1);
-
+        */
+        
         log.debug("### Data initialized ###");
     }
 
