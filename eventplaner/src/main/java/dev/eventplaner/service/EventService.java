@@ -1,5 +1,6 @@
 package dev.eventplaner.service;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,9 +36,9 @@ public class EventService {
     /**
      * Retrieves all events.
      *
-     * @return An Iterable containing all events.
+     * @return An Collection containing all events.
      */
-    public Iterable<Event> getAll(){
+    public Collection<Event> getAll(){
         log.info("getAllRooms");
         return eventRepository.values();
     }
@@ -184,11 +185,11 @@ public class EventService {
      * Retrieves the participants of an event.
      *
      * @param eventID the ID of the event
-     * @return an iterable collection of Users representing the participants of the event
+     * @return an Collection collection of Users representing the participants of the event
      * @see #getUserRepository(UUID eventID)
      * @see #getParticipantIDs(UUID eventID)
      */
-    public Iterable<User> getParticipantValues(UUID eventID) {
+    public Collection<User> getParticipantValues(UUID eventID) {
         log.info("getUsers: eventID={}", eventID);
         Event event = eventRepository.get(eventID);
         return event.getParticipants().values();

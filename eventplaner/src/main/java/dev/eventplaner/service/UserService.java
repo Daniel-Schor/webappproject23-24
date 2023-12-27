@@ -2,6 +2,8 @@ package dev.eventplaner.service;
 
 import dev.eventplaner.model.User;
 import dev.eventplaner.repository.UserRepository;
+
+import java.util.Collection;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,9 +78,9 @@ public class UserService {
     /**
      * Retrieves all users.
      *
-     * @return An Iterable of all User objects.
+     * @return An Collection of all User objects.
      */
-    public Iterable<User> getAll() {
+    public Collection<User> getAll() {
         log.info("getAllUsers");
         return userRepository.values();
     }
