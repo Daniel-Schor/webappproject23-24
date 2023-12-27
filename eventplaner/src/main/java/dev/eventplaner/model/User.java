@@ -10,7 +10,7 @@ public class User {
     private String lastName;
     private String email;
     private String password;
-    private Boolean organizer;
+    private boolean organizer;
 
     public User() {
         this.userID = UUID.randomUUID();
@@ -68,31 +68,22 @@ public class User {
         }
     }
 
-    /* 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         if (password != null) {
-            this.password = password;
+            this.password = encoder.encode(password);
         }
-    }
-    */
-
-    public void setPassword(String password) {
-        this.password = encoder.encode(password);
+        
     }
 
-    public Boolean checkPassword(String password) {
+    public boolean checkPassword(String password) {
         return encoder.matches(password, this.password);
     }
 
-    public Boolean isOrganizer() {
+    public boolean isOrganizer() {
         return organizer;
     }
 
-    public void setOrganizer(Boolean organizer) {
+    public void setOrganizer(boolean organizer) {
         this.organizer = organizer;
     }
 
