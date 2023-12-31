@@ -93,7 +93,7 @@ public class User {
 
     // -- GETTER AND SETTER --
 
-    public UUID getUserID() {
+    public UUID getID() {
         return userID;
     }
 

@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import dev.eventplaner.repository.UserRepository;
-
 public class Event {
 
     private final UUID eventID;
@@ -31,7 +29,7 @@ public class Event {
         this.description = "Default Description";
         this.dateTime = LocalDateTime.now();
         this.location = new Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
-        this.maxParticipants = 0;
+        this.maxParticipants = 10;
         this.participants = new HashSet<>();
         this.organizerUserID = null;
         this.rating = 0;
@@ -150,7 +148,7 @@ public class Event {
 
     // -- GETTER AND SETTER --
 
-    public UUID getEventID() {
+    public UUID getID() {
         return this.eventID;
     }
 
@@ -174,8 +172,8 @@ public class Event {
         return this.maxParticipants;
     }
 
-    public UserRepository getParticipants() {
-        return (UserRepository) Collections.unmodifiableSet(this.participants);
+    public Set<UUID> getParticipants() {
+        return Collections.unmodifiableSet(this.participants);
     }
 
     public UUID getOrganizerUserID() {
