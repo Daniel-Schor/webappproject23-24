@@ -28,8 +28,8 @@ public class EventService {
         * @return the created event
         */
     public Event create(Event event){
-        log.info("Event Created: {}, {}", event.getName(), event.getEventID());
-        eventRepository.put(event.getEventID(), event);
+        log.info("Event Created: {}, {}", event.getName(), event.getID());
+        eventRepository.put(event.getID(), event);
         return event;
     }
 
@@ -62,7 +62,7 @@ public class EventService {
      */
     public Event update(Event event){
         log.info("update event: {}", event);
-        eventRepository.put(event.getEventID(), event);
+        eventRepository.put(event.getID(), event);
         return event;
     }
 
@@ -120,79 +120,6 @@ public class EventService {
         for (Event event : eventRepository.values()) {
             event.removeParticipant(userID);
         }
-    }
-
-    /**
-     * Retrieves the user with the specified ID from the event's participants.
-     *
-     * @param eventID the ID of the event
-     * @param userID the ID of the user
-     * @return the user with the specified ID
-     * @see #getUser(UUID userID)
-     */
-    public User getUser(UUID eventID, UUID userID) {
-        log.info("getUser: eventID={}, userID={}", eventID, userID);
-        Event event = eventRepository.get(eventID);
-        return event.getParticipants().get(userID);
-    }
-
-    /**
-     * Retrieves the user with the specified userID. Searches in all events.
-     *
-     * @param userID the unique identifier of the user
-     * @return the user with the specified userID, or null if not found
-     * @see #getUser(UUID eventID, UUID userID)
-     */
-    public User getUser(UUID userID) {
-        log.info("getUser: userId={}", userID);
-        for (Event event : eventRepository.values()) {
-            if (event.getParticipants().get(userID) != null) {
-                return event.getParticipants().get(userID);
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Retrieves the UserRepository associated with the specified event ID.
-     *
-     * @param eventID the ID of the event
-     * @return the UserRepository associated with the event
-     * @see #getParticipantValues(UUID eventID)
-     * @see #getParticipantIDs(UUID eventID)
-     */
-    public UserRepository getUserRepository(UUID eventID) {
-        log.info("getUsers: eventID={}", eventID);
-        Event event = eventRepository.get(eventID);
-        return event.getParticipants();
-    }
-
-    /**
-     * Retrieves the set of participant IDs for a given event.
-     *
-     * @param eventID the ID of the event
-     * @return a set of participant IDs
-     * @see #getUserRepository(UUID eventID)
-     * @see #getParticipantValues(UUID eventID)
-     */
-    public Set<UUID> getParticipantIDs(UUID eventID) {
-        log.info("getUsers: eventID={}", eventID);
-        Event event = eventRepository.get(eventID);
-        return event.getParticipants().keySet();
-    }
-
-    /**
-     * Retrieves the participants of an event.
-     *
-     * @param eventID the ID of the event
-     * @return an Collection collection of Users representing the participants of the event
-     * @see #getUserRepository(UUID eventID)
-     * @see #getParticipantIDs(UUID eventID)
-     */
-    public Collection<User> getParticipantValues(UUID eventID) {
-        log.info("getUsers: eventID={}", eventID);
-        Event event = eventRepository.get(eventID);
-        return event.getParticipants().values();
     }
 
     /**
