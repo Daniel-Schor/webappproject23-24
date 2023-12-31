@@ -30,38 +30,37 @@ public class InitData {
         log.debug("create event 2");
         Event event2 = eventService.create(new Event());
 
-        /*
+        
         log.debug("create user 1");
         User user1 = userService.createUser(new User());
         log.debug("create user 2");
         User user2 = userService.createUser(new User());
         log.debug("create user 3");
         User user3 = userService.createUser(new User());
-        */
-        /* 
+        
+        
         log.debug("add user 1 to event 1");
-        eventService.addUser(event1.getEventID(), user1.getUserID());
+        eventService.addUser(event1.getID(), user1.getID());
         log.debug("add user 2 to event 1");
-        eventService.addUser(event1.getEventID(), user2.getUserID());
-
+        eventService.addUser(event1.getID(), user2.getID());
+ 
         log.debug("add user 3 to event 2");
-        eventService.addUser(event2.getEventID(), user3.getUserID());
+        eventService.addUser(event2.getID(), user3.getID());
         log.debug("add user 1 to event 2");
-        eventService.addUser(event2.getEventID(), user1.getUserID());
-        */
-        /* 
+        eventService.addUser(event2.getID(), user1.getID());
+
+        
         log.debug("Rating added from user 1 in event 1. Rating: 5");
-        eventService.addRating(event1.getEventID(), user1.getUserID(), 5);
+        eventService.addRating(event1.getID(), user1.getID(), 5);
         log.debug("Rating added from user 2 in event 1. Rating: 3");
-        eventService.addRating(event1.getEventID(), user2.getUserID(), 3);
+        eventService.addRating(event1.getID(), user2.getID(), 3);
 
 
         log.debug("Rating added from user 3 in event 2. Rating: 2");
-        eventService.addRating(event2.getEventID(), user3.getUserID(), 2);
+        eventService.addRating(event2.getID(), user3.getID(), 2);
         log.debug("Rating added from user 1 in event 2. Rating: 1");
-        eventService.addRating(event2.getEventID(), user1.getUserID(), 1);
-        */
-        
+        eventService.addRating(event2.getID(), user1.getID(), 1);
+
         log.debug("### Data initialized ###");
     }
 
