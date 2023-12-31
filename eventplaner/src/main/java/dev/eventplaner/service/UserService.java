@@ -44,8 +44,8 @@ public class UserService {
      * @param user The User object to create.
      */
     public User createUser(User user) {
-        log.info("User Created: {}", user.getUserID());
-        userRepository.put(user.getUserID(), user);
+        log.info("User Created: {}", user.getID());
+        userRepository.put(user.getID(), user);
         return user;
     }
 
@@ -72,8 +72,8 @@ public class UserService {
      * @param user The User object to update.
      */
     public void updateUser(User user) {
-        log.info("User Updated: {}", user.getUserID());
-        userRepository.put(user.getUserID(), user);
+        log.info("User Updated: {}", user.getID());
+        userRepository.put(user.getID(), user);
     }
 
     /**
