@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.eventplaner.model.Event;
+import dev.eventplaner.model.User;
 import dev.eventplaner.service.EventService;
+import dev.eventplaner.service.UserService;
+
 
 @RestController
 @RequestMapping("/api")
@@ -24,11 +27,13 @@ public class ApiController {
 
     @Autowired
     private EventService eventService;
-    
+    @Autowired
+    private UserService userService;
+
     @GetMapping(value = "/events",
                 produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Iterable<Event>> getAllEvents() {
+    public ResponseEntity<Collection<Event>> getAllEvents() {
         log.info("Get all events");
         Collection<Event> events = eventService.getAll();
 
@@ -36,6 +41,19 @@ public class ApiController {
             return ResponseEntity.noContent().build();
         }
         return new ResponseEntity<>(events, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/user",
+                produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Collection<User>> getAllUser() {
+        log.info("Get all user");
+        Collection<User> users = userService.getAll();
+
+        if (users.size() == 0) {
+            return ResponseEntity.noContent().build();
+        }
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
 }
