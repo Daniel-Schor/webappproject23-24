@@ -1,7 +1,6 @@
 package dev.eventplaner.service;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -9,9 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import dev.eventplaner.model.Event;
-import dev.eventplaner.model.User;
 import dev.eventplaner.repository.EventRepository;
-import dev.eventplaner.repository.UserRepository;
 
 @Service
 public class EventService {
