@@ -201,39 +201,45 @@ public class Event {
         return this.rating;
     }
 
-    public void setName(String name) {
+    public Event setName(String name) {
         if (name != null) {
             this.name = name;
         }
+        return this;
     }
 
-    public void setDescription(String description) {
+    public Event setDescription(String description) {
         if (description != null) {
             this.description = description;
         }
+        return this;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+    public Event setDateTime(LocalDateTime dateTime) {
         if (dateTime != null) {
             this.dateTime = dateTime;
         }
+        return this;
     }
 
-    public void setMaxParticipants(int maxParticipants) {
+    public Event setMaxParticipants(int maxParticipants) {
         if (maxParticipants >= 0) {
             this.maxParticipants = maxParticipants;
         }
+        return this;
     }
 
-    public void setOrganizerUserID(UUID organizerUserID) {
+    public Event setOrganizerUserID(UUID organizerUserID) {
         if (organizerUserID != null) {
             this.organizerUserID = organizerUserID;
         }
+        return this;
     }
 
-    public void setLocation(Location location) {
+    public Event setLocation(Location location) {
         if (location != null) {
             this.location = location;
         }
+        return this;
     }
 }
