@@ -3,6 +3,8 @@ package dev.eventplaner.model;
 import java.util.UUID;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * User class represents a user in the system.
  * It contains information about the user such as their ID, name, email,
@@ -92,7 +94,7 @@ public class User {
     }
 
     // -- GETTER AND SETTER --
-
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public UUID getID() {
         return userID;
     }

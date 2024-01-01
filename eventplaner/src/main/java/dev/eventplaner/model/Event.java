@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Event {
 
     private final UUID eventID;
@@ -118,6 +120,7 @@ public class Event {
      * @return The average rating of the event. If no rating is available, 0 is 
      * @see #getRating()
      */
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public double getAvgRating() {
         if (this.ratedUserIDs.size() == 0) {
             return 0;
@@ -148,6 +151,7 @@ public class Event {
 
     // -- GETTER AND SETTER --
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public UUID getID() {
         return this.eventID;
     }
@@ -164,6 +168,7 @@ public class Event {
         return this.dateTime;
     }
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public Location getLocation() {
         return this.location;
     }
@@ -172,14 +177,17 @@ public class Event {
         return this.maxParticipants;
     }
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public Set<UUID> getParticipants() {
         return Collections.unmodifiableSet(this.participants);
     }
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public UUID getOrganizerUserID() {
         return this.organizerUserID;
     }
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public Set<UUID> getRatedUserIDs() {
         return Collections.unmodifiableSet(this.ratedUserIDs);
     }
@@ -188,6 +196,7 @@ public class Event {
      * @return the raw rating of the event
      * @see #getAvgRating()
      */
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public double getRating() {
         return this.rating;
     }
