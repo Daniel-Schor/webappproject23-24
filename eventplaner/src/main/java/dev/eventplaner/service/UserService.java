@@ -45,7 +45,7 @@ public class UserService {
      *
      * @param user The User object to create.
      */
-    public User createUser(User user) {
+    public User create(User user) {
         log.info("User Created: {}", user.getID());
         userRepository.put(user.getID(), user);
         return user;

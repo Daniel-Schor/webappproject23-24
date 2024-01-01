@@ -32,11 +32,11 @@ public class InitData {
 
         
         log.debug("create user \"Yannis Koerner\"");
-        User user1 = userService.createUser(new User("Yannis", "Koerner", "yannis.koerner@stud.fra-uas.de", "123", true));
+        User user1 = userService.create(new User("Yannis", "Koerner", "yannis.koerner@stud.fra-uas.de", "123", true));
         log.debug("create user \"Tristan Buls\"");
-        User user2 = userService.createUser(new User("Tristan", "Buls", "tristan.buls@stud.fra-uas.de", "456"));
+        User user2 = userService.create(new User("Tristan", "Buls", "tristan.buls@stud.fra-uas.de", "456"));
         log.debug("create user \"Daniel Schor\"");
-        User user3 = userService.createUser(new User("Daniel", "Schor", "daniel.schor@stud.fra-uas.de", "789"));
+        User user3 = userService.create(new User("Daniel", "Schor", "daniel.schor@stud.fra-uas.de", "789"));
         
         
         log.debug("add user 1 to event 1");
