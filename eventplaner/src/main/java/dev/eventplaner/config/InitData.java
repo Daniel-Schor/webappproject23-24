@@ -25,18 +25,18 @@ public class InitData {
     public void init() {
         log.debug("### Initialize Data ###");
 
-        log.debug("create event 1");
+        log.debug("create event \"Statistik Vorlesung\"");
         Event event1 = eventService.create(new Event());
-        log.debug("create event 2");
+        log.debug("create event \"Webanwendung Vorlesung\"");
         Event event2 = eventService.create(new Event());
 
         
-        log.debug("create user 1");
-        User user1 = userService.createUser(new User());
-        log.debug("create user 2");
-        User user2 = userService.createUser(new User());
-        log.debug("create user 3");
-        User user3 = userService.createUser(new User());
+        log.debug("create user \"Yannis Koerner\"");
+        User user1 = userService.createUser(new User("Yannis", "Koerner", "yannis.koerner@stud.fra-uas.de", "123", true));
+        log.debug("create user \"Tristan Buls\"");
+        User user2 = userService.createUser(new User("Tristan", "Buls", "tristan.buls@stud.fra-uas.de", "456"));
+        log.debug("create user \"Daniel Schor\"");
+        User user3 = userService.createUser(new User("Daniel", "Schor", "daniel.schor@stud.fra-uas.de", "789"));
         
         
         log.debug("add user 1 to event 1");
