@@ -34,7 +34,7 @@ public class ApiController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = {"/events", "/events/"},
+    @GetMapping(value = "/events",
                 produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Collection<EventDTO>> getAllEvents() {
@@ -47,7 +47,7 @@ public class ApiController {
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
-    @GetMapping(value = {"/users", "/users/"},
+    @GetMapping(value = "/users",
                 produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Collection<UserDTO>> getAllUsers() {
