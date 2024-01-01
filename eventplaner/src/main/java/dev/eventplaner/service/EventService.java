@@ -1,5 +1,6 @@
 package dev.eventplaner.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import dev.eventplaner.model.Event;
+import dev.eventplaner.model.EventDTO;
 import dev.eventplaner.repository.EventRepository;
 
 @Service
@@ -36,8 +38,17 @@ public class EventService {
      * @return An Collection containing all events.
      */
     public Collection<Event> getAll(){
-        log.info("getAllRooms");
+        log.info("get all Events");
         return eventRepository.values();
+    }
+
+    public Collection<EventDTO> getAllDTO(){
+        log.info("get all Events as DTO");
+        Collection<EventDTO> eventsDTO = new ArrayList<>();
+        for (Event event : eventRepository.values()) {
+            eventsDTO.add(new EventDTO(event));
+        }
+        return eventsDTO;
     }
 
     /**

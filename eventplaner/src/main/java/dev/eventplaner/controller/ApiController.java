@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.eventplaner.model.Event;
-import dev.eventplaner.model.User;
+import dev.eventplaner.model.EventDTO;
+import dev.eventplaner.model.UserDTO;
 import dev.eventplaner.service.EventService;
 import dev.eventplaner.service.UserService;
 
@@ -33,9 +33,9 @@ public class ApiController {
     @GetMapping(value = "/events",
                 produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Collection<Event>> getAllEvents() {
+    public ResponseEntity<Collection<EventDTO>> getAllEvents() {
         log.info("Get all events");
-        Collection<Event> events = eventService.getAll();
+        Collection<EventDTO> events = eventService.getAllDTO();
 
         if (events.size() == 0) {
             return ResponseEntity.noContent().build();
@@ -43,12 +43,12 @@ public class ApiController {
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/user",
+    @GetMapping(value = "/users",
                 produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Collection<User>> getAllUser() {
-        log.info("Get all user");
-        Collection<User> users = userService.getAll();
+    public ResponseEntity<Collection<UserDTO>> getAllUsers() {
+        log.info("Get all users");
+        Collection<UserDTO> users = userService.getAllDTO();
 
         if (users.size() == 0) {
             return ResponseEntity.noContent().build();
