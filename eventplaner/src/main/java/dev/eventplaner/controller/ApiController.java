@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,6 +78,19 @@ public class ApiController {
         return new ResponseEntity<User>(createdUser, HttpStatus.CREATED);
     }
 
+    @DeleteMapping(value = "/users/{userID}",
+                   produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> deleteUser(@PathVariable("userID") UUID userID) {
+        log.debug("deleteUser() is called");
+        User user = userService.delete(userID);
+        eventService.removeUser(userID);
+        if (userID == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/events", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Collection<EventDTO>> getAllEvents() {
@@ -115,4 +129,17 @@ public class ApiController {
         Event createdEvent = eventService.create(event);
         return new ResponseEntity<Event>(createdEvent, HttpStatus.CREATED);
     }
+
+    @DeleteMapping(value = "/events/{eventID}",
+                   produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> deleteEvent(@PathVariable("eventID") UUID eventID) {
+        log.debug("deleteEvent() is called");
+        Event event = eventService.delete(eventID);
+        if (eventID == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<Event>(event, HttpStatus.OK);
+    }
+
 }

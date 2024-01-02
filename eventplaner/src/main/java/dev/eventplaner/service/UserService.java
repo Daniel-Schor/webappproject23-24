@@ -56,15 +56,16 @@ public class UserService {
      *
      * @param userID The ID of the user to delete.
      */
-    public void deleteUser(UUID userID) {
+    public User delete(UUID userID) {
         if (userRepository.get(userID) == null) {
             log.warn("User with ID {} not found", userID);
         }
         if (userRepository.get(userID) != null) {
             log.warn("User with ID {} found", userID);
-            userRepository.remove(userID);
             log.info("User Deleted: {}", userID);
+            return userRepository.remove(userID);
         }
+        return null;
 
     }
 
