@@ -74,11 +74,11 @@ public class User {
      * @param password The password to be set
      */
 
-    public void setPassword(String password) {
+    public User setPassword(String password) {
         if (password != null) {
             this.password = encoder.encode(password);
         }
-
+        return this;
     }
 
     /**
@@ -103,38 +103,42 @@ public class User {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public User setFirstName(String firstName) {
         if (firstName != null) {
             this.firstName = firstName;
         }
+        return this;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public User setLastName(String lastName) {
         if (lastName != null) {
             this.lastName = lastName;
         }
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public User setEmail(String email) {
         if (email != null) {
             this.email = email;
         }
+        return this;
     }
 
     public boolean isOrganizer() {
         return organizer;
     }
 
-    public void setOrganizer(boolean organizer) {
+    public User setOrganizer(boolean organizer) {
         this.organizer = organizer;
+        return this;
     }
 
 }

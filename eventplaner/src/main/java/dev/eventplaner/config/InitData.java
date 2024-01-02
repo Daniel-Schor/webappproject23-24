@@ -28,21 +28,45 @@ public class InitData {
         log.debug("### Initialize Data ###");
 
         log.debug("create event \"Statistik Vorlesung\"");
-        Event event1 = eventService.create(new Event().setName("Statistik Vorlesung")
-                .setDescription("Statistik Vorlesung am 11.01.2024 um 08:15 Uhr.")
-                .setDateTime(LocalDateTime.of(2024, 1, 11, 8, 15, 0)));
+        Event event1 = eventService.create(
+                new Event()
+                        .setName("Statistik Vorlesung")
+                        .setDescription("Statistik Vorlesung am 11.01.2024 um 08:15 Uhr.")
+                        .setDateTime(LocalDateTime.of(2024, 1, 11, 8, 15, 0)));
+
         log.debug("create event \"Webanwendung Vorlesung\"");
-        Event event2 = eventService.create(new Event().setName("Webanwendung Vorlesung")
-                .setDescription("Webanwendung Vorlesung am 11.01.2024 um 08:15 Uhr.")
-                .setDateTime(LocalDateTime.of(2024, 1, 8, 16, 0, 0)));
+        Event event2 = eventService.create(
+                new Event()
+                        .setName("Webanwendung Vorlesung")
+                        .setDescription("Webanwendung Vorlesung am 11.01.2024 um 08:15 Uhr.")
+                        .setDateTime(LocalDateTime.of(2024, 1, 8, 16, 0, 0)));
 
         log.debug("create user \"Yannis Koerner\"");
-        User user1 = userService.create(new User("Yannis", "Koerner", "yannis.koerner@stud.fra-uas.de", "123", true));
-        log.debug("create user \"Tristan Buls\"");
-        User user2 = userService.create(new User("Tristan", "Buls", "tristan.buls@stud.fra-uas.de", "456"));
-        log.debug("create user \"Daniel Schor\"");
-        User user3 = userService.create(new User("Daniel", "Schor", "daniel.schor@stud.fra-uas.de", "789"));
+        User user1 = userService.create(
+                new User()
+                        .setFirstName("Yannis")
+                        .setLastName("Koerner")
+                        .setEmail("yannis.koerner@stud.fra-uas.de")
+                        .setPassword("123")
+                        .setOrganizer(true));
 
+        log.debug("create user \"Tristan Buls\"");
+        User user2 = userService.create(
+                new User()
+                        .setFirstName("Tristan")
+                        .setLastName("Buls")
+                        .setEmail("tristan.buls@stud.fra-uas.de")
+                        .setPassword("456"));
+
+        log.debug("create user \"Daniel Schor\"");
+        User user3 = userService.create(
+                new User()
+                        .setFirstName("Daniel")
+                        .setLastName("Schor")
+                        .setEmail("daniel.schor@stud.fra-uas.de")
+                        .setPassword("789"));
+
+                        
         log.debug("add user 1 to event 1");
         eventService.addUser(event1.getID(), user1.getID());
         log.debug("add user 2 to event 1");
