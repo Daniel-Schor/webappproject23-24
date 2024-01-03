@@ -28,15 +28,15 @@ public class WebController {
     }
 
     @GetMapping("/web/events/{eventID}")
-    public String showEventDetails(@PathVariable("eventID") String eventID, Model model) {
+    public String showEventDetails(@PathVariable("eventID") UUID eventID, Model model) {
         log.info("WebController: Showing details for event ID: {}", eventID);
         try {
-            Event event = eventService.getEvent(UUID.fromString(eventID));
+            Event event = eventService.getEvent(eventID);
             model.addAttribute("event", event);
         } catch (IllegalArgumentException e) {
             log.warn("WebController: Invalid event ID format: {}", eventID);
         }
-        return "eventDetails";
+        return "event-details";
     }
 
     @GetMapping("/web/home")

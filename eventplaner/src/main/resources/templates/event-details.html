@@ -11,7 +11,7 @@
 <div th:if="${event}">
     <h2 th:text="${event.name}"></h2>
     <p th:text="${event.description}"></p>
-    <p>Date: <span th:text="${#dates.format(event.date, 'dd.MM.yyyy HH:mm')}"></span></p>
+    
     <p>Location: <span th:text="${event.location}"></span></p>
     <p>Participants:</p>
     <ul>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>User List</title>
+    <title>User Details</title>
     <style>
         table {
             width: 80%;
@@ -24,19 +24,23 @@
 </head>
 <body>
 
-<h1>User List</h1>
+<h1>User Details</h1>
 
 <table>
     <thead>
         <tr>
             <th>User ID</th>
-            <th>Name</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Organizer</th>
         </tr>
     </thead>
     <tbody>
-        <tr th:each="user : ${users}">
-            <td th:text="${user.userID}"></td>
-            <td th:text="${user.name}"></td>
+        <tr>
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.firstName}"></td>
+            <td th:text="${user.lastName}"></td>
+            <td th:text="${user.organizer} ? 'Yes' : 'No'"></td>
         </tr>
     </tbody>
 </table>

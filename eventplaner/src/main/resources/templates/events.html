@@ -36,7 +36,7 @@
     <tbody>
         <tr th:each="event : ${events}">
             <td th:text="${event.eventID}"></td>
-            <td th:text="${event.name}"></td>
+            <td><a th:href="@{/web/events/{eventID}(eventID=${event.eventID})}" th:text="${event.name}"></a></td>
         </tr>
     </tbody>
 </table>
