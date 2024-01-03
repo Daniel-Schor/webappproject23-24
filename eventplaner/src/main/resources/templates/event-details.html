@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Event Details</title>
+</head>
+<body>
+
+<h1>Event Details</h1>
+
+<div th:if="${event}">
+    <h2 th:text="${event.name}"></h2>
+    <p th:text="${event.description}"></p>
+    <p>Date: <span th:text="${#dates.format(event.date, 'dd.MM.yyyy HH:mm')}"></span></p>
+    <p>Location: <span th:text="${event.location}"></span></p>
+    <p>Participants:</p>
+    <ul>
+        <li th:each="participant : ${event.participants}" th:text="${participant}"></li>
+    </ul>
+    <p>Average Rating: <span th:text="${event.avgRating}"></span></p>
+</div>
+<div th:unless="${event}">
+    <p>No event details available</p>
+</div>
+
+<a href="/web/events">Back to Event List</a>
+
+</body>
+</html>
