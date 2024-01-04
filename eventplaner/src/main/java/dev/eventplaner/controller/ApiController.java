@@ -1,6 +1,7 @@
 package dev.eventplaner.controller;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -27,7 +28,6 @@ import dev.eventplaner.model.UserDTO;
 import dev.eventplaner.service.EventService;
 import dev.eventplaner.service.UserService;
 import org.springframework.web.bind.annotation.PutMapping;
-
 
 @RestController
 @RequestMapping("/api")
@@ -93,8 +93,7 @@ public class ApiController {
         return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/users/{userID}",
-                   produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> deleteUser(@PathVariable("userID") UUID userID) {
         log.debug("deleteUser() is called");
@@ -130,7 +129,24 @@ public class ApiController {
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
-    // get /events/{eventID}/participants
+    // neu
+
+    @GetMapping(value = "/events/{eventID}/participants", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Collection<UserDTO>> getEventParticipants(@PathVariable("eventID") UUID eventID) {
+        log.info("Get all users");
+        Collection<UUID> usersUUID = eventService.getEvent(eventID).getParticipants();
+        Collection<UserDTO> users = new ArrayList();
+
+        for (UUID uuid : usersUUID) {
+            users.add(new UserDTO(userService.getUser(uuid)));
+        }
+
+        if (users.size() == 0) {
+            return ResponseEntity.noContent().build();
+        }
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 
     @PostMapping(value = "/events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -149,8 +165,19 @@ public class ApiController {
 
     // put /events/{eventID}/
 
-    @DeleteMapping(value = "/events/{eventID}",
-                   produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Event> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
+        log.info("Update event: {}", eventID);
+        User updatedEvent = eventService.updateEvent(eventID, event);
+
+        if (updatedEvent == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<Event>(updatedEvent, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> deleteEvent(@PathVariable("eventID") UUID eventID) {
         log.debug("deleteEvent() is called");
