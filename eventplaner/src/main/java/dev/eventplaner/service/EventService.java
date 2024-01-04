@@ -68,9 +68,9 @@ public class EventService {
      * @param event The event to be updated.
      * @return The updated event.
      */
-    public Event update(Event event){
+    public Event update(UUID eventID, Event event){
         log.info("update event: {}", event);
-        eventRepository.put(event.getID(), event);
+        eventRepository.put(eventID, event);
         return event;
     }
 
