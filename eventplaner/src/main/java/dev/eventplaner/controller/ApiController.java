@@ -163,8 +163,7 @@ public class ApiController {
         return new ResponseEntity<Event>(createdEvent, HttpStatus.CREATED);
     }
 
-    // put /events/{eventID}/
-
+    // neu
     @PutMapping(value = "/events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Event> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
