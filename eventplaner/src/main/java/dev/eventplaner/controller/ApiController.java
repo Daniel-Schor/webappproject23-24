@@ -80,8 +80,8 @@ public class ApiController {
         return new ResponseEntity<User>(createdUser, HttpStatus.CREATED);
     }
 
-
-    @PutMapping("/users/{userID}")
+    // neu
+    @PutMapping(value = "/users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<User> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
         log.info("Update user: {}", userID);
@@ -90,7 +90,7 @@ public class ApiController {
         if (updatedUser == null) {
             return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/users/{userID}",
