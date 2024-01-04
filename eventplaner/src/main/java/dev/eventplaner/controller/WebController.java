@@ -25,7 +25,6 @@ public class WebController {
         log.info("WebController: Showing all events");
         model.addAttribute("events", eventService.getAllDTO());
         return "events";
-       // "Davide ist schon geil"
     }
 
     @GetMapping("/web/events/{eventID}")
