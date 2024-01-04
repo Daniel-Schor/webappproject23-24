@@ -26,6 +26,8 @@ import dev.eventplaner.model.Event;
 import dev.eventplaner.model.UserDTO;
 import dev.eventplaner.service.EventService;
 import dev.eventplaner.service.UserService;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping("/api")
@@ -78,6 +80,19 @@ public class ApiController {
         return new ResponseEntity<User>(createdUser, HttpStatus.CREATED);
     }
 
+
+    @PutMapping("/users/{userID}")
+    @ResponseBody
+    public ResponseEntity<User> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
+        log.info("Update user: {}", userID);
+        User updatedUser = userService.updateUser(userID, user);
+
+        if (updatedUser == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
+
     @DeleteMapping(value = "/users/{userID}",
                    produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -115,6 +130,8 @@ public class ApiController {
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
+    // get /events/{eventID}/participants
+
     @PostMapping(value = "/events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
@@ -129,6 +146,8 @@ public class ApiController {
         Event createdEvent = eventService.create(event);
         return new ResponseEntity<Event>(createdEvent, HttpStatus.CREATED);
     }
+
+    // put /events/{eventID}/
 
     @DeleteMapping(value = "/events/{eventID}",
                    produces = MediaType.APPLICATION_JSON_VALUE)
