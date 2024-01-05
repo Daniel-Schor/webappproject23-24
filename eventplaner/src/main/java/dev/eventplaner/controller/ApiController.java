@@ -56,7 +56,7 @@ public class ApiController {
         log.info("Get all users");
         Collection<UserDTO> users = userService.getAllDTO();
 
-        if (users.size() == 0) {
+        if (users.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -195,13 +195,13 @@ public class ApiController {
     public ResponseEntity<Collection<UserDTO>> getEventParticipants(@PathVariable("eventID") UUID eventID) {
         log.info("Get all users");
         Collection<UUID> usersUUID = eventService.getEvent(eventID).getParticipants();
-        Collection<UserDTO> users = new ArrayList();
+        Collection<UserDTO> users = new ArrayList<>();
 
         for (UUID uuid : usersUUID) {
             users.add(new UserDTO(userService.getUser(uuid)));
         }
 
-        if (users.size() == 0) {
+        if (users.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -218,7 +218,7 @@ public class ApiController {
     @PostMapping(value = "/events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
-        log.info("Create new Event: ", event.getName());
+        log.info("Create new Event: {}", event.getName());
         if (event.getName() == null || event.getName().isEmpty()) {
             String detail = "Event name must not be null or empty";
             ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, detail);
@@ -244,7 +244,7 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<Event> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
         log.info("Update event: {}", eventID);
-        Event updatedEvent = eventService.updateEvent(eventID, event);
+        Event updatedEvent = eventService.update(eventID, event);
 
         if (updatedEvent == null) {
             return ResponseEntity.notFound().build();
@@ -279,7 +279,7 @@ public class ApiController {
      * @param userID  The ID of the user to be added as a participant.
      * @return The ResponseEntity containing the updated event information.
      */
-    @PutMapping(value = "/events/{eventID}/add/{userID}", produces = MediaType.APPLICATION_JSON_VALUE);
+    @PutMapping(value = "/events/{eventID}/add/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
         log.debug("addParticipant() is called");
@@ -300,7 +300,7 @@ public class ApiController {
      * @return A ResponseEntity containing the updated event if successful, or a not
      *         found response if the event ID is invalid.
      */
-    @PutMapping(value = "/events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE);
+    @PutMapping(value = "/events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> removeParticipant(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
         log.debug("removeParticipant() is called");
@@ -321,7 +321,7 @@ public class ApiController {
      * @return ResponseEntity containing the updated Event object if successful, or
      *         a not found response if the event ID is invalid.
      */
-    @PutMapping(value = "/events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE);
+    @PutMapping(value = "/events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID, @PathVariable("rating") int rating) {
         log.debug("rateEvent() is called");
@@ -331,7 +331,5 @@ public class ApiController {
         }
         return new ResponseEntity<Event>(event, HttpStatus.OK);
     }
-
-}
 
 }
