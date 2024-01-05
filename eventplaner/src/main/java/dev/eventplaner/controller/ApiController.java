@@ -118,7 +118,7 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<User> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
         log.info("Update user: {}", userID);
-        User updatedUser = userService.updateUser(userID, user);
+        User updatedUser = userService.update(user);
 
         if (updatedUser == null) {
             return ResponseEntity.notFound().build();
