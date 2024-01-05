@@ -58,32 +58,6 @@ public class Event {
     }
 
     /**
-     * Constructor for the Event class.
-     * Initializes the event with the specified values.
-     * 
-     * @param name            The name of the event.
-     * @param description     The description of the event.
-     * @param dateTime        The date and time of the event.
-     * @param location        The location of the event.
-     * @param maxParticipants The maximum number of participants for the event.
-     * @param participants    The list of participant UUIDs for the event.
-     * @param organizerUserID The UUID of the organizer user.
-     * @param rating          The rating of the event.
-     * @param ratings         The list of rated user UUIDs for the event.
-     */
-    public Event(String name, String description, LocalDateTime dateTime, Geolocation geolocation, int maxParticipants,
-            HashMap<UUID, Integer> participants, UUID organizerUserID, int rating) {
-        this.eventID = UUID.randomUUID();
-        this.name = name;
-        this.description = description;
-        this.dateTime = dateTime;
-        this.geolocation = geolocation;
-        this.maxParticipants = maxParticipants;
-        this.participants = participants;
-        this.organizerUserID = organizerUserID;
-    }
-
-    /**
      * Adds a participant to the event.
      * 
      * @param participant the participant to be added
