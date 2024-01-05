@@ -138,7 +138,7 @@ public class Event {
      *         out of bounds or user not in event)
      */
     public boolean rate(UUID userID, int rating) {
-        if (userID == null || participants.get(userID) != null || (rating < 0 || rating > 5)) {
+        if (userID == null || (rating < 0 || rating > 5)) {
             return false;
         }
         participants.put(userID, rating);

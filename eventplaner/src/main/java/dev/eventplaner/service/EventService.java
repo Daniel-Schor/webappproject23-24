@@ -142,9 +142,10 @@ public class EventService {
     public Event addRating(UUID eventID, UUID userID, int rating) {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
         Event event = eventRepository.get(eventID);
-        if (event == null || !event.rate(userID, rating)) {
+        if (event == null) {
             throw new IllegalArgumentException("Failed to add rating to event");
         }
+        event.rate(userID, rating);
         return event;
     }
 
