@@ -30,20 +30,17 @@
     <thead>
         <tr>
             <th>User ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Organizer</th>
+            <th>Full Name</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td th:text="${user.id}"></td>
-            <td th:text="${user.firstName}"></td>
-            <td th:text="${user.lastName}"></td>
-            <td th:text="${user.organizer} ? 'Yes' : 'No'"></td>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.userID}"></td>
+            <td th:text="${user.fullName}"></td>
         </tr>
     </tbody>
 </table>
+
 
 <a href="/web/home">Back to Home</a>
 
