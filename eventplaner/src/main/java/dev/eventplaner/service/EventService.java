@@ -68,9 +68,9 @@ public class EventService {
      * @param event The event to be updated.
      * @return The updated event.
      */
-    public Event update(Event event){
+    public Event update(UUID eventID, Event event){
         log.info("update event: {}", event);
-        eventRepository.put(event.getID(), event);
+        eventRepository.put(eventID, event);
         return event;
     }
 
@@ -142,9 +142,10 @@ public class EventService {
     public Event addRating(UUID eventID, UUID userID, int rating) {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
         Event event = eventRepository.get(eventID);
-        if (event == null || !event.addRating(userID, rating)) {
+        if (event == null) {
             throw new IllegalArgumentException("Failed to add rating to event");
         }
+        event.rate(userID, rating);
         return event;
     }
 
@@ -157,7 +158,7 @@ public class EventService {
     public double getRating(UUID eventID) {
         log.info("getRating: eventID={}", eventID);
         Event event = eventRepository.get(eventID);
-        return event.getAvgRating();
+        return event.getRating();
     }
 
 }

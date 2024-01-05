@@ -1,14 +1,14 @@
 package dev.eventplaner.model;
 
-public class Coordinates extends Location{
+public class Geolocation{
 
     private double latitude;
     private double longitude;
 
-    public Coordinates() {
+    public Geolocation() {
     }
 
-    public Coordinates(double latitude, double longitude) {
+    public Geolocation(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }

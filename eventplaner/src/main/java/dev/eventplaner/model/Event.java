@@ -2,8 +2,8 @@ package dev.eventplaner.model;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,12 +14,10 @@ public class Event {
     private String name;
     private String description;
     private LocalDateTime dateTime;
-    private Location location;
+    private Geolocation geolocation;
     private int maxParticipants;
-    private Set<UUID> participants;
+    private Map<UUID, Integer> participants;
     private UUID organizerUserID;
-    private int rating;
-    private Set<UUID> ratedUserIDs;
 
     /**
      * Default constructor for the Event class.
@@ -30,12 +28,10 @@ public class Event {
         this.name = "Default Event";
         this.description = "Default Description";
         this.dateTime = LocalDateTime.now();
-        this.location = new Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
+        this.geolocation = new Geolocation(50.130444, 8.692556);//new Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
         this.maxParticipants = 10;
-        this.participants = new HashSet<>();
+        this.participants = new HashMap<>();
         this.organizerUserID = null;
-        this.rating = 0;
-        this.ratedUserIDs = new HashSet<>();
     }
 
     /**
@@ -49,56 +45,30 @@ public class Event {
      * @param maxParticipants The maximum number of participants for the event.
      * @param organizerUserID The UUID of the organizer user.
      */
-    public Event(String name, String description, LocalDateTime dateTime, Location location, int maxParticipants,
+    public Event(String name, String description, LocalDateTime dateTime, Geolocation geolocation, int maxParticipants,
             UUID organizerUserID) {
         this.eventID = UUID.randomUUID();
         this.name = name;
         this.description = description;
         this.dateTime = dateTime;
-        this.location = location;
+        this.geolocation = geolocation;
         this.maxParticipants = maxParticipants;
-        this.participants = new HashSet<>();
+        this.participants = new HashMap<>();
         this.organizerUserID = organizerUserID;
-        this.rating = 0;
-        this.ratedUserIDs = new HashSet<>();
     }
 
     /**
-     * Constructor for the Event class.
-     * Initializes the event with the specified values.
+     * Adds a participant to the event.
      * 
-     * @param name            The name of the event.
-     * @param description     The description of the event.
-     * @param dateTime        The date and time of the event.
-     * @param location        The location of the event.
-     * @param maxParticipants The maximum number of participants for the event.
-     * @param participants    The list of participant UUIDs for the event.
-     * @param organizerUserID The UUID of the organizer user.
-     * @param rating          The rating of the event.
-     * @param ratedUserIDs    The list of rated user UUIDs for the event.
+     * @param participant the participant to be added
+     * @return true if the participant was added successfully, false if the
+     *         participant limit is reached or participant is already in the event
      */
-    public Event(String name, String description, LocalDateTime dateTime, Location location, int maxParticipants, HashSet<UUID> participants, UUID organizerUserID, int rating, HashSet<UUID> ratedUserIDs) {
-        this.eventID = UUID.randomUUID();
-        this.name = name;
-        this.description = description;
-        this.dateTime = dateTime;
-        this.location = location;
-        this.maxParticipants = maxParticipants;
-        this.participants = participants;
-        this.organizerUserID = organizerUserID;
-        this.rating = rating;
-        this.ratedUserIDs = ratedUserIDs;
-    }
-
-    /**
-        * Adds a participant to the event.
-        * 
-        * @param participant the participant to be added
-        * @return true if the participant was added successfully, false if the participant limit is reached or participant is already in the event
-        */
     public synchronized boolean addParticipant(UUID participantID) {
-        if (participantID != null && participants.size() < maxParticipants) {
-            return this.participants.add(participantID);
+        if (participantID != null && participants.size() < maxParticipants
+                || !participants.containsKey(participantID)) {
+            this.participants.put(participantID, null);
+            return true;
         }
         return false;
     }
@@ -117,15 +87,20 @@ public class Event {
     /**
      * Returns the average rating of the event.
      *
-     * @return The average rating of the event. If no rating is available, 0 is 
-     * @see #getRating()
+     * @return The average rating of the event. If no rating is available, 0 is
      */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    public double getAvgRating() {
-        if (this.ratedUserIDs.size() == 0) {
-            return 0;
+    public double getRating() {
+        double rating = 0;
+        int nullValues = 0;
+
+        for (Integer i : participants.values()) {
+            if (i == null) {
+                nullValues++;
+            } else {
+                rating += i;
+            }
         }
-        return ((double) this.rating) / this.ratedUserIDs.size();
+        return ((double) rating) / (participants.size() - nullValues);
     }
 
     /**
@@ -133,20 +108,19 @@ public class Event {
      * 
      * @param userID the ID of the user giving the rating
      * @param rating the rating value to be added
-     * @return true if the rating was successfully added, false otherwise (user
-     *         already rated or rating out of bounds)
+     * @return true if the rating was successfully added, false otherwise (rating
+     *         out of bounds or user not in event)
      */
-    public synchronized boolean addRating(UUID userID, int rating) {
-        if (!(userID != null && !this.ratedUserIDs.contains(userID)) || (rating < 0 || rating > 5)) {
+    public boolean rate(UUID userID, int rating) {
+        if (userID == null || (rating < 0 || rating > 5)) {
             return false;
         }
-        this.rating += rating;
-        this.ratedUserIDs.add(userID);
+        participants.put(userID, rating);
         return true;
     }
 
     public boolean contains(UUID userID) {
-        return this.participants.contains(userID);
+        return this.participants.containsKey(userID);
     }
 
     // -- GETTER AND SETTER --
@@ -169,36 +143,21 @@ public class Event {
     }
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    public Location getLocation() {
-        return this.location;
+    public Geolocation getLocation() {
+        return this.geolocation;
     }
 
     public int getMaxParticipants() {
         return this.maxParticipants;
     }
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    public Set<UUID> getParticipants() {
-        return Collections.unmodifiableSet(this.participants);
+    public Map<UUID, Integer> getParticipants() {
+        return Collections.unmodifiableMap(this.participants);
     }
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public UUID getOrganizerUserID() {
         return this.organizerUserID;
-    }
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    public Set<UUID> getRatedUserIDs() {
-        return Collections.unmodifiableSet(this.ratedUserIDs);
-    }
-
-    /**
-     * @return the raw rating of the event
-     * @see #getAvgRating()
-     */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    public double getRating() {
-        return this.rating;
     }
 
     public Event setName(String name) {
@@ -236,9 +195,9 @@ public class Event {
         return this;
     }
 
-    public Event setLocation(Location location) {
-        if (location != null) {
-            this.location = location;
+    public Event setLocation(Geolocation geolocation) {
+        if (geolocation != null) {
+            this.geolocation = geolocation;
         }
         return this;
     }

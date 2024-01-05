@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Event Details</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdOSQ-BZeoYcvf2Z6fyGuAWhZ7SpdV3eQ"></script>
+    <script>
+        function initMap(lat, lng) {
+            var eventLocation = { lat: lat, lng: lng };
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: eventLocation
+            });
+            var marker = new google.maps.Marker({
+                position: eventLocation,
+                map: map
+            });
+        }
+    </script>
+</head>
+<body>
+
+<h1>Event Details</h1>
+
+<div th:if="${event}">
+    <h2 th:text="${event.name}"></h2>
+    <p th:text="${event.description}"></p>
+    
+    <p>Participants:</p>
+    <ul>
+        <li th:each="participant : ${event.participants}" th:text="${participant}"></li>
+    </ul>
+
+    <p>Average Rating: <span th:text="${event.getRating()}"></span></p>
+    
+    <div id="map" style="height:200px;width:300px;"></div> // Google Maps Kartenmaße
+
+</div>
+<div th:unless="${event}">
+    <p>No event details available</p>
+</div>
+
+<a href="/web/events">Back to Event List</a>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    initMap(/*[[${event.getLocation().getLatitude()}]]*/, /*[[${event.getLocation().getLongitude()}]]*/);  // Use event location coordinates
+    /*]]>*/
+</script>
+
+</body>
+</html>

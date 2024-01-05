@@ -74,9 +74,10 @@ public class UserService {
      *
      * @param user The User object to update.
      */
-    public void updateUser(User user) {
+    public User update(User user) {
         log.info("User Updated: {}", user.getID());
         userRepository.put(user.getID(), user);
+        return user;
     }
 
     /**
