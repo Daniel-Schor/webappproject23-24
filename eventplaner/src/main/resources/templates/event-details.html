@@ -26,8 +26,6 @@
     <h2 th:text="${event.name}"></h2>
     <p th:text="${event.description}"></p>
     
-    <p>Location: <span th:text="${event.location}"></span></p>
-
     <p>Participants:</p>
     <ul>
         <li th:each="participant : ${event.participants}" th:text="${participant}"></li>
@@ -46,7 +44,7 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/
-    initMap(50.130444, 8.692556);  // Koordinaten für die Frankfurt University of Applied Sciences
+    initMap(/*[[${event.getLocation().getLatitude()}]]*/, /*[[${event.getLocation().getLongitude()}]]*/);  // Use event location coordinates
     /*]]>*/
 </script>
 
