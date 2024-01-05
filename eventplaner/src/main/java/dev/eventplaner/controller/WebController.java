@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import dev.eventplaner.model.Event;
+import dev.eventplaner.model.User;
 import dev.eventplaner.model.UserDTO;
 import dev.eventplaner.service.EventService;
 import dev.eventplaner.service.UserService;
@@ -50,12 +51,12 @@ public class WebController {
     @GetMapping("/web/users")
     public String showAllUsers(Model model) {
         log.info("WebController: Showing all users");
-        Collection<UserDTO> usersDTO = userService.getAllDTO();
-        if (usersDTO != null) {
-            model.addAttribute("users", userService.getAllDTO());
+        Collection<User> users = userService.getAll();
+        if (users != null) {
+            model.addAttribute("users", users);
         } else {
             // Handle case when usersDTO is null
-            log.warn("WebController: UsersDTO is null");
+            log.warn("WebController: Users is null");
         }
         return "users";
     }
