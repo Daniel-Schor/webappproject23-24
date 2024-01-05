@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import dev.eventplaner.model.Event;
-import dev.eventplaner.model.User;
 import dev.eventplaner.model.UserDTO;
 import dev.eventplaner.service.EventService;
 import dev.eventplaner.service.UserService;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 
