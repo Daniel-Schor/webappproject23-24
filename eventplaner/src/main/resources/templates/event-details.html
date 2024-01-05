@@ -33,7 +33,7 @@
         <li th:each="participant : ${event.participants}" th:text="${participant}"></li>
     </ul>
 
-    <p>Average Rating: <span th:text="${event.avgRating}"></span></p>
+    <p>Average Rating: <span th:text="${event.getRating()}"></span></p>
     
     <div id="map" style="height:200px;width:300px;"></div> // Google Maps Kartenmaße
 
