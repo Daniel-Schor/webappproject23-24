@@ -187,4 +187,42 @@ public class ApiController {
         return new ResponseEntity<Event>(event, HttpStatus.OK);
     }
 
+    // neu
+    @PutMapping(value = "/events/{eventID}/add/{userID}", produces = MediaType.APPLICATION_JSON_VALUE);
+    @ResponseBody
+    public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
+        log.debug("addParticipant() is called");
+        Event event = eventService.addUser(eventID, userID);
+        if (eventID == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<Event>(event, HttpStatus.OK);
+    }
+
+    // neu
+    @PutMapping(value = "/events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE);
+    @ResponseBody
+    public ResponseEntity<?> removeParticipant(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
+        log.debug("removeParticipant() is called");
+        Event event = eventService.removeUser(eventID, userID);
+        if (eventID == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<Event>(event, HttpStatus.OK);
+    }
+
+    // neu
+    @PutMapping(value = "/events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE);
+    @ResponseBody
+    public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID, @PathVariable("rating") int rating) {
+        log.debug("rateEvent() is called");
+        Event event = eventService.addRating(eventID, userID, rating);
+        if (eventID == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<Event>(event, HttpStatus.OK);
+    }
+
+}
+
 }
