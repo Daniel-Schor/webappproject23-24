@@ -2,7 +2,9 @@ package dev.eventplaner.model;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -18,8 +20,7 @@ public class Event {
     private int maxParticipants;
     private Set<UUID> participants;
     private UUID organizerUserID;
-    private int rating;
-    private Set<UUID> ratedUserIDs;
+    private Map<UUID, Integer> ratings;
 
     /**
      * Default constructor for the Event class.
@@ -34,8 +35,7 @@ public class Event {
         this.maxParticipants = 10;
         this.participants = new HashSet<>();
         this.organizerUserID = null;
-        this.rating = 0;
-        this.ratedUserIDs = new HashSet<>();
+        this.ratings = new HashMap<>();
     }
 
     /**
@@ -59,8 +59,7 @@ public class Event {
         this.maxParticipants = maxParticipants;
         this.participants = new HashSet<>();
         this.organizerUserID = organizerUserID;
-        this.rating = 0;
-        this.ratedUserIDs = new HashSet<>();
+        this.ratings = new HashMap<>();
     }
 
     /**
@@ -75,9 +74,9 @@ public class Event {
      * @param participants    The list of participant UUIDs for the event.
      * @param organizerUserID The UUID of the organizer user.
      * @param rating          The rating of the event.
-     * @param ratedUserIDs    The list of rated user UUIDs for the event.
+     * @param ratings    The list of rated user UUIDs for the event.
      */
-    public Event(String name, String description, LocalDateTime dateTime, Location location, int maxParticipants, HashSet<UUID> participants, UUID organizerUserID, int rating, HashSet<UUID> ratedUserIDs) {
+    public Event(String name, String description, LocalDateTime dateTime, Location location, int maxParticipants, HashSet<UUID> participants, UUID organizerUserID, int rating, HashMap<UUID, Integer> ratings) {
         this.eventID = UUID.randomUUID();
         this.name = name;
         this.description = description;
@@ -86,8 +85,7 @@ public class Event {
         this.maxParticipants = maxParticipants;
         this.participants = participants;
         this.organizerUserID = organizerUserID;
-        this.rating = rating;
-        this.ratedUserIDs = ratedUserIDs;
+        this.ratings = ratings;
     }
 
     /**
@@ -118,14 +116,14 @@ public class Event {
      * Returns the average rating of the event.
      *
      * @return The average rating of the event. If no rating is available, 0 is 
-     * @see #getRating()
      */
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    public double getAvgRating() {
-        if (this.ratedUserIDs.size() == 0) {
-            return 0;
+    public double getRating() {
+        double rating = 0;
+        for (Integer i : ratings.values()) {
+            rating += i;
         }
-        return ((double) this.rating) / this.ratedUserIDs.size();
+        return ((double) rating) / ratings.size();
     }
 
     /**
@@ -133,15 +131,13 @@ public class Event {
      * 
      * @param userID the ID of the user giving the rating
      * @param rating the rating value to be added
-     * @return true if the rating was successfully added, false otherwise (user
-     *         already rated or rating out of bounds)
+     * @return true if the rating was successfully added, false otherwise (rating out of bounds or user not in event)
      */
-    public synchronized boolean addRating(UUID userID, int rating) {
-        if (!(userID != null && !this.ratedUserIDs.contains(userID)) || (rating < 0 || rating > 5)) {
+    public boolean rate(UUID userID, int rating) {
+        if (userID == null || !participants.contains(userID) || (rating < 0 || rating > 5)) {
             return false;
         }
-        this.rating += rating;
-        this.ratedUserIDs.add(userID);
+        this.ratings.put(userID, rating);
         return true;
     }
 
@@ -188,17 +184,8 @@ public class Event {
     }
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    public Set<UUID> getRatedUserIDs() {
-        return Collections.unmodifiableSet(this.ratedUserIDs);
-    }
-
-    /**
-     * @return the raw rating of the event
-     * @see #getAvgRating()
-     */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    public double getRating() {
-        return this.rating;
+    public Map<UUID, Integer> getratings() {
+        return Collections.unmodifiableMap(this.ratings);
     }
 
     public Event setName(String name) {
