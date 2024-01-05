@@ -194,7 +194,7 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<Collection<UserDTO>> getEventParticipants(@PathVariable("eventID") UUID eventID) {
         log.info("Get all users");
-        Collection<UUID> usersUUID = eventService.getEvent(eventID).getParticipants();
+        Collection<UUID> usersUUID = eventService.getEvent(eventID).getParticipants().keySet();
         Collection<UserDTO> users = new ArrayList<>();
 
         for (UUID uuid : usersUUID) {

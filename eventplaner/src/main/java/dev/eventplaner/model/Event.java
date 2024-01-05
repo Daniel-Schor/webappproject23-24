@@ -3,9 +3,7 @@ package dev.eventplaner.model;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,9 +16,8 @@ public class Event {
     private LocalDateTime dateTime;
     private Location location;
     private int maxParticipants;
-    private Set<UUID> participants;
+    private Map<UUID, Integer> participants;
     private UUID organizerUserID;
-    private Map<UUID, Integer> ratings;
 
     /**
      * Default constructor for the Event class.
@@ -33,9 +30,8 @@ public class Event {
         this.dateTime = LocalDateTime.now();
         this.location = new Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
         this.maxParticipants = 10;
-        this.participants = new HashSet<>();
+        this.participants = new HashMap<>();
         this.organizerUserID = null;
-        this.ratings = new HashMap<>();
     }
 
     /**
@@ -57,9 +53,8 @@ public class Event {
         this.dateTime = dateTime;
         this.location = location;
         this.maxParticipants = maxParticipants;
-        this.participants = new HashSet<>();
+        this.participants = new HashMap<>();
         this.organizerUserID = organizerUserID;
-        this.ratings = new HashMap<>();
     }
 
     /**
@@ -74,9 +69,10 @@ public class Event {
      * @param participants    The list of participant UUIDs for the event.
      * @param organizerUserID The UUID of the organizer user.
      * @param rating          The rating of the event.
-     * @param ratings    The list of rated user UUIDs for the event.
+     * @param ratings         The list of rated user UUIDs for the event.
      */
-    public Event(String name, String description, LocalDateTime dateTime, Location location, int maxParticipants, HashSet<UUID> participants, UUID organizerUserID, int rating, HashMap<UUID, Integer> ratings) {
+    public Event(String name, String description, LocalDateTime dateTime, Location location, int maxParticipants,
+            HashMap<UUID, Integer> participants, UUID organizerUserID, int rating) {
         this.eventID = UUID.randomUUID();
         this.name = name;
         this.description = description;
@@ -85,18 +81,20 @@ public class Event {
         this.maxParticipants = maxParticipants;
         this.participants = participants;
         this.organizerUserID = organizerUserID;
-        this.ratings = ratings;
     }
 
     /**
-        * Adds a participant to the event.
-        * 
-        * @param participant the participant to be added
-        * @return true if the participant was added successfully, false if the participant limit is reached or participant is already in the event
-        */
+     * Adds a participant to the event.
+     * 
+     * @param participant the participant to be added
+     * @return true if the participant was added successfully, false if the
+     *         participant limit is reached or participant is already in the event
+     */
     public synchronized boolean addParticipant(UUID participantID) {
-        if (participantID != null && participants.size() < maxParticipants) {
-            return this.participants.add(participantID);
+        if (participantID != null && participants.size() < maxParticipants
+                || !participants.containsKey(participantID)) {
+            this.participants.put(participantID, null);
+            return true;
         }
         return false;
     }
@@ -115,15 +113,20 @@ public class Event {
     /**
      * Returns the average rating of the event.
      *
-     * @return The average rating of the event. If no rating is available, 0 is 
+     * @return The average rating of the event. If no rating is available, 0 is
      */
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public double getRating() {
         double rating = 0;
-        for (Integer i : ratings.values()) {
-            rating += i;
+        int nullValues = 0;
+
+        for (Integer i : participants.values()) {
+            if (i == null) {
+                nullValues++;
+            } else {
+                rating += i;
+            }
         }
-        return ((double) rating) / ratings.size();
+        return ((double) rating) / (participants.size() - nullValues);
     }
 
     /**
@@ -131,18 +134,19 @@ public class Event {
      * 
      * @param userID the ID of the user giving the rating
      * @param rating the rating value to be added
-     * @return true if the rating was successfully added, false otherwise (rating out of bounds or user not in event)
+     * @return true if the rating was successfully added, false otherwise (rating
+     *         out of bounds or user not in event)
      */
     public boolean rate(UUID userID, int rating) {
-        if (userID == null || !participants.contains(userID) || (rating < 0 || rating > 5)) {
+        if (userID == null || participants.get(userID) != null || (rating < 0 || rating > 5)) {
             return false;
         }
-        this.ratings.put(userID, rating);
+        participants.put(userID, rating);
         return true;
     }
 
     public boolean contains(UUID userID) {
-        return this.participants.contains(userID);
+        return this.participants.containsKey(userID);
     }
 
     // -- GETTER AND SETTER --
@@ -173,19 +177,13 @@ public class Event {
         return this.maxParticipants;
     }
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    public Set<UUID> getParticipants() {
-        return Collections.unmodifiableSet(this.participants);
+    public Map<UUID, Integer> getParticipants() {
+        return Collections.unmodifiableMap(this.participants);
     }
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public UUID getOrganizerUserID() {
         return this.organizerUserID;
-    }
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    public Map<UUID, Integer> getratings() {
-        return Collections.unmodifiableMap(this.ratings);
     }
 
     public Event setName(String name) {
