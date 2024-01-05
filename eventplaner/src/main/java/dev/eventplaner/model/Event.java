@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails.Address;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Event {
@@ -14,7 +16,7 @@ public class Event {
     private String name;
     private String description;
     private LocalDateTime dateTime;
-    private Location location;
+    private Geolocation geolocation;
     private int maxParticipants;
     private Map<UUID, Integer> participants;
     private UUID organizerUserID;
@@ -28,7 +30,7 @@ public class Event {
         this.name = "Default Event";
         this.description = "Default Description";
         this.dateTime = LocalDateTime.now();
-        this.location = new Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
+        this.geolocation = new Geolocation(50.130444, 8.692556);//new Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
         this.maxParticipants = 10;
         this.participants = new HashMap<>();
         this.organizerUserID = null;
@@ -45,13 +47,13 @@ public class Event {
      * @param maxParticipants The maximum number of participants for the event.
      * @param organizerUserID The UUID of the organizer user.
      */
-    public Event(String name, String description, LocalDateTime dateTime, Location location, int maxParticipants,
+    public Event(String name, String description, LocalDateTime dateTime, Geolocation geolocation, int maxParticipants,
             UUID organizerUserID) {
         this.eventID = UUID.randomUUID();
         this.name = name;
         this.description = description;
         this.dateTime = dateTime;
-        this.location = location;
+        this.geolocation = geolocation;
         this.maxParticipants = maxParticipants;
         this.participants = new HashMap<>();
         this.organizerUserID = organizerUserID;
@@ -71,13 +73,13 @@ public class Event {
      * @param rating          The rating of the event.
      * @param ratings         The list of rated user UUIDs for the event.
      */
-    public Event(String name, String description, LocalDateTime dateTime, Location location, int maxParticipants,
+    public Event(String name, String description, LocalDateTime dateTime, Geolocation geolocation, int maxParticipants,
             HashMap<UUID, Integer> participants, UUID organizerUserID, int rating) {
         this.eventID = UUID.randomUUID();
         this.name = name;
         this.description = description;
         this.dateTime = dateTime;
-        this.location = location;
+        this.geolocation = geolocation;
         this.maxParticipants = maxParticipants;
         this.participants = participants;
         this.organizerUserID = organizerUserID;
@@ -169,8 +171,8 @@ public class Event {
     }
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    public Location getLocation() {
-        return this.location;
+    public Geolocation getLocation() {
+        return this.geolocation;
     }
 
     public int getMaxParticipants() {
@@ -221,9 +223,9 @@ public class Event {
         return this;
     }
 
-    public Event setLocation(Location location) {
-        if (location != null) {
-            this.location = location;
+    public Event setLocation(Geolocation geolocation) {
+        if (geolocation != null) {
+            this.geolocation = geolocation;
         }
         return this;
     }
