@@ -15,6 +15,7 @@ import dev.eventplaner.service.EventService;
 import dev.eventplaner.service.UserService;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -49,15 +50,9 @@ public class WebController {
     }
 
     @GetMapping("/web/users")
-    public String showAllUsers(Model model) {
-        log.info("WebController: Showing all users");
-        Collection<User> users = userService.getAll();
-        if (users != null) {
-            model.addAttribute("users", users);
-        } else {
-            // Handle case when usersDTO is null
-            log.warn("WebController: Users is null");
-        }
+    public String getUsers(Model model) {
+        Collection<UserDTO> users = userService.getAllDTO(); // 
+        model.addAttribute("users", users);
         return "users";
     }
     
