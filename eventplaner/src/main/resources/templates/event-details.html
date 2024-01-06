@@ -1,9 +1,32 @@
-<!DOCTYPE html>
+<!DO<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>Event Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/style.css}"/>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdOSQ-BZeoYcvf2Z6fyGuAWhZ7SpdV3eQ"></script>
+    <style>
+        .star-rating .star-container {
+            font-size: 24px; /* Größe der Sterne */
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+        .star-rating .star-container i {
+            color: gold; /* Farbe der gefüllten Sterne */
+        }
+        .star-rating .star-container::before {
+            content: '\f005'; /* FontAwesome Stern-Code */
+            font-family: 'FontAwesome';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0; /* Anfangsfüllung */
+            color: lightgray; /* Farbe der leeren Sterne */
+            overflow: hidden;
+        }
+    </style>
     <script>
         function initMap(lat, lng) {
             var eventLocation = { lat: lat, lng: lng };
@@ -31,9 +54,13 @@
         <li th:each="participant : ${event.participants}" th:text="${participant}"></li>
     </ul>
 
-    <p>Average Rating: <span th:text="${event.getRating()}"></span></p>
+    <p>Average Rating: 
+        <div class="star-rating">
+            <div th:each="i : ${#numbers.sequence(1,5)}" class="star-container" th:id="'star' + ${i}"><i class="fas fa-star"></i></div>
+        </div>
+    </p>
     
-    <div id="map" style="height:200px;width:300px;"></div> // Google Maps Kartenmaße
+    <div id="map" style="height:200px;width:300px;"></div>
 
 </div>
 <div th:unless="${event}">
@@ -48,5 +75,22 @@
     /*]]>*/
 </script>
 
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener("DOMContentLoaded", function() {
+        var rating = /*[[${event.getRating()}]]*/; // Bewertung des Events
+        var totalStars = 5;
+
+        for (var i = 1; i <= totalStars; i++) {
+            var starElement = document.getElementById('star' + i);
+            var starPercentage = (rating / totalStars) * 100;
+            var starPercentageRounded = `${Math.round(starPercentage / 10) * 10}%`;
+            starElement.style.width = starPercentageRounded;
+        }
+    });
+    /*]]>*/
+</script>
+
 </body>
 </html>
+
