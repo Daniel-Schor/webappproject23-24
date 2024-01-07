@@ -5,17 +5,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
+import org.springframework.web.bind.annotation.*;
 import dev.eventplaner.model.Event;
+import dev.eventplaner.model.Geolocation;
 import dev.eventplaner.model.UserDTO;
 import dev.eventplaner.service.EventService;
 import dev.eventplaner.service.UserService;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.UUID;
-
 
 @Controller
 public class WebController {
@@ -49,14 +49,62 @@ public class WebController {
 
     @GetMapping("/web/users")
     public String getUsers(Model model) {
-        Collection<UserDTO> users = userService.getAllDTO(); // 
+        Collection<UserDTO> users = userService.getAllDTO();
         model.addAttribute("users", users);
         return "users";
     }
-    
+
     @GetMapping("/web/home")
     public String home() {
         log.info("WebController: Home page requested");
         return "index";
     }
+    @GetMapping("/web/manage")
+    public String showManageEvents(Model model) {
+        log.info("WebController: Showing manage events page");
+        return "manage-events";
+    }
+
+    @GetMapping("/web/manage/add-event")
+    public String showAddEventForm(Model model) {
+        log.info("WebController: Showing add event form");
+        model.addAttribute("event", new Event());
+        return "add-event";
+    }
+    @PostMapping("/web/manage/add-event")
+    public String addEvent(@RequestParam("name") String name,
+                           @RequestParam("description") String description,
+                           @RequestParam("dateTime") LocalDateTime dateTime,
+                           @RequestParam("latitude") Double latitude,
+                           @RequestParam("longitude") Double longitude,
+                           @RequestParam("maxParticipants") int maxParticipants,
+                           @RequestParam(value = "organizerUserID", required = false) UUID organizerUserID,
+                           Model model) {
+        log.info("WebController: Adding new event: {}", name);
+
+        // Mache neue Event Instanz
+        Event event = new Event();
+
+        // Stecke die Parameter in die Event Instanz
+        event.setName(name);
+        event.setDescription(description);
+        event.setDateTime(dateTime);
+
+        // Erstelle eine Geolocation Instanz und stecke sie in die Event Instanz
+        Geolocation geolocation = new Geolocation(latitude, longitude);
+        event.setLocation(geolocation);
+
+        event.setMaxParticipants(maxParticipants);
+        event.setOrganizerUserID(organizerUserID);
+
+        // Füge das Event der Eventliste hinzu
+        eventService.create(event);
+
+        // Redirect the user to the event overview
+        model.addAttribute("events", eventService.getAllDTO());
+
+        // Redirect the user to the event overview
+        return "redirect:/web/events";
+    }
+    
 }
