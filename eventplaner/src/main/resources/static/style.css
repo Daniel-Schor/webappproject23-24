@@ -1,0 +1,28 @@
+.star-rating {
+    font-size: 0; /* Entfernt den Zwischenraum zwischen Inline-Blocks */
+    line-height: 0; /* Verhindert zusätzlichen vertikalen Abstand */
+    display: inline-block; /* Richtet alle Sterne in einer Zeile aus */
+}
+
+.star-container {
+    font-size: 24px; /* Größe der Sterne */
+    display: inline-block; /* Stellt sicher, dass die Sterne nebeneinander stehen */
+    position: relative;
+    overflow: hidden; /* Verhindert Überlauf bei teilweiser Füllung */
+}
+
+.star-container i {
+    color: gold; /* Farbe der gefüllten Sterne */
+    line-height: 1; /* Standardzeilenhöhe für die Sterne */
+}
+
+.star-container::before {
+    content: '\f005'; /* FontAwesome Stern-Code */
+    font-family: 'FontAwesome';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0; /* Anfangsfüllung, wird durch JS gesteuert */
+    color: lightgray; /* Farbe der leeren Sterne */
+    overflow: hidden;
+}
