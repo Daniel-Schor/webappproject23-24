@@ -46,106 +46,6 @@ public class ApiController {
     private UserService userService;
 
     /**
-     * Retrieves all users from the database.
-     *
-     * @return ResponseEntity containing a collection of UserDTO objects
-     */
-    @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Collection<UserDTO>> getAllUsers() {
-        log.info("Get all users");
-        Collection<UserDTO> users = userService.getAllDTO();
-
-        if (users.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
-
-    /**
-     * Retrieves a user by their ID.
-     *
-     * @param userID the ID of the user to retrieve
-     * @return the ResponseEntity containing the user if found, or no content if not
-     *         found
-     */
-    @GetMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<User> getUser(@PathVariable("userID") UUID userID) {
-        log.info("Get all users");
-        User user = userService.getUser(userID);
-
-        if (user == null) {
-            return ResponseEntity.noContent().build();
-        }
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
-    /**
-     * Creates a new user.
-     *
-     * @param user The user object containing the user details.
-     * @return ResponseEntity<?> The response entity containing the created user or
-     *         an error message.
-     */
-    @PostMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<?> createUser(@RequestBody User user) {
-        String fullname = user.getFirstName() + user.getLastName();
-        log.info("Create new user: ", fullname);
-        if (fullname == null || fullname.isEmpty()) {
-            String detail = "User name must not be null or empty";
-            ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, detail);
-            pd.setInstance(URI.create("/users"));
-            pd.setTitle("User creation error");
-            return ResponseEntity.unprocessableEntity().body(pd);
-        }
-        User createdUser = userService.create(user);
-        return new ResponseEntity<User>(createdUser, HttpStatus.CREATED);
-    }
-
-    // neu Methode
-
-    /**
-     * Updates a user with the given user ID.
-     *
-     * @param userID The ID of the user to be updated.
-     * @param user   The updated user object.
-     * @return The ResponseEntity containing the updated user object if successful,
-     *         or a not found response if the user does not exist.
-     */
-    @PutMapping(value = "/users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<User> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
-        log.info("Update user: {}", userID);
-        User updatedUser = userService.update(user);
-
-        if (updatedUser == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
-    }
-
-    /**
-     * Deletes a user with the specified userID.
-     *
-     * @param userID The ID of the user to be deleted.
-     * @return A ResponseEntity containing the deleted user if successful, or a not
-     *         found response if the user does not exist.
-     */
-    @DeleteMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<?> deleteUser(@PathVariable("userID") UUID userID) {
-        log.debug("deleteUser() is called");
-        User user = userService.delete(userID);
-        eventService.removeUser(userID);
-        if (userID == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return new ResponseEntity<User>(user, HttpStatus.OK);
-    }
-
-    /**
      * Retrieves all events.
      *
      * @return ResponseEntity containing a collection of EventDTO objects
@@ -281,7 +181,8 @@ public class ApiController {
      */
     @PutMapping(value = "/events/{eventID}/add/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
+    public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID,
+            @PathVariable("userID") UUID userID) {
         log.debug("addParticipant() is called");
         Event event = eventService.addUser(eventID, userID);
         if (eventID == null) {
@@ -302,7 +203,8 @@ public class ApiController {
      */
     @PutMapping(value = "/events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<?> removeParticipant(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
+    public ResponseEntity<?> removeParticipant(@PathVariable("eventID") UUID eventID,
+            @PathVariable("userID") UUID userID) {
         log.debug("removeParticipant() is called");
         Event event = eventService.removeUser(eventID, userID);
         if (eventID == null) {
@@ -323,7 +225,8 @@ public class ApiController {
      */
     @PutMapping(value = "/events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID, @PathVariable("rating") int rating) {
+    public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID,
+            @PathVariable("rating") int rating) {
         log.debug("rateEvent() is called");
         Event event = eventService.addRating(eventID, userID, rating);
         if (eventID == null) {
