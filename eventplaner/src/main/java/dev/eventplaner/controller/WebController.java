@@ -51,6 +51,7 @@ public class WebController {
     public String getUsers(Model model) {
         Collection<UserDTO> users = userService.getAllDTO();
         model.addAttribute("users", users);
+        log.info("Fetched all users"); 
         return "users";
     }
 
