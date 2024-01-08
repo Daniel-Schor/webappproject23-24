@@ -1,5 +1,6 @@
 package dev.eventplaner.service;
 
+import dev.eventplaner.model.ApiError;
 import dev.eventplaner.model.User;
 import dev.eventplaner.model.UserDTO;
 import dev.eventplaner.repository.UserRepository;
@@ -13,8 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
 @Service
 public class UserService {
@@ -22,15 +29,10 @@ public class UserService {
     // Logger instance for this class, used to log system messages, warnings, and
     // errors.
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
-    
-     // Read the URL of the external API from properties file.
+
+    // Read the URL of the external API from properties file.
     @Value("${userservice.url}")
     String apiUrl;
-
-    // Autowired annotation is used to automatically inject the UserRepository
-    // instance into this class.
-    @Autowired
-    private UserRepository userRepository;
 
     /**
      * Retrieves a user by their ID.
@@ -43,9 +45,18 @@ public class UserService {
         log.info("get user by userID: {}", userID);
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users/" + userID;
-        
 
-        HttpHeader headers = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
+        }
         return response;
     }
 
@@ -54,10 +65,25 @@ public class UserService {
      *
      * @param user The User object to create.
      */
-    public User create(User user) {
+    public ResponseEntity<?> create(User user) {
         log.info("User Created: {}", user.getID());
-        userRepository.put(user.getID(), user);
-        return user;
+
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/users/";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<User> request = new HttpEntity<User>(user, headers);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
+        }
+        return response;
     }
 
     /**
@@ -65,16 +91,22 @@ public class UserService {
      *
      * @param userID The ID of the user to delete.
      */
-    public User delete(UUID userID) {
-        if (userRepository.get(userID) == null) {
-            log.warn("User with ID {} not found", userID);
+    public ResponseEntity<?> delete(UUID userID) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/users/" + userID;
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        if (userRepository.get(userID) != null) {
-            log.warn("User with ID {} found", userID);
-            log.info("User Deleted: {}", userID);
-            return userRepository.remove(userID);
-        }
-        return null;
+        return response;
 
     }
 
@@ -83,29 +115,47 @@ public class UserService {
      *
      * @param user The User object to update.
      */
-    public User update(User user) {
+    public ResponseEntity<?> update(User user) {
         log.info("User Updated: {}", user.getID());
-        userRepository.put(user.getID(), user);
-        return user;
-    }
 
-    /**
-     * Retrieves all users.
-     *
-     * @return An Collection of all User objects.
-     */
-    public Collection<User> getAll() {
-        log.info("getAllUsers");
-        return userRepository.values();
-    }
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/users/";
 
-    public Collection<UserDTO> getAllDTO(){
-        log.info("get all Events as DTO");
-        Collection<UserDTO> usersDTO = new ArrayList<>();
-        for (User user : userRepository.values()) {
-            usersDTO.add(new UserDTO(user));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<User> request = new HttpEntity<User>(user, headers);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        return usersDTO;
+
+        return response;
+    }
+
+    public ResponseEntity<?> getAllDTO() {
+        log.info("get all Events as DTO");
+
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/users/";
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
+        }
+        return response;
+
     }
 
 }

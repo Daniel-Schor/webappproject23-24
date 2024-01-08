@@ -93,6 +93,13 @@ public class User {
         return encoder.matches(password, this.password);
     }
 
+    //@Override
+    //public String toString() {
+    //    String s = "User{" + "userID=" + userID + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\''
+    //            + ", email='" + email + '\'' + '\'' + ", organizer=" + organizer + '}';
+    //    return s;
+    //}
+
     // -- GETTER AND SETTER --
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public UUID getID() {
