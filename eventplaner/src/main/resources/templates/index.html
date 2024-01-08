@@ -7,45 +7,73 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            background: linear-gradient(to bottom, #ff6f61, #1e3c72); /* Lebhafte Farbkombination */
             margin: 0;
             padding: 0;
             display: flex;
+            flex-direction: column; 
             align-items: center;
             justify-content: center;
             height: 100vh;
         }
 
         h1 {
-            color: #333;
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #ffc947; /* Gelb-Orange für den Titel */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-top: 0;
+        }
+
+        .container {
             text-align: center;
+            color: #fff; /* Weiß für den Text im Container */
+            max-width: 800px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.7); /* Dunkler transparenter Hintergrund */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .description {
+            margin-top: 30px;
+            text-align: justify;
+            line-height: 1.6;
+            font-size: 16px;
         }
 
         ul {
             list-style: none;
             padding: 0;
-            text-align: center;
+            display: flex;
+            justify-content: center;
         }
 
         li {
-            margin: 10px;
+            margin: 0 15px;
         }
 
         a {
             text-decoration: none;
-            color: #007BFF;
+            color: #f5a623; /* Goldgelb für die Links */
             font-weight: bold;
-            font-size: 18px;
+            font-size: 20px;
+            transition: color 0.3s ease-in-out;
         }
 
         a:hover {
-            text-decoration: underline;
+            color: #e07a02; /* Dunkleres Gelb beim Hover */
         }
     </style>
 </head>
 <body>
-    <div>
-        <h1>Welcome to the Event Planner</h1>
+    <h1>Welcome to the Event Planner</h1>
+    <div class="container">
+        <div class="description">
+            <p>Discover Event Planner - Your go-to website for creating and joining unforgettable events!</p>
+            <p>Whether you're planning your own event or looking for exciting activities, we've got you covered.</p>
+            <p>Download now and redefine the way you experience events!</p>
+        </div>
         <ul>
             <li><a href="/web/events">Explore Events</a></li>
             <li><a href="/web/users">Meet our Users</a></li>
