@@ -6,20 +6,24 @@ public class UserDTO {
 
     UUID userID;
     String fullName;
+    boolean organizer; // Add this line
 
     public UserDTO(User user) {
         this.userID = user.getID();
         this.fullName = user.getFirstName() + " " + user.getLastName();
+        this.organizer = user.isOrganizer(); // Add this line
     }
 
-    public UserDTO(UUID userID, String firstName, String lastName) {
+    public UserDTO(UUID userID, String firstName, String lastName, boolean organizer) {
         this.userID = userID;
         this.fullName = firstName + " " + lastName;
+        this.organizer = organizer; // Add this line
     }
 
-    public UserDTO(UUID userID, String fullName) {
+    public UserDTO(UUID userID, String fullName, boolean organizer) {
         this.userID = userID;
         this.fullName = fullName;
+        this.organizer = organizer; // Add this line
     }
 
     public UUID getUserID() {
@@ -38,4 +42,11 @@ public class UserDTO {
         this.fullName = fullName;
     }
 
+    public boolean isOrganizer() { // Add this method
+        return organizer;
+    }
+
+    public void setOrganizer(boolean organizer) { // Add this method
+        this.organizer = organizer;
+    }
 }
