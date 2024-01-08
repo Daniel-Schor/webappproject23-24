@@ -1,10 +1,10 @@
-package edu.fra.uas.userservice.userservice;
+package dev.eventplaner.userservice.eventplaner;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UserserviceApplicationTests {
+class EventplanerApplicationTests {
 
 	@Test
 	void contextLoads() {
