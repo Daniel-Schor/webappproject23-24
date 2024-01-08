@@ -10,7 +10,11 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 
 @Service
 public class UserService {
@@ -18,6 +22,10 @@ public class UserService {
     // Logger instance for this class, used to log system messages, warnings, and
     // errors.
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    
+     // Read the URL of the external API from properties file.
+    @Value("${userservice.url}")
+    String apiUrl;
 
     // Autowired annotation is used to automatically inject the UserRepository
     // instance into this class.
@@ -31,13 +39,14 @@ public class UserService {
      * @return The User object corresponding to the given ID, or null if no such
      *         user exists.
      */
-    public User getUser(UUID userID) {
+    public ResponseEntity<?> getUser(UUID userID) {
         log.info("get user by userID: {}", userID);
-        User user = userRepository.get(userID);
-        if (user == null) {
-            log.warn("User with ID {} not found", userID);
-        }
-        return user;
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/users/" + userID;
+        
+
+        HttpHeader headers = new HttpHeaders();
+        return response;
     }
 
     /**
