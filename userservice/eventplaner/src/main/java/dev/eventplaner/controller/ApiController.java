@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.eventplaner.model.Event;
 import dev.eventplaner.model.User;
 import dev.eventplaner.model.UserDTO;
 import dev.eventplaner.service.UserService;
@@ -117,5 +119,15 @@ public class ApiController {
         return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
     }
 
+    @DeleteMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> deleteEvent(@PathVariable("userID") UUID userID) {
+        log.debug("deleteEvent() is called");
+        User user = userService.delete(userID);
+        if (userID == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
 
 }
