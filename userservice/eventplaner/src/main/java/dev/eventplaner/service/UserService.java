@@ -2,7 +2,6 @@ package dev.eventplaner.service;
 
 import dev.eventplaner.model.User;
 import dev.eventplaner.model.UserDTO;
-import dev.eventplaner.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -13,7 +13,6 @@ import dev.eventplaner.model.ApiError;
 import dev.eventplaner.model.Event;
 import dev.eventplaner.model.EventDTO;
 import dev.eventplaner.model.User;
-import dev.eventplaner.repository.EventRepository;
 
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;

@@ -3,7 +3,6 @@ package dev.eventplaner.service;
 import dev.eventplaner.model.ApiError;
 import dev.eventplaner.model.User;
 import dev.eventplaner.model.UserDTO;
-import dev.eventplaner.repository.UserRepository;
 
 import java.util.UUID;
 import org.slf4j.Logger;
