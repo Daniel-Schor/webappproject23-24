@@ -25,7 +25,6 @@ import dev.eventplaner.service.UserService;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
-@RequestMapping("/api")
 public class ApiController {
 
     // Logger instance for this class, used to log system messages, warnings, and

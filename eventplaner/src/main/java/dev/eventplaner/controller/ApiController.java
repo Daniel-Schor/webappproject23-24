@@ -30,7 +30,7 @@ import dev.eventplaner.service.UserService;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/")
 public class ApiController {
 
     // Logger instance for this class, used to log system messages, warnings, and
@@ -69,7 +69,7 @@ public class ApiController {
      * @return the ResponseEntity containing the user if found, or no content if not
      *         found
      */
-    @GetMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<User> getUser(@PathVariable("userID") UUID userID) {
         log.info("Get all users");
@@ -88,7 +88,7 @@ public class ApiController {
      * @return ResponseEntity<?> The response entity containing the created user or
      *         an error message.
      */
-    @PostMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> createUser(@RequestBody User user) {
         String fullname = user.getFirstName() + user.getLastName();
@@ -114,7 +114,7 @@ public class ApiController {
      * @return The ResponseEntity containing the updated user object if successful,
      *         or a not found response if the user does not exist.
      */
-    @PutMapping(value = "/users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<User> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
         log.info("Update user: {}", userID);
@@ -133,7 +133,7 @@ public class ApiController {
      * @return A ResponseEntity containing the deleted user if successful, or a not
      *         found response if the user does not exist.
      */
-    @DeleteMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> deleteUser(@PathVariable("userID") UUID userID) {
         log.debug("deleteUser() is called");
@@ -150,7 +150,7 @@ public class ApiController {
      *
      * @return ResponseEntity containing a collection of EventDTO objects
      */
-    @GetMapping(value = "/events", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "events", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Collection<EventDTO>> getAllEvents() {
         log.info("Get all events");
@@ -169,7 +169,7 @@ public class ApiController {
      * @return a ResponseEntity containing the event if found, or no content if not
      *         found
      */
-    @GetMapping(value = "/events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Event> getEvent(@PathVariable("eventID") UUID eventID) {
         log.info("Get all users");
@@ -190,7 +190,7 @@ public class ApiController {
      * @return A ResponseEntity containing a collection of UserDTO objects
      *         representing the participants of the event.
      */
-    @GetMapping(value = "/events/{eventID}/participants", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "events/{eventID}/participants", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Collection<UserDTO>> getEventParticipants(@PathVariable("eventID") UUID eventID) {
         log.info("Get all users");
@@ -215,7 +215,7 @@ public class ApiController {
      * @return ResponseEntity representing the HTTP response with the created event
      *         or an error message.
      */
-    @PostMapping(value = "/events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
         log.info("Create new Event: {}", event.getName());
@@ -240,7 +240,7 @@ public class ApiController {
      * @return ResponseEntity containing the updated event if successful, or
      *         ResponseEntity with status 404 if the event is not found.
      */
-    @PutMapping(value = "/events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Event> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
         log.info("Update event: {}", eventID);
@@ -259,7 +259,7 @@ public class ApiController {
      * @return A ResponseEntity containing the deleted event if successful, or a not
      *         found response if the event does not exist.
      */
-    @DeleteMapping(value = "/events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> deleteEvent(@PathVariable("eventID") UUID eventID) {
         log.debug("deleteEvent() is called");
@@ -279,7 +279,7 @@ public class ApiController {
      * @param userID  The ID of the user to be added as a participant.
      * @return The ResponseEntity containing the updated event information.
      */
-    @PutMapping(value = "/events/{eventID}/add/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "events/{eventID}/add/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
         log.debug("addParticipant() is called");
@@ -300,7 +300,7 @@ public class ApiController {
      * @return A ResponseEntity containing the updated event if successful, or a not
      *         found response if the event ID is invalid.
      */
-    @PutMapping(value = "/events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> removeParticipant(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
         log.debug("removeParticipant() is called");
@@ -321,7 +321,7 @@ public class ApiController {
      * @return ResponseEntity containing the updated Event object if successful, or
      *         a not found response if the event ID is invalid.
      */
-    @PutMapping(value = "/events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID, @PathVariable("rating") int rating) {
         log.debug("rateEvent() is called");

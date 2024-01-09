@@ -16,8 +16,17 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
+@RequestMapping("/web/")
+public SomeData requestMethodName(@RequestParam String param) {
+    return new SomeData();
+}
+
 public class WebController {
 
     private static final Logger log = LoggerFactory.getLogger(WebController.class);
@@ -28,14 +37,14 @@ public class WebController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/web/events")
+    @GetMapping("events")
     public String showAllEvents(Model model) {
         log.info("WebController: Showing all events");
         model.addAttribute("events", eventService.getAllDTO());
         return "events";
     }
 
-    @GetMapping("/web/events/{eventID}")
+    @GetMapping("events/{eventID}")
     public String showEventDetails(@PathVariable("eventID") UUID eventID, Model model) {
         log.info("WebController: Showing details for event ID: {}", eventID);
         try {
@@ -47,7 +56,7 @@ public class WebController {
         return "event-details";
     }
 
-    @GetMapping("/web/users")
+    @GetMapping("users")
     public String getUsers(Model model) {
         Collection<UserDTO> users = userService.getAllDTO();
         model.addAttribute("users", users);
@@ -55,24 +64,24 @@ public class WebController {
         return "users";
     }
 
-    @GetMapping("/web/home")
+    @GetMapping("home")
     public String home() {
         log.info("WebController: Home page requested");
         return "index";
     }
-    @GetMapping("/web/manage")
+    @GetMapping("manage")
     public String showManageEvents(Model model) {
         log.info("WebController: Showing manage events page");
         return "manage-events";
     }
 
-    @GetMapping("/web/manage/add-event")
+    @GetMapping("manage/add-event")
     public String showAddEventForm(Model model) {
         log.info("WebController: Showing add event form");
         model.addAttribute("event", new Event());
         return "add-event";
     }
-    @PostMapping("/web/manage/add-event")
+    @PostMapping("manage/add-event")
     public String addEvent(@RequestParam("name") String name,
                            @RequestParam("description") String description,
                            @RequestParam("dateTime") LocalDateTime dateTime,
@@ -105,7 +114,7 @@ public class WebController {
         model.addAttribute("events", eventService.getAllDTO());
 
         // Redirect the user to the event overview
-        return "redirect:/web/events";
+        return "redirect:events";
     }
     
 }
