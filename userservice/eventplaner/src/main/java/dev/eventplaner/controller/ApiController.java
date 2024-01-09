@@ -1,7 +1,6 @@
 package dev.eventplaner.controller;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -12,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,11 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.eventplaner.model.EventDTO;
 import dev.eventplaner.model.User;
-import dev.eventplaner.model.Event;
 import dev.eventplaner.model.UserDTO;
-import dev.eventplaner.service.EventService;
 import dev.eventplaner.service.UserService;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -37,11 +32,8 @@ public class ApiController {
     // errors.
     private static final Logger log = LoggerFactory.getLogger(ApiController.class);
 
-    // Autowired annotation is used to automatically inject the EventService and
     // UserService
     // instance into this class.
-    @Autowired
-    private EventService eventService;
     @Autowired
     private UserService userService;
 
@@ -126,23 +118,5 @@ public class ApiController {
         return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
     }
 
-    /**
-     * Deletes a user with the specified userID.
-     *
-     * @param userID The ID of the user to be deleted.
-     * @return A ResponseEntity containing the deleted user if successful, or a not
-     *         found response if the user does not exist.
-     */
-    @DeleteMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<?> deleteUser(@PathVariable("userID") UUID userID) {
-        log.debug("deleteUser() is called");
-        User user = userService.delete(userID);
-        eventService.removeUser(userID);
-        if (userID == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return new ResponseEntity<User>(user, HttpStatus.OK);
-    }
 
 }

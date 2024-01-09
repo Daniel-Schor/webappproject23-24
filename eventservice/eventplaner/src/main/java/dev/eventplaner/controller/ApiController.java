@@ -26,7 +26,6 @@ import dev.eventplaner.model.User;
 import dev.eventplaner.model.Event;
 import dev.eventplaner.model.UserDTO;
 import dev.eventplaner.service.EventService;
-import dev.eventplaner.service.UserService;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -38,12 +37,9 @@ public class ApiController {
     private static final Logger log = LoggerFactory.getLogger(ApiController.class);
 
     // Autowired annotation is used to automatically inject the EventService and
-    // UserService
     // instance into this class.
     @Autowired
     private EventService eventService;
-    @Autowired
-    private UserService userService;
 
     /**
      * Retrieves all events.
@@ -79,32 +75,6 @@ public class ApiController {
             return ResponseEntity.noContent().build();
         }
         return new ResponseEntity<>(event, HttpStatus.OK);
-    }
-
-    // neue Methode
-
-    /**
-     * Retrieves the participants of an event.
-     *
-     * @param eventID The ID of the event.
-     * @return A ResponseEntity containing a collection of UserDTO objects
-     *         representing the participants of the event.
-     */
-    @GetMapping(value = "/events/{eventID}/participants", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Collection<UserDTO>> getEventParticipants(@PathVariable("eventID") UUID eventID) {
-        log.info("Get all users");
-        Collection<UUID> usersUUID = eventService.getEvent(eventID).getParticipants().keySet();
-        Collection<UserDTO> users = new ArrayList<>();
-
-        for (UUID uuid : usersUUID) {
-            users.add(new UserDTO((User) userService.getUser(uuid).getBody()));
-        }
-
-        if (users.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     /**
