@@ -28,6 +28,7 @@ import dev.eventplaner.model.UserDTO;
 import dev.eventplaner.service.EventService;
 import dev.eventplaner.service.UserService;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api")
@@ -98,7 +99,7 @@ public class ApiController {
         Collection<UserDTO> users = new ArrayList<>();
 
         for (UUID uuid : usersUUID) {
-            users.add(new UserDTO(userService.getUser(uuid)));
+            users.add(new UserDTO((User) userService.getUser(uuid).getBody()));
         }
 
         if (users.isEmpty()) {
