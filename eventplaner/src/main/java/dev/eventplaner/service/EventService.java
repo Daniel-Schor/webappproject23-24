@@ -1,99 +1,192 @@
 package dev.eventplaner.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+
+import dev.eventplaner.model.ApiError;
 import dev.eventplaner.model.Event;
-import dev.eventplaner.model.EventDTO;
-import dev.eventplaner.repository.EventRepository;
 
 
 @Service
 public class EventService {
-    
 
     private static final Logger log = LoggerFactory.getLogger(EventService.class);
 
-    @Autowired
-    private EventRepository eventRepository;
+    // Read the URL of the external API from properties file.
+    @Value("${eventservice.url}")
+    String apiUrl;
 
-    public Event create(Event event){
-        log.info("Event Created: {}, {}", event.getName(), event.getID());
-        eventRepository.put(event.getID(), event);
-        return event;
+    public ResponseEntity<?> create(Event event) {
+        log.info("event Created: {}", event.getID());
+
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/events/";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Event> request = new HttpEntity<Event>(event, headers);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
+        }
+        return response;
     }
 
-    public Collection<Event> getAll(){
-        log.info("get all Events");
-        return eventRepository.values();
-    }
-
-    public Collection<EventDTO> getAllDTO(){
+    public ResponseEntity<?> getAllDTO() {
         log.info("get all Events as DTO");
-        Collection<EventDTO> eventsDTO = new ArrayList<>();
-        for (Event event : eventRepository.values()) {
-            eventsDTO.add(new EventDTO(event));
+
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/events";
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        return eventsDTO;
+        return response;
     }
 
-    public Event getEvent(UUID eventID) {
+    public ResponseEntity<?> getEvent(UUID eventID) {
         log.info("get event by eventID: {}", eventID);
-        return eventRepository.get(eventID);
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/events/" + eventID;
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
+        }
+        return response;
     }
 
-    public Event update(UUID eventID, Event event){
+    public ResponseEntity<?> update(Event event) {
         log.info("update event: {}", event);
-        eventRepository.put(eventID, event);
-        return event;
+
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/events";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Event> request = new HttpEntity<Event>(event, headers);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
+        }
+
+        return response;
     }
 
-    public Event delete(UUID eventID){
+    public ResponseEntity<?> delete(UUID eventID) {
         log.info("delete eventID: {}", eventID);
-        return eventRepository.remove(eventID);
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/events/" + eventID;
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
+        }
+        return response;
     }
 
-    public Event addUser(UUID eventID, UUID userID) {
+    public ResponseEntity<?> addUser(UUID eventID, UUID userID) {
         log.info("addUser: eventID={}, userID={}", eventID, userID);
-        Event event = eventRepository.get(eventID);
-        if (event == null || !event.addParticipant(userID)) {
-            throw new IllegalArgumentException("Failed to add user to event");
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/events/" + eventID + "/add/" + userID;
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        return event;
+
+        return response;
     }
 
-    public Event removeUser(UUID eventID, UUID userID) {
+    public ResponseEntity<?> removeUser(UUID eventID, UUID userID) {
         log.info("removeUser: eventID={}, user={}", eventID, userID);
-        Event event = eventRepository.get(eventID);
-        event.removeParticipant(userID);
-        return event;
-    }
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/events/" + eventID + "/remove/" + userID;
 
-    public void removeUser(UUID userID) {
-        log.info("removeUser: userId={}", userID);
-        for (Event event : eventRepository.values()) {
-            event.removeParticipant(userID);
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
+
+        return response;
     }
 
-    public Event addRating(UUID eventID, UUID userID, int rating) {
+    public ResponseEntity<?> addRating(UUID eventID, UUID userID, int rating) {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
-        Event event = eventRepository.get(eventID);
-        if (event == null) {
-            throw new IllegalArgumentException("Failed to add rating to event");
+        
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/events/" + eventID + "/" + userID + "/" + rating;
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        event.rate(userID, rating);
-        return event;
+
+        return response;
     }
 
-    public double getRating(UUID eventID) {
-        log.info("getRating: eventID={}", eventID);
-        Event event = eventRepository.get(eventID);
-        return event.getRating();
-    }
 }
