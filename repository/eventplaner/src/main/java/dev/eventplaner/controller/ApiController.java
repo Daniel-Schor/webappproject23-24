@@ -18,7 +18,6 @@ import dev.eventplaner.model.Event;
 import dev.eventplaner.service.RepositoryService;
 
 @RestController
-@RequestMapping("/api")
 public class ApiController {
 
     @Autowired
