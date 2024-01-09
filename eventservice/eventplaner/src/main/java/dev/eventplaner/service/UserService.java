@@ -5,12 +5,9 @@ import dev.eventplaner.model.User;
 import dev.eventplaner.model.UserDTO;
 import dev.eventplaner.repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,7 +18,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
 @Service
 public class UserService {
@@ -69,7 +65,7 @@ public class UserService {
         log.info("User Created: {}", user.getID());
 
         RestTemplate restTemplate = new RestTemplate();
-        String url = apiUrl + "/users/";
+        String url = apiUrl + "/users";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -119,7 +115,7 @@ public class UserService {
         log.info("User Updated: {}", user.getID());
 
         RestTemplate restTemplate = new RestTemplate();
-        String url = apiUrl + "/users/";
+        String url = apiUrl + "/users";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -141,7 +137,7 @@ public class UserService {
         log.info("get all Events as DTO");
 
         RestTemplate restTemplate = new RestTemplate();
-        String url = apiUrl + "/users/";
+        String url = apiUrl + "/users";
 
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<String>(headers);
