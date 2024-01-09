@@ -56,15 +56,23 @@ public class EventService {
         return response;
     }
 
-    public ResponseEntity<?> getAll() {
-        log.info("get all Events");
-
-        return response;
-    }
-
     public ResponseEntity<?> getAllDTO() {
         log.info("get all Events as DTO");
 
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/events";
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
+        }
         return response;
     }
 
@@ -91,7 +99,7 @@ public class EventService {
         log.info("update event: {}", event);
 
         RestTemplate restTemplate = new RestTemplate();
-        String url = apiUrl + "/events/";
+        String url = apiUrl + "/events";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -105,6 +113,7 @@ public class EventService {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
             response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
+
         return response;
     }
 
@@ -169,12 +178,22 @@ public class EventService {
 
     public ResponseEntity<?> addRating(UUID eventID, UUID userID, int rating) {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
+        
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/events/" + eventID + "/" + userID + "/" + rating;
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
+        }
 
         return response;
     }
 
-    public ResponseEntity<?> getRating(UUID eventID) {
-        log.info("getRating: eventID={}", eventID);
-        return response;
-    }
 }
