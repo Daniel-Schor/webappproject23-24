@@ -114,7 +114,7 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<Event> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
         log.info("Update event: {}", eventID);
-        Event updatedEvent = eventService.update(eventID, event);
+        Event updatedEvent = eventService.update(event);
 
         if (updatedEvent == null) {
             return ResponseEntity.notFound().build();
