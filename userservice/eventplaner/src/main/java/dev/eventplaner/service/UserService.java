@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +18,9 @@ public class UserService {
     // Logger instance for this class, used to log system messages, warnings, and
     // errors.
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
+
+    @Value("${repository.url}")
+    String apiUrl;
 
     /**
      * Retrieves a user by their ID.

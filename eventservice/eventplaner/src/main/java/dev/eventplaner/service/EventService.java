@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import dev.eventplaner.model.Event;
 import dev.eventplaner.model.EventDTO;
@@ -18,6 +19,8 @@ public class EventService {
 
     private static final Logger log = LoggerFactory.getLogger(EventService.class);
 
+    @Value("${repository.url}")
+    String apiUrl;
 
     public Event create(Event event){
         log.info("Event Created: {}, {}", event.getName(), event.getID());
