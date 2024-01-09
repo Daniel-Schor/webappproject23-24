@@ -18,8 +18,6 @@ public class EventService {
 
     private static final Logger log = LoggerFactory.getLogger(EventService.class);
 
-    @Autowired
-    private EventRepository eventRepository;
 
     public Event create(Event event){
         log.info("Event Created: {}, {}", event.getName(), event.getID());

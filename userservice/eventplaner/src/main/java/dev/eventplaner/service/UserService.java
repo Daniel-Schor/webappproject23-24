@@ -18,11 +18,6 @@ public class UserService {
     // errors.
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    // Autowired annotation is used to automatically inject the UserRepository
-    // instance into this class.
-    @Autowired
-    private UserRepository userRepository;
-
     /**
      * Retrieves a user by their ID.
      *
