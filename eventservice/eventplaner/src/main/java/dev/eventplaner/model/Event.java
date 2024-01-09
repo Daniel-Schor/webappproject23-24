@@ -28,7 +28,8 @@ public class Event {
         this.name = "Default Event";
         this.description = "Default Description";
         this.dateTime = LocalDateTime.now();
-        this.geolocation = new Geolocation(50.130444, 8.692556);//new Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
+        this.geolocation = new Geolocation(50.130444, 8.692556);// new Address("Nibelungenplatz", "1", "60318",
+                                                                // "Frankfurt am Main", "Deutschland");
         this.maxParticipants = 10;
         this.participants = new HashMap<>();
         this.organizerUserID = null;
@@ -77,10 +78,13 @@ public class Event {
      * Removes a participant from the event.
      * 
      * @param participantID the ID of the participant to be removed
+     * @return true if the participant was removed successfully, false if the ID is not in the event
      */
-    public synchronized void removeParticipant(UUID participantID) {
+    public synchronized boolean removeParticipant(UUID participantID) {
         if (participantID != null) {
-            this.participants.remove(participantID);
+            return (this.participants.remove(participantID) != null);
+        } else {
+            return false;
         }
     }
 
