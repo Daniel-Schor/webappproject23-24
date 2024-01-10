@@ -36,6 +36,22 @@ public class Event {
     }
 
     /**
+     * Default constructor for the Event class.
+     * Initializes the event with default values.
+     */
+    public Event(UUID eventID) {
+        this.eventID = eventID;
+        this.name = "Default Event";
+        this.description = "Default Description";
+        this.dateTime = LocalDateTime.now();
+        this.geolocation = new Geolocation(50.130444, 8.692556);// new Address("Nibelungenplatz", "1", "60318",
+                                                                // "Frankfurt am Main", "Deutschland");
+        this.maxParticipants = 10;
+        this.participants = new HashMap<>();
+        this.organizerUserID = null;
+    }
+
+    /**
      * Constructor for the Event class.
      * Initializes the event with the specified values.
      * 
