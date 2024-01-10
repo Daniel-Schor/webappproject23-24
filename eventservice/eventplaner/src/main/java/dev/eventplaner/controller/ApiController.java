@@ -67,9 +67,9 @@ public class ApiController {
      */
     @GetMapping(value = "/events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Event> getEvent(@PathVariable("eventID") UUID eventID) {
+    public ResponseEntity<String> getEvent(@PathVariable("eventID") UUID eventID) {
         log.info("Get all users");
-        Event event = eventService.getEvent(eventID);
+        String event = eventService.getEvent(eventID);
 
         if (event == null) {
             return ResponseEntity.noContent().build();
@@ -96,8 +96,8 @@ public class ApiController {
             pd.setTitle("Event creation error");
             return ResponseEntity.unprocessableEntity().body(pd);
         }
-        Event createdEvent = eventService.create(event);
-        return new ResponseEntity<Event>(createdEvent, HttpStatus.CREATED);
+        String createdEvent = eventService.create(event);
+        return new ResponseEntity<String>(createdEvent, HttpStatus.CREATED);
     }
 
     // neue Methode
@@ -110,16 +110,17 @@ public class ApiController {
      * @return ResponseEntity containing the updated event if successful, or
      *         ResponseEntity with status 404 if the event is not found.
      */
+    // TODO eventID not in use
     @PutMapping(value = "/events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Event> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
+    public ResponseEntity<String> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
         log.info("Update event: {}", eventID);
-        Event updatedEvent = eventService.update(event);
+        String updatedEvent = eventService.update(event.setID(eventID));
 
         if (updatedEvent == null) {
             return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<Event>(updatedEvent, HttpStatus.OK);
+        return new ResponseEntity<String>(updatedEvent, HttpStatus.OK);
     }
 
     /**
@@ -133,11 +134,11 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<?> deleteEvent(@PathVariable("eventID") UUID eventID) {
         log.debug("deleteEvent() is called");
-        Event event = eventService.delete(eventID);
+        String event = eventService.delete(eventID);
         if (eventID == null) {
             return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<Event>(event, HttpStatus.OK);
+        return new ResponseEntity<String>(event, HttpStatus.OK);
     }
 
     // neue Methode
@@ -154,11 +155,11 @@ public class ApiController {
     public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID,
             @PathVariable("userID") UUID userID) {
         log.debug("addParticipant() is called");
-        Event event = eventService.addUser(eventID, userID);
-        if (eventID == null) {
+        String event = eventService.addUser(eventID, userID);
+        if (eventService.getEvent(eventID) == null) {
             return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<Event>(event, HttpStatus.OK);
+        return new ResponseEntity<String>(event, HttpStatus.OK);
     }
 
     // neue Methode
@@ -176,14 +177,13 @@ public class ApiController {
     public ResponseEntity<?> removeParticipant(@PathVariable("eventID") UUID eventID,
             @PathVariable("userID") UUID userID) {
         log.debug("removeParticipant() is called");
-        Event event = eventService.removeUser(eventID, userID);
-        if (eventID == null) {
+        String event = eventService.removeUser(eventID, userID);
+        if (eventService.getEvent(eventID) == null) {
             return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<Event>(event, HttpStatus.OK);
+        return new ResponseEntity<String>(event, HttpStatus.OK);
     }
 
-    // neue Methode
     /**
      * Updates the rating of an event by a user.
      *
@@ -193,16 +193,17 @@ public class ApiController {
      * @return ResponseEntity containing the updated Event object if successful, or
      *         a not found response if the event ID is invalid.
      */
+    // TODO test
     @PutMapping(value = "/events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID,
             @PathVariable("rating") int rating) {
         log.debug("rateEvent() is called");
-        Event event = eventService.addRating(eventID, userID, rating);
+        String event = eventService.addRating(eventID, userID, rating);
         if (eventID == null) {
             return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<Event>(event, HttpStatus.OK);
+        return new ResponseEntity<String>(event, HttpStatus.OK);
     }
 
 }
