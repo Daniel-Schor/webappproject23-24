@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Event {
 
-    private final UUID eventID;
+    private UUID eventID;
     private String name;
     private String description;
     private LocalDateTime dateTime;
@@ -199,6 +199,11 @@ public class Event {
         if (geolocation != null) {
             this.geolocation = geolocation;
         }
+        return this;
+    }
+
+    public Event setID(UUID eventID) {
+        this.eventID = eventID;
         return this;
     }
 }
