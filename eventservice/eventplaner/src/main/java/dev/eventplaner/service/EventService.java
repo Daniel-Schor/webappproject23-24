@@ -71,7 +71,7 @@ public class EventService {
         return response.getBody().toString();
     }
 
-    // TODO convert to String
+    // TODO change return to String
     public Collection<EventDTO> getAllDTO() {
         log.info("get all Events as DTO");
         RestTemplate restTemplate = new RestTemplate();
@@ -161,7 +161,7 @@ public class EventService {
         return response.getBody().toString();
     }
  
-    // TODO test
+    // TODO test this
     private String convertToJson(Object object) {
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = "";
@@ -208,7 +208,7 @@ public class EventService {
         }
     }
 
-    // TODO test
+    // TODO test this
     public String addRating(UUID eventID, UUID userID, int rating) {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
         String eventString = getEvent(eventID);

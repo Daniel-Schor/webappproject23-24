@@ -110,7 +110,6 @@ public class ApiController {
      * @return ResponseEntity containing the updated event if successful, or
      *         ResponseEntity with status 404 if the event is not found.
      */
-    // TODO eventID not in use
     @PutMapping(value = "/events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
@@ -193,7 +192,7 @@ public class ApiController {
      * @return ResponseEntity containing the updated Event object if successful, or
      *         a not found response if the event ID is invalid.
      */
-    // TODO test
+    // TODO test this
     @PutMapping(value = "/events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID,

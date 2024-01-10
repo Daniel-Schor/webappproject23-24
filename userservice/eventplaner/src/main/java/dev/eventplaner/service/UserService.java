@@ -175,7 +175,7 @@ public class UserService {
         return response.getBody().toString();
     }
 
-    // TODO return String
+    // TODO change return to String
     public Collection<UserDTO> getAllDTO(){
         log.info("get all Users as DTO");
 
