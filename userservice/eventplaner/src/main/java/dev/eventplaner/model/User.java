@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class User {
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    private final UUID userID;
+    private UUID userID;
     private String firstName;
     private String lastName;
     private String email;
@@ -138,6 +138,11 @@ public class User {
 
     public User setOrganizer(boolean organizer) {
         this.organizer = organizer;
+        return this;
+    }
+
+    public User setID(UUID userID) {
+        this.userID = userID;
         return this;
     }
 
