@@ -1,16 +1,20 @@
 package dev.eventplaner.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.json.JSONObject;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Event {
 
-    private final UUID eventID;
+    private UUID eventID;
     private String name;
     private String description;
     private LocalDateTime dateTime;
@@ -120,6 +124,9 @@ public class Event {
                 rating += i;
             }
         }
+        if (participants.size() == nullValues) {
+            return 0;
+        }
         return ((double) rating) / (participants.size() - nullValues);
     }
 
@@ -219,6 +226,44 @@ public class Event {
         if (geolocation != null) {
             this.geolocation = geolocation;
         }
+        return this;
+    }
+
+    // TODO finish this
+    public static Event fromString(String eventString) {
+        JSONObject jsonObject = new JSONObject(eventString);
+
+        Event event = new Event(UUID.fromString(jsonObject.getString("id")))
+                //.setDescription(jsonObject.getString("description"))
+                //.setDateTime(LocalDateTime.parse(jsonObject.getString("dateTime")))
+                //.setLocation(Geolocation.fromString(jsonObject.getString("location")))
+                //.setMaxParticipants(jsonObject.getInt("maxParticipants"))
+                .setName(jsonObject.getString("name"))
+                .setDescription("TEST");
+                //.setOrganizerUserID(UUID.fromString(jsonObject.getString("organizerUserID")))
+
+        return event;
+    }
+
+    // TODO finish this
+    public static Collection<Event> collectionFromString(String eventString) {
+        /*
+         * ObjectMapper mapper = new ObjectMapper();
+         * Collection<Event> event = null;
+         * try {
+         * event = mapper.readValue(eventString, Collection.class);
+         * } catch (Exception e) {
+         * e.printStackTrace();
+         * }
+         * return event;
+         */
+        ArrayList<Event> events = new ArrayList<Event>();
+        events.add(new Event());
+        return events;
+    }
+
+    public Event setID(UUID eventID) {
+        this.eventID = eventID;
         return this;
     }
 }
