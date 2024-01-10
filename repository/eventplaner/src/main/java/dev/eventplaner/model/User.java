@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class User {
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    private final UUID userID;
+    private UUID userID;
     private String firstName;
     private String lastName;
     private String email;
@@ -141,4 +141,8 @@ public class User {
         return this;
     }
 
+    public User setID(UUID eventID) {
+        this.userID = eventID;
+        return this;
+    }
 }
