@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import dev.eventplaner.model.ApiError;
 import dev.eventplaner.model.Event;
 import dev.eventplaner.model.EventDTO;
@@ -29,7 +31,7 @@ public class EventService {
     @Value("${repository.url}")
     String apiUrl;
 
-    public Event create(Event event) {
+    public String create(Event event) {
         log.info("Event Created: {}, {}", event.getName(), event.getID());
 
         RestTemplate restTemplate = new RestTemplate();
@@ -47,10 +49,10 @@ public class EventService {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
             response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        return (Event) response.getBody();
+        return response.getBody().toString();
     }
 
-    public Collection<Event> getAll() {
+    public String getAll() {
         log.info("get all Events");
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events";
@@ -66,9 +68,10 @@ public class EventService {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
             response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        return (Collection<Event>) response.getBody();
+        return response.getBody().toString();
     }
 
+    // TODO convert to String
     public Collection<EventDTO> getAllDTO() {
         log.info("get all Events as DTO");
         RestTemplate restTemplate = new RestTemplate();
@@ -97,7 +100,7 @@ public class EventService {
         return eventsDTO;
     }
 
-    public Event getEvent(UUID eventID) {
+    public String getEvent(UUID eventID) {
         log.info("get event by eventID: {}", eventID);
 
         RestTemplate restTemplate = new RestTemplate();
@@ -114,14 +117,13 @@ public class EventService {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
             response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        return (Event) response.getBody();
+        return response.getBody().toString();
     }
 
-    // XXX Identisch zu create(Event event)
-    public Event update(Event event) {
-        log.info("update event: {}", event);
+    public String update(Event event) {
+        log.info("update event: {}", event.getID());
         RestTemplate restTemplate = new RestTemplate();
-        String url = apiUrl + "/events";
+        String url = apiUrl + "/events/" + event.getID();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -130,15 +132,15 @@ public class EventService {
         ResponseEntity<?> response;
 
         try {
-            response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
+            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
             response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        return (Event) response.getBody();
+        return response.getBody().toString();
     }
 
-    public Event delete(UUID eventID) {
+    public String delete(UUID eventID) {
         log.info("delete eventID: {}", eventID);
 
         RestTemplate restTemplate = new RestTemplate();
@@ -156,50 +158,73 @@ public class EventService {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
             response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        return (Event) response.getBody();
+        return response.getBody().toString();
+    }
+ 
+    // TODO test
+    private String convertToJson(Object object) {
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = "";
+        try {
+            jsonString = mapper.writeValueAsString(object);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jsonString;
     }
 
-    public Event addUser(UUID eventID, UUID userID) {
+    public String addUser(UUID eventID, UUID userID) {
         log.info("addUser: eventID={}, userID={}", eventID, userID);
-        Event event = getEvent(eventID);
+        String eventString = getEvent(eventID);
+        Event event = Event.fromString(eventString);
+
         if (event == null || !event.addParticipant(userID)) {
             throw new IllegalArgumentException("Failed to add user to event");
         }
+        log.info("addUser: participants{}", event.getParticipants());
         update(event);
-        return event;
+        return "test";//convertToJson(event);
     }
 
-    public Event removeUser(UUID eventID, UUID userID) {
+    public String removeUser(UUID eventID, UUID userID) {
         log.info("removeUser: eventID={}, user={}", eventID, userID);
-        Event event = getEvent(eventID);
-        event.removeParticipant(userID);
+        String eventString = getEvent(eventID);
+        Event event = Event.fromString(eventString);
+
+        if (event == null || !event.removeParticipant(userID)) {
+            throw new IllegalArgumentException("Failed to remove user from event");
+        }
+        log.info("removeUser: participants{}", event.getParticipants());
         update(event);
-        return event;
+        return eventString;
     }
 
     public void removeUser(UUID userID) {
         log.info("removeUser: userId={}", userID);
-        for (Event event : getAll()) {
+        for (Event event : Event.collectionFromString(getAll())) {
             if (event.removeParticipant(userID)) {
                 update(event);
             }
         }
     }
 
-    public Event addRating(UUID eventID, UUID userID, int rating) {
+    // TODO test
+    public String addRating(UUID eventID, UUID userID, int rating) {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
-        Event event = getEvent(eventID);
+        String eventString = getEvent(eventID);
+        Event event = Event.fromString(eventString);
         if (event == null) {
             throw new IllegalArgumentException("Failed to add rating to event");
         }
         event.rate(userID, rating);
         update(event);
-        return event;
+        return eventString;
     }
 
     public double getRating(UUID eventID) {
         log.info("getRating: eventID={}", eventID);
-        Event event = getEvent(eventID);
+        String eventString = getEvent(eventID);
+        Event event = Event.fromString(eventString);
         return event.getRating();
     }
 }
