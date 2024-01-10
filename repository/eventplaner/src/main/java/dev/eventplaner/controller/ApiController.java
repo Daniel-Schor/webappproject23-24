@@ -22,42 +22,42 @@ public class ApiController {
     @Autowired
     private RepositoryService repositoryService;
 
-    @PostMapping("/event")
+    @PostMapping(value = "/events")
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
         return ResponseEntity.ok(repositoryService.putEvent(event));
     }
 
-    @GetMapping("/event")
+    @GetMapping("/events")
     public ResponseEntity<Collection<Event>> getAllEvents() {
         return ResponseEntity.ok(repositoryService.getAllEvents());
     }
 
-    @GetMapping("/event/{eventID}")
+    @GetMapping("/events/{eventID}")
     public ResponseEntity<Event> getEvent(@PathVariable UUID eventID) {
         return ResponseEntity.ok(repositoryService.getEvent(eventID));
     }
 
-    @DeleteMapping("/event/{eventID}")
+    @DeleteMapping("/events/{eventID}")
     public ResponseEntity<Event> deleteEvent(@PathVariable UUID eventID) {
         return ResponseEntity.ok(repositoryService.deleteEvent(eventID));
     }
 
-    @PostMapping("/user")
+    @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         return ResponseEntity.ok(repositoryService.putUser(user));
     }
 
-    @GetMapping("/user")
+    @GetMapping("/users")
     public ResponseEntity<Collection<User>> getAllUsers() {
         return ResponseEntity.ok(repositoryService.getAllUsers());
     }
 
-    @GetMapping("/Users/{id}")
+    @GetMapping("/users/{userID}")
     public ResponseEntity<User> getUsers(@PathVariable UUID userID) {
         return ResponseEntity.ok(repositoryService.getUser(userID));
     }
 
-    @DeleteMapping("/Users/{userID}")
+    @DeleteMapping("/users/{userID}")
     public ResponseEntity<User> deleteUsers(@PathVariable UUID userID) {
         return ResponseEntity.ok(repositoryService.deleteUser(userID));
     }
