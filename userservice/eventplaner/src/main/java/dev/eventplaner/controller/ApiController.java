@@ -45,9 +45,10 @@ public class ApiController {
      */
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Collection<UserDTO>> getAllUsers() {
+    // TODO user getAllDTO() instead of getAll()
+    public ResponseEntity<String> getAllUsers() {
         log.info("Get all users");
-        Collection<UserDTO> users = userService.getAllDTO();
+        String users = userService.getAll();
 
         if (users.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -64,9 +65,9 @@ public class ApiController {
      */
     @GetMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<User> getUser(@PathVariable("userID") UUID userID) {
+    public ResponseEntity<String> getUser(@PathVariable("userID") UUID userID) {
         log.info("Get all users");
-        User user = userService.getUser(userID);
+        String user = userService.getUser(userID);
 
         if (user == null) {
             return ResponseEntity.noContent().build();
@@ -93,8 +94,8 @@ public class ApiController {
             pd.setTitle("User creation error");
             return ResponseEntity.unprocessableEntity().body(pd);
         }
-        User createdUser = userService.create(user);
-        return new ResponseEntity<User>(createdUser, HttpStatus.CREATED);
+        String createdUser = userService.create(user);
+        return new ResponseEntity<String>(createdUser, HttpStatus.CREATED);
     }
 
     // neu Methode
@@ -109,25 +110,25 @@ public class ApiController {
      */
     @PutMapping(value = "/users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<User> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
+    public ResponseEntity<String> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
         log.info("Update user: {}", userID);
-        User updatedUser = userService.update(user);
+        String updatedUser = userService.update(user);
 
         if (updatedUser == null) {
             return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
+        return new ResponseEntity<String>(updatedUser, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> deleteEvent(@PathVariable("userID") UUID userID) {
         log.debug("deleteEvent() is called");
-        User user = userService.delete(userID);
+        String user = userService.delete(userID);
         if (userID == null) {
             return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<User>(user, HttpStatus.OK);
+        return new ResponseEntity<String>(user, HttpStatus.OK);
     }
 
 }

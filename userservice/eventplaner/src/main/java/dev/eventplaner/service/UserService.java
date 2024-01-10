@@ -40,7 +40,7 @@ public class UserService {
      * @return The User object corresponding to the given ID, or null if no such
      *         user exists.
      */
-    public User getUser(UUID userID) {
+    public String getUser(UUID userID) {
         log.info("get user by userID: {}", userID);
         //User user = userRepository.get(userID);
         //if (user == null) {
@@ -61,7 +61,7 @@ public class UserService {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
             response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        return (User) response.getBody();
+        return response.getBody().toString();
     }
 
     /**
@@ -69,7 +69,7 @@ public class UserService {
      *
      * @param user The User object to create.
      */
-    public User create(User user) {
+    public String create(User user) {
         log.info("User Created: {}", user.getID());
 
         RestTemplate restTemplate = new RestTemplate();
@@ -87,7 +87,7 @@ public class UserService {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
             response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        return (User) response.getBody();
+        return response.getBody().toString();
     }
 
     /**
@@ -95,7 +95,7 @@ public class UserService {
      *
      * @param userID The ID of the user to delete.
      */
-    public User delete(UUID userID) {
+    public String delete(UUID userID) {
         log.info("delete userID: {}", userID);
         //if (userRepository.get(userID) == null) {
         //    log.warn("User with ID {} not found", userID);
@@ -121,7 +121,7 @@ public class UserService {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
             response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        return (User) response.getBody();
+        return response.getBody().toString();
     }
 
     /**
@@ -129,7 +129,7 @@ public class UserService {
      *
      * @param user The User object to update.
      */
-    public User update(User user) {
+    public String update(User user) {
         log.info("User Updated: {}", user.getID());
 
         RestTemplate restTemplate = new RestTemplate();
@@ -147,7 +147,7 @@ public class UserService {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
             response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        return (User) response.getBody();
+        return response.getBody().toString();
     }
 
     /**
@@ -155,7 +155,7 @@ public class UserService {
      *
      * @return An Collection of all User objects.
      */
-    public Collection<User> getAll() {
+    public String getAll() {
         log.info("getAllUsers");
         
         RestTemplate restTemplate = new RestTemplate();
@@ -172,9 +172,10 @@ public class UserService {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
             response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        return (Collection<User>) response.getBody();
+        return response.getBody().toString();
     }
 
+    // TODO return String
     public Collection<UserDTO> getAllDTO(){
         log.info("get all Users as DTO");
 
