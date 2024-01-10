@@ -1,11 +1,15 @@
 package dev.eventplaner.model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class Geolocation{
 
     private double latitude;
     private double longitude;
 
     public Geolocation() {
+        this.latitude = 0;
+        this.longitude = 0;
     }
 
     public Geolocation(double latitude, double longitude) {
@@ -27,5 +31,16 @@ public class Geolocation{
 
     public void setLongitude(double longtitude) {
         this.longitude = longtitude;
+    }
+
+    public static Geolocation fromString(String jsonString) {
+        ObjectMapper mapper = new ObjectMapper();
+        Geolocation geolocation = null;
+        try {
+            geolocation = mapper.readValue(jsonString, Geolocation.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return geolocation;
     }
 }
