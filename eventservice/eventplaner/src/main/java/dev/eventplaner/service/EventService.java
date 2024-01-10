@@ -173,7 +173,7 @@ public class EventService {
         return jsonString;
     }
 
-    public String addUser(UUID eventID, UUID userID) {
+    public Event addUser(UUID eventID, UUID userID) {
         log.info("addUser: eventID={}, userID={}", eventID, userID);
         String eventString = getEvent(eventID);
         Event event = Event.fromString(eventString);
@@ -183,10 +183,10 @@ public class EventService {
         }
         log.info("addUser: participants{}", event.getParticipants());
         update(event);
-        return "test";//convertToJson(event);
+        return event;
     }
 
-    public String removeUser(UUID eventID, UUID userID) {
+    public Event removeUser(UUID eventID, UUID userID) {
         log.info("removeUser: eventID={}, user={}", eventID, userID);
         String eventString = getEvent(eventID);
         Event event = Event.fromString(eventString);
@@ -196,7 +196,7 @@ public class EventService {
         }
         log.info("removeUser: participants{}", event.getParticipants());
         update(event);
-        return eventString;
+        return event;
     }
 
     public void removeUser(UUID userID) {

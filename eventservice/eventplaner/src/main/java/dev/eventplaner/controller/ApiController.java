@@ -154,11 +154,11 @@ public class ApiController {
     public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID,
             @PathVariable("userID") UUID userID) {
         log.debug("addParticipant() is called");
-        String event = eventService.addUser(eventID, userID);
+        Event event = eventService.addUser(eventID, userID);
         if (eventService.getEvent(eventID) == null) {
             return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<String>(event, HttpStatus.OK);
+        return new ResponseEntity<Event>(event, HttpStatus.OK);
     }
 
     // neue Methode
@@ -176,11 +176,11 @@ public class ApiController {
     public ResponseEntity<?> removeParticipant(@PathVariable("eventID") UUID eventID,
             @PathVariable("userID") UUID userID) {
         log.debug("removeParticipant() is called");
-        String event = eventService.removeUser(eventID, userID);
+        Event event = eventService.removeUser(eventID, userID);
         if (eventService.getEvent(eventID) == null) {
             return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<String>(event, HttpStatus.OK);
+        return new ResponseEntity<Event>(event, HttpStatus.OK);
     }
 
     /**
