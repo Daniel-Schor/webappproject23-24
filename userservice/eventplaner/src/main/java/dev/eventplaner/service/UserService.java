@@ -133,7 +133,7 @@ public class UserService {
         log.info("User Updated: {}", user.getID());
 
         RestTemplate restTemplate = new RestTemplate();
-        String url = apiUrl + "/users";
+        String url = apiUrl + "/users/" + user.getID();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -142,7 +142,7 @@ public class UserService {
         ResponseEntity<?> response;
 
         try {
-            response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
+            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
             response = new ResponseEntity<>(apiError, apiError.getStatus());

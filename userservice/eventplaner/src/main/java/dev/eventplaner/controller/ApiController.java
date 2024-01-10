@@ -112,11 +112,11 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<String> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
         log.info("Update user: {}", userID);
-        String updatedUser = userService.update(user);
-
-        if (updatedUser == null) {
+        if (userService.getUser(userID) == null) {
             return ResponseEntity.notFound().build();
         }
+        String updatedUser = userService.update(user.setID(userID));
+
         return new ResponseEntity<String>(updatedUser, HttpStatus.OK);
     }
 
