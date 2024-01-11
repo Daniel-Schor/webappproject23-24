@@ -89,7 +89,7 @@ public class Event {
      *
      * @return The average rating of the event. If no rating is available, 0 is
      */
-    public double getRating() {
+    public double rating() {
         double rating = 0;
         int nullValues = 0;
 

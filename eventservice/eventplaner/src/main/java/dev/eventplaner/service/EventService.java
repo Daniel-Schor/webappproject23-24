@@ -56,6 +56,7 @@ public class EventService {
         return response.getBody().toString();
     }
 
+    // FIXME use this instead of getAllDTO; test this
     public String getAll() {
         log.info("get all Events");
         RestTemplate restTemplate = new RestTemplate();
@@ -75,6 +76,37 @@ public class EventService {
         return response.getBody().toString();
     }
 
+    private Collection<Event> collectionFromJson(String s) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        Collection<Event> values = new ArrayList<>();
+
+        try {
+            values = mapper.readValue(s, new TypeReference<Collection<Event>>() {
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+
+    private Event eventFromJson(String s) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        Event event = new Event();
+
+        try {
+            event = mapper.readValue(s, new TypeReference<Event>() {
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return event;
+    }
+
+    // XXX this is needed in the api gateway
     public String getAllDTO() {
         log.info("get all Events as DTO");
 
@@ -93,22 +125,21 @@ public class EventService {
             response = new ResponseEntity<>(apiError.toString(), apiError.getStatus());
         }
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        Collection<Event> values = new ArrayList<>();
+        String body = response.getBody();
+        Collection<Event> values = collectionFromJson(body);
 
-        try {
-            values = mapper.readValue(response.getBody(), new TypeReference<Collection<Event>>() {
-            });
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        log.info("values: {}", body);
+
+        for (Event event : values) {
+            log.info("Event: {}", event.toString());
         }
 
         Collection<EventDTO> eventDTO = new ArrayList<>();
         if (values != null) {
             for (Event event : values) {
-                eventDTO.add(new EventDTO(event));
+                EventDTO newEvent = new EventDTO(event);
+                log.info("newEvent: {}", newEvent.getID());
+                eventDTO.add(newEvent);
             }
         }
         return convertObjectToJson(eventDTO);
@@ -178,7 +209,7 @@ public class EventService {
     public Event addUser(UUID eventID, UUID userID) {
         log.info("addUser: eventID={}, userID={}", eventID, userID);
         String eventString = getEvent(eventID);
-        Event event = Event.fromString(eventString);
+        Event event = eventFromJson(eventString);
 
         if (event == null || !event.addParticipant(userID)) {
             throw new IllegalArgumentException("Failed to add user to event");
@@ -188,10 +219,11 @@ public class EventService {
         return event;
     }
 
+    // TODO test this
     public Event removeUser(UUID eventID, UUID userID) {
         log.info("removeUser: eventID={}, user={}", eventID, userID);
         String eventString = getEvent(eventID);
-        Event event = Event.fromString(eventString);
+        Event event = eventFromJson(eventString);
 
         if (event == null || !event.removeParticipant(userID)) {
             throw new IllegalArgumentException("Failed to remove user from event");
@@ -201,34 +233,38 @@ public class EventService {
         return event;
     }
 
+    // XXX das wird nur im api gateway gebraucht, falls ein user aus der datenbank gelöscht wird
     public void removeUser(UUID userID) {
         log.info("removeUser: userId={}", userID);
-        for (Event event : Event.collectionFromString(getAll())) {
+        for (Event event : collectionFromJson(getAll())) {
             if (event.removeParticipant(userID)) {
                 update(event);
             }
         }
     }
 
+    // TODO test this
     public String addRating(UUID eventID, UUID userID, int rating) {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
         String eventString = getEvent(eventID);
-        Event event = Event.fromString(eventString);
+        Event event = eventFromJson(eventString);
         if (event == null) {
             throw new IllegalArgumentException("Failed to add rating to event");
         }
         event.rate(userID, rating);
         update(event);
-        return eventString;
+        return convertObjectToJson(event);
     }
 
+    // XXX wird das gebraucht? wie wird das Rating im event angezeigt? braucht man eine extra double rating im event?
     public double getRating(UUID eventID) {
         log.info("getRating: eventID={}", eventID);
         String eventString = getEvent(eventID);
-        Event event = Event.fromString(eventString);
-        return event.getRating();
+        Event event = eventFromJson(eventString);
+        return event.rating();
     }
 
+    // TODO dateTime richtig converten
     private String convertObjectToJson(Object object) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
