@@ -27,7 +27,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 
-
 @Service
 public class UserService {
 
@@ -180,7 +179,6 @@ public class UserService {
         return response.getBody().toString();
     }
 
-    // TODO change return to String
     public String getAllDTO() {
         log.info("get all Users as DTO");
 
@@ -203,7 +201,8 @@ public class UserService {
         Collection<User> values = new ArrayList<>();
 
         try {
-            values = mapper.readValue(response.getBody(), new TypeReference<Collection<User>>() {});
+            values = mapper.readValue(response.getBody(), new TypeReference<Collection<User>>() {
+            });
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
