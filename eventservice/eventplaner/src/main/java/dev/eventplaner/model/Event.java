@@ -24,7 +24,7 @@ public class Event {
     private UUID organizerUserID;
 
     /**
-     * Default constructor for the Event class.
+     * Default constructor for the Event class. New Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
      * Initializes the event with default values.
      */
     public Event() {
@@ -32,15 +32,14 @@ public class Event {
         this.name = "Default Event";
         this.description = "Default Description";
         this.dateTime = LocalDateTime.now();
-        this.geolocation = new Geolocation(50.130444, 8.692556);// new Address("Nibelungenplatz", "1", "60318",
-                                                                // "Frankfurt am Main", "Deutschland");
+        this.geolocation = new Geolocation(50.130444, 8.692556);
         this.maxParticipants = 10;
         this.participants = new HashMap<>();
         this.organizerUserID = null;
     }
 
     /**
-     * Default constructor for the Event class.
+     * Default constructor for the Event class. New Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
      * Initializes the event with default values.
      */
     public Event(UUID eventID) {
@@ -48,8 +47,7 @@ public class Event {
         this.name = "Default Event";
         this.description = "Default Description";
         this.dateTime = LocalDateTime.now();
-        this.geolocation = new Geolocation(50.130444, 8.692556);// new Address("Nibelungenplatz", "1", "60318",
-                                                                // "Frankfurt am Main", "Deutschland");
+        this.geolocation = new Geolocation(50.130444, 8.692556);
         this.maxParticipants = 10;
         this.participants = new HashMap<>();
         this.organizerUserID = null;

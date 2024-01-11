@@ -33,7 +33,7 @@ public class EventService {
     private static final Logger log = LoggerFactory.getLogger(EventService.class);
 
     @Value("${repository.url}")
-    String apiUrl;
+    private String apiUrl;
 
     public String create(Event event) {
         log.info("Event Created: {}, {}", event.getName(), event.getID());
@@ -82,7 +82,7 @@ public class EventService {
         String url = apiUrl + "/events";
 
         HttpHeaders headers = new HttpHeaders();
-        HttpEntity<String> request = new HttpEntity<String>(headers);
+        HttpEntity<String> request = new HttpEntity<>(headers);
 
         ResponseEntity<String> response;
 
@@ -90,7 +90,7 @@ public class EventService {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<String>(apiError.toString(), apiError.getStatus());
+            response = new ResponseEntity<>(apiError.toString(), apiError.getStatus());
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -111,22 +111,7 @@ public class EventService {
                 eventDTO.add(new EventDTO(event));
             }
         }
-        return convertCollectionToJson(eventDTO);
-    }
-
-    public String convertCollectionToJson(Collection<EventDTO> eventsDTOs) {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        String jsonString = "";
-
-        try {
-            jsonString = mapper.writeValueAsString(eventsDTOs);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        return jsonString;
+        return convertObjectToJson(eventDTO);
     }
 
     public String getEvent(UUID eventID) {
@@ -190,17 +175,6 @@ public class EventService {
         return response.getBody().toString();
     }
 
-    private String convertToJson(Object object) {
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonString = "";
-        try {
-            jsonString = mapper.writeValueAsString(object);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return jsonString;
-    }
-
     public Event addUser(UUID eventID, UUID userID) {
         log.info("addUser: eventID={}, userID={}", eventID, userID);
         String eventString = getEvent(eventID);
@@ -253,5 +227,19 @@ public class EventService {
         String eventString = getEvent(eventID);
         Event event = Event.fromString(eventString);
         return event.getRating();
+    }
+
+    private String convertObjectToJson(Object object) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        String jsonString = "";
+
+        try {
+            jsonString = mapper.writeValueAsString(object);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jsonString;
     }
 }
