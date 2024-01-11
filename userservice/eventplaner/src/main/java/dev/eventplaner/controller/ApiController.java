@@ -45,10 +45,9 @@ public class ApiController {
      */
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    // TODO user getAllDTO() instead of getAll()
     public ResponseEntity<String> getAllUsers() {
         log.info("Get all users");
-        String users = userService.getAll();
+        String users = userService.getAllDTO();
 
         if (users.isEmpty()) {
             return ResponseEntity.noContent().build();

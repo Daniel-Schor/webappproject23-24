@@ -23,6 +23,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+
+
 @Service
 public class UserService {
 
@@ -42,11 +47,11 @@ public class UserService {
      */
     public String getUser(UUID userID) {
         log.info("get user by userID: {}", userID);
-        //User user = userRepository.get(userID);
-        //if (user == null) {
-        //    log.warn("User with ID {} not found", userID);
-        //}
-        //return user;
+        // User user = userRepository.get(userID);
+        // if (user == null) {
+        // log.warn("User with ID {} not found", userID);
+        // }
+        // return user;
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users/" + userID;
 
@@ -97,15 +102,15 @@ public class UserService {
      */
     public String delete(UUID userID) {
         log.info("delete userID: {}", userID);
-        //if (userRepository.get(userID) == null) {
-        //    log.warn("User with ID {} not found", userID);
-        //}
-        //if (userRepository.get(userID) != null) {
-        //    log.warn("User with ID {} found", userID);
-        //    log.info("User Deleted: {}", userID);
-        //    return userRepository.remove(userID);
-        //}
-        //return null;
+        // if (userRepository.get(userID) == null) {
+        // log.warn("User with ID {} not found", userID);
+        // }
+        // if (userRepository.get(userID) != null) {
+        // log.warn("User with ID {} found", userID);
+        // log.info("User Deleted: {}", userID);
+        // return userRepository.remove(userID);
+        // }
+        // return null;
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users/" + userID;
 
@@ -157,7 +162,7 @@ public class UserService {
      */
     public String getAll() {
         log.info("getAllUsers");
-        
+
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users";
 
@@ -176,7 +181,7 @@ public class UserService {
     }
 
     // TODO change return to String
-    public Collection<UserDTO> getAllDTO(){
+    public String getAllDTO() {
         log.info("get all Users as DTO");
 
         RestTemplate restTemplate = new RestTemplate();
@@ -185,16 +190,23 @@ public class UserService {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<String>(headers);
 
-        ResponseEntity<?> response;
+        ResponseEntity<String> response;
 
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<String>(apiError.toString(), apiError.getStatus());
         }
 
-        Collection<User> values = (ArrayList<User>) response.getBody();
+        ObjectMapper mapper = new ObjectMapper();
+        Collection<User> values = new ArrayList<>();
+
+        try {
+            values = mapper.readValue(response.getBody(), new TypeReference<Collection<User>>() {});
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
         Collection<UserDTO> usersDTO = new ArrayList<>();
         if (values != null) {
@@ -202,7 +214,20 @@ public class UserService {
                 usersDTO.add(new UserDTO(user));
             }
         }
-        return usersDTO;
+        return convertCollectionToJson(usersDTO);
+    }
+
+    public String convertCollectionToJson(Collection<UserDTO> usersDTO) {
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = "";
+
+        try {
+            jsonString = mapper.writeValueAsString(usersDTO);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return jsonString;
     }
 
 }
