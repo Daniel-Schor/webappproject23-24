@@ -48,11 +48,11 @@ public class ApiController {
      */
     @GetMapping(value = "/events", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Collection<EventDTO>> getAllEvents() {
+    public ResponseEntity<String> getAllEvents() {
         log.info("Get all events");
-        Collection<EventDTO> events = eventService.getAllDTO();
+        String events = eventService.getAllDTO();
 
-        if (events.size() == 0) {
+        if (events.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return new ResponseEntity<>(events, HttpStatus.OK);

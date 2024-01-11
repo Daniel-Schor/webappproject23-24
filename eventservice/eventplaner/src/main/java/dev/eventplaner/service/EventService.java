@@ -17,7 +17,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import dev.eventplaner.model.ApiError;
 import dev.eventplaner.model.Event;
@@ -71,33 +75,58 @@ public class EventService {
         return response.getBody().toString();
     }
 
-    // TODO change return to String
-    public Collection<EventDTO> getAllDTO() {
+    public String getAllDTO() {
         log.info("get all Events as DTO");
+
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events";
 
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<String>(headers);
 
-        ResponseEntity<?> response;
+        ResponseEntity<String> response;
 
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<String>(apiError.toString(), apiError.getStatus());
         }
 
-        Collection<Event> values = (ArrayList<Event>) response.getBody();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        Collection<Event> values = new ArrayList<>();
 
-        Collection<EventDTO> eventsDTO = new ArrayList<>();
+        try {
+            values = mapper.readValue(response.getBody(), new TypeReference<Collection<Event>>() {
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        Collection<EventDTO> eventDTO = new ArrayList<>();
         if (values != null) {
             for (Event event : values) {
-                eventsDTO.add(new EventDTO(event));
+                eventDTO.add(new EventDTO(event));
             }
         }
-        return eventsDTO;
+        return convertCollectionToJson(eventDTO);
+    }
+
+    public String convertCollectionToJson(Collection<EventDTO> eventsDTOs) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        String jsonString = "";
+
+        try {
+            jsonString = mapper.writeValueAsString(eventsDTOs);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return jsonString;
     }
 
     public String getEvent(UUID eventID) {
@@ -160,8 +189,7 @@ public class EventService {
         }
         return response.getBody().toString();
     }
- 
-    // TODO test this
+
     private String convertToJson(Object object) {
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = "";
@@ -208,7 +236,6 @@ public class EventService {
         }
     }
 
-    // TODO test this
     public String addRating(UUID eventID, UUID userID, int rating) {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
         String eventString = getEvent(eventID);
