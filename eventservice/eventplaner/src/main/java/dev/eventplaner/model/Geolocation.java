@@ -43,4 +43,11 @@ public class Geolocation{
         }
         return geolocation;
     }
+
+    @Override
+    public String toString() {
+        String s = "";
+        s += "Latitude: " + this.latitude + "\n";
+        return s;
+    }
 }
