@@ -1,4 +1,4 @@
-package dev.eventplaner.service;
+package dev.repoplaner.service;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -7,10 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import dev.eventplaner.model.Event;
-import dev.eventplaner.model.User;
-import dev.eventplaner.repository.EventRepository;
-import dev.eventplaner.repository.UserRepository;
+import dev.repoplaner.model.Event;
+import dev.repoplaner.model.User;
+import dev.repoplaner.repository.EventRepository;
+import dev.repoplaner.repository.UserRepository;
 
 
 @Service

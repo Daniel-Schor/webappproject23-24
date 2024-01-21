@@ -1,13 +1,13 @@
-package dev.eventplaner;
+package dev.repoplaner;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EventplanerApplication {
+public class repoplanerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(EventplanerApplication.class, args);
+		SpringApplication.run(repoplanerApplication.class, args);
 	}
 
 }

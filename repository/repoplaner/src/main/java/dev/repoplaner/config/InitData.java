@@ -1,13 +1,13 @@
-package dev.eventplaner.config;
+package dev.repoplaner.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import dev.eventplaner.model.Event;
-import dev.eventplaner.model.User;
-import dev.eventplaner.service.RepositoryService;
+import dev.repoplaner.model.Event;
+import dev.repoplaner.model.User;
+import dev.repoplaner.service.RepositoryService;
 import jakarta.annotation.PostConstruct;
 
 import java.time.LocalDateTime;

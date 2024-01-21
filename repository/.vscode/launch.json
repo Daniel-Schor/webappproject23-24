@@ -2,11 +2,18 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Spring Boot-EventplanerApplication<eventplaner>",
+            "name": "repoplanerApplication",
+            "request": "launch",
+            "mainClass": "dev.repoplaner.repoplanerApplication",
+            "projectName": "repoplaner"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-repoplanerApplication<repoplaner>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "mainClass": "dev.eventplaner.EventplanerApplication",
-            "projectName": "eventplaner",
+            "mainClass": "dev.repoplaner.repoplanerApplication",
+            "projectName": "repoplaner",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }

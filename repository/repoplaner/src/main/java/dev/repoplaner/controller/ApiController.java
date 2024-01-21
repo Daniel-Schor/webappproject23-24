@@ -1,4 +1,4 @@
-package dev.eventplaner.controller;
+package dev.repoplaner.controller;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.eventplaner.model.User;
-import dev.eventplaner.model.Event;
-import dev.eventplaner.service.RepositoryService;
+import dev.repoplaner.model.User;
+import dev.repoplaner.model.Event;
+import dev.repoplaner.service.RepositoryService;
 
 @RestController
 public class ApiController {

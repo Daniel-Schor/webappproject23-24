@@ -1,4 +1,4 @@
-package dev.eventplaner.model;
+package dev.repoplaner.model;
 
 public class Geolocation{
 

@@ -1,4 +1,4 @@
-package dev.eventplaner.security;
+package dev.repoplaner.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
