@@ -1,4 +1,4 @@
-package dev.eventplaner.model;
+package dev.userplaner.model;
 
 import java.time.LocalDateTime;
 import java.util.Collections;

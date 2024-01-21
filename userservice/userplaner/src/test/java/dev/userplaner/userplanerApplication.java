@@ -1,10 +1,10 @@
-package dev.eventplaner;
+package dev.userplaner;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EventplanerApplicationTests {
+class userplanerApplicationTests {
 
 	@Test
 	void contextLoads() {

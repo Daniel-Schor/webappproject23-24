@@ -2,11 +2,18 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Spring Boot-EventplanerApplication<eventplaner>",
+            "name": "userplanerApplication",
+            "request": "launch",
+            "mainClass": "dev.userplaner.userplanerApplication",
+            "projectName": "UserService",
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-userplanerApplication<userplaner>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "mainClass": "dev.eventplaner.EventplanerApplication",
-            "projectName": "eventplaner",
+            "mainClass": "dev.userplaner.userplanerApplication",
+            "projectName": "UserService",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }

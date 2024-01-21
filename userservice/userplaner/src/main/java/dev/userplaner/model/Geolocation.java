@@ -1,4 +1,4 @@
-package dev.eventplaner.model;
+package dev.userplaner.model;
 
 public class Geolocation{
 

@@ -1,10 +1,10 @@
-package dev.eventplaner.service;
+package dev.userplaner.service;
 
-import dev.eventplaner.model.ApiError;
-import dev.eventplaner.model.Event;
-import dev.eventplaner.model.EventDTO;
-import dev.eventplaner.model.User;
-import dev.eventplaner.model.UserDTO;
+import dev.userplaner.model.ApiError;
+import dev.userplaner.model.Event;
+import dev.userplaner.model.EventDTO;
+import dev.userplaner.model.User;
+import dev.userplaner.model.UserDTO;
 
 import java.util.ArrayList;
 import java.util.Collection;

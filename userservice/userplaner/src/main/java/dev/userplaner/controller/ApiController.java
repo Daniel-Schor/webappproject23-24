@@ -1,4 +1,4 @@
-package dev.eventplaner.controller;
+package dev.userplaner.controller;
 
 import java.net.URI;
 import java.util.Collection;
@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.eventplaner.model.User;
+import dev.userplaner.model.User;
 
-import dev.eventplaner.service.UserService;
+import dev.userplaner.service.UserService;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
