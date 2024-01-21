@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-repoplanerApplication<repoplaner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "dev.repoplaner.repoplanerApplication",
+            "projectName": "repoplaner",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
