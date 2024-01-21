@@ -1,4 +1,4 @@
-package dev.eventplaner.model;
+package dev.eventcreator.model;
 
 import java.util.UUID;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

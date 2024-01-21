@@ -1,4 +1,4 @@
-package dev.eventplaner.service;
+package dev.eventcreator.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,9 +23,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import dev.eventplaner.model.ApiError;
-import dev.eventplaner.model.Event;
-import dev.eventplaner.model.EventDTO;
+import dev.eventcreator.model.ApiError;
+import dev.eventcreator.model.Event;
+import dev.eventcreator.model.EventDTO;
 
 @Service
 public class EventService {
