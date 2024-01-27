@@ -51,15 +51,30 @@ public class ApiController {
      * @return ResponseEntity containing a collection of UserDTO objects
      */
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public ResponseEntity<Collection<UserDTO>> getAllUsers() {
         log.info("Get all users");
-        Collection<UserDTO> users = userService.getAllDTO();
 
-        if (users.isEmpty()) {
+        ResponseEntity<?> response = userService.getAllDTO();
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            Object responseBody = response.getBody();
+
+            if (responseBody instanceof Collection<?>) {
+                Collection<UserDTO> usersDTO = (Collection<UserDTO>) (Collection<?>) responseBody;
+                if (usersDTO.isEmpty()) {
+                    return ResponseEntity.noContent().build();
+                }
+                return new ResponseEntity<>(usersDTO, HttpStatus.OK);
+            } else {
+                log.warn("Invalid response body type for getting all users as DTO");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        } else if (response.getStatusCode() == HttpStatus.NO_CONTENT) {
             return ResponseEntity.noContent().build();
+        } else {
+            log.warn("Error retrieving all users as DTO. Status code: {}", response.getStatusCode());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     /**
@@ -70,17 +85,28 @@ public class ApiController {
      *         found
      */
     @GetMapping(value = "users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<User> getUser(@PathVariable("userID") UUID userID) {
-        log.info("Get all users");
-        User user = userService.getUser(userID);
+    public ResponseEntity<?> getUser(@PathVariable("userID") UUID userID) {
+        log.info("Get user by userID: {}", userID);
 
-        if (user == null) {
+        ResponseEntity<?> response = userService.getUser(userID);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            Object responseBody = response.getBody();
+
+            if (responseBody instanceof User) {
+                User user = (User) responseBody;
+                return new ResponseEntity<>(user, HttpStatus.OK);
+            } else {
+                log.warn("Invalid response body type for user ID: {}", userID);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        } else if (response.getStatusCode() == HttpStatus.NO_CONTENT) {
             return ResponseEntity.noContent().build();
-        }
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
+        } else {
+            log.warn("Error retrieving user ID: {}. Status code: {}", userID, response.getStatusCode());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+       
+         } }
     /**
      * Creates a new user.
      *
@@ -89,19 +115,36 @@ public class ApiController {
      *         an error message.
      */
     @PostMapping(value = "users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public ResponseEntity<?> createUser(@RequestBody User user) {
-        String fullname = user.getFirstName() + user.getLastName();
-        log.info("Create new user: ", fullname);
-        if (fullname == null || fullname.isEmpty()) {
+        String fullname = user.getFirstName() + " " + user.getLastName();
+        log.info("Create new user: {}", fullname);
+
+        if (fullname == null || fullname.trim().isEmpty()) {
             String detail = "User name must not be null or empty";
             ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, detail);
-            pd.setInstance(URI.create("/users"));
+            pd.setInstance(URI.create("/api/users"));
             pd.setTitle("User creation error");
             return ResponseEntity.unprocessableEntity().body(pd);
         }
-        User createdUser = userService.create(user);
-        return new ResponseEntity<User>(createdUser, HttpStatus.CREATED);
+
+        ResponseEntity<?> response = userService.create(user);
+
+        if (response.getStatusCode() == HttpStatus.CREATED) {
+            Object responseBody = response.getBody();
+
+            if (responseBody instanceof User) {
+                User createdUser = (User) responseBody;
+                return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+            } else {
+                log.warn("Invalid response body type for user creation");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        } else if (response.getStatusCode() == HttpStatus.UNPROCESSABLE_ENTITY) {
+            return ResponseEntity.unprocessableEntity().body(response.getBody());
+        } else {
+            log.warn("Error creating user. Status code: {}", response.getStatusCode());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     // neu Methode
@@ -115,221 +158,121 @@ public class ApiController {
      *         or a not found response if the user does not exist.
      */
     @PutMapping(value = "users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
     public ResponseEntity<User> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
         log.info("Update user: {}", userID);
-        User updatedUser = userService.update(user);
-
-        if (updatedUser == null) {
+        ResponseEntity<?> responseEntity = userService.update(user);
+    
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            User updatedUser = (User) responseEntity.getBody();
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        } else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
             return ResponseEntity.notFound().build();
+        } else {
+            log.warn("Error updating user. Status code: {}", responseEntity.getStatusCode());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
     }
-
-    /**
-     * Deletes a user with the specified userID.
-     *
-     * @param userID The ID of the user to be deleted.
-     * @return A ResponseEntity containing the deleted user if successful, or a not
-     *         found response if the user does not exist.
-     */
-    @DeleteMapping(value = "users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    
+    @DeleteMapping(value = "events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<?> deleteUser(@PathVariable("userID") UUID userID) {
-        log.debug("deleteUser() is called");
-        User user = userService.delete(userID);
-        eventService.removeUser(userID);
-        if (userID == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return new ResponseEntity<User>(user, HttpStatus.OK);
-    }
-
-    /**
-     * Retrieves all events.
-     *
-     * @return ResponseEntity containing a collection of EventDTO objects
-     */
-    @GetMapping(value = "events", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Collection<EventDTO>> getAllEvents() {
-        log.info("Get all events");
-        Collection<EventDTO> events = eventService.getAllDTO();
-
-        if (events.size() == 0) {
-            return ResponseEntity.noContent().build();
-        }
-        return new ResponseEntity<>(events, HttpStatus.OK);
-    }
-
-    /**
-     * Retrieves the event with the specified event ID.
-     *
-     * @param eventID the ID of the event to retrieve
-     * @return a ResponseEntity containing the event if found, or no content if not
-     *         found
-     */
-    @GetMapping(value = "events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Event> getEvent(@PathVariable("eventID") UUID eventID) {
-        log.info("Get all users");
-        Event event = eventService.getEvent(eventID);
-
-        if (event == null) {
-            return ResponseEntity.noContent().build();
-        }
-        return new ResponseEntity<>(event, HttpStatus.OK);
-    }
-
-    // neue Methode
-
-    /**
-     * Retrieves the participants of an event.
-     *
-     * @param eventID The ID of the event.
-     * @return A ResponseEntity containing a collection of UserDTO objects
-     *         representing the participants of the event.
-     */
-    @GetMapping(value = "events/{eventID}/participants", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Collection<UserDTO>> getEventParticipants(@PathVariable("eventID") UUID eventID) {
-        log.info("Get all users");
-        Collection<UUID> usersUUID = eventService.getEvent(eventID).getParticipants().keySet();
-        Collection<UserDTO> users = new ArrayList<>();
-
-        for (UUID uuid : usersUUID) {
-            users.add(new UserDTO(userService.getUser(uuid)));
-        }
-
-        if (users.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
-
-    /**
-     * Creates a new event.
-     *
-     * @param event The event object containing the details of the event to be
-     *              created.
-     * @return ResponseEntity representing the HTTP response with the created event
-     *         or an error message.
-     */
-    @PostMapping(value = "events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<?> createEvent(@RequestBody Event event) {
-        log.info("Create new Event: {}", event.getName());
-        if (event.getName() == null || event.getName().isEmpty()) {
-            String detail = "Event name must not be null or empty";
-            ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, detail);
-            pd.setInstance(URI.create("/events"));
-            pd.setTitle("Event creation error");
-            return ResponseEntity.unprocessableEntity().body(pd);
-        }
-        Event createdEvent = eventService.create(event);
-        return new ResponseEntity<Event>(createdEvent, HttpStatus.CREATED);
-    }
-
-    // neue Methode
-
-    /**
-     * Updates an event with the given event ID.
-     *
-     * @param eventID The ID of the event to be updated.
-     * @param event   The updated event object.
-     * @return ResponseEntity containing the updated event if successful, or
-     *         ResponseEntity with status 404 if the event is not found.
-     */
-    @PutMapping(value = "events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Event> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
-        log.info("Update event: {}", eventID);
-        Event updatedEvent = eventService.update(eventID, event);
-
-        if (updatedEvent == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return new ResponseEntity<Event>(updatedEvent, HttpStatus.OK);
-    }
-
-    /**
-     * Deletes an event with the specified event ID.
-     *
-     * @param eventID The ID of the event to be deleted.
-     * @return A ResponseEntity containing the deleted event if successful, or a not
-     *         found response if the event does not exist.
-     */
-    @DeleteMapping(value = "events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<?> deleteEvent(@PathVariable("eventID") UUID eventID) {
-        log.debug("deleteEvent() is called");
-        Event event = eventService.delete(eventID);
-        if (eventID == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return new ResponseEntity<Event>(event, HttpStatus.OK);
-    }
-
-    // neue Methode
-
-    /**
-     * Adds a participant to an event.
-     *
-     * @param eventID The ID of the event.
-     * @param userID  The ID of the user to be added as a participant.
-     * @return The ResponseEntity containing the updated event information.
-     */
-    @PutMapping(value = "events/{eventID}/add/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
-        log.debug("addParticipant() is called");
-        Event event = eventService.addUser(eventID, userID);
-        if (eventID == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return new ResponseEntity<Event>(event, HttpStatus.OK);
-    }
-
-    // neue Methode
-
-    /**
-     * Removes a participant from an event.
-     *
-     * @param eventID The ID of the event.
-     * @param userID  The ID of the user to be removed.
-     * @return A ResponseEntity containing the updated event if successful, or a not
-     *         found response if the event ID is invalid.
-     */
-    @PutMapping(value = "events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<?> removeParticipant(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
+    public ResponseEntity<User> removeUserFromEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
         log.debug("removeParticipant() is called");
-        Event event = eventService.removeUser(eventID, userID);
-        if (eventID == null) {
+        ResponseEntity<?> responseEntity = eventService.removeUser(eventID, userID);
+    
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            Object deletedUser = responseEntity.getBody();
+            return new ResponseEntity<User>((User) deletedUser, HttpStatus.OK);
+        } else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
             return ResponseEntity.notFound().build();
+        } else {
+            log.warn("Error removing participant. Status code: {}", responseEntity.getStatusCode());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return new ResponseEntity<Event>(event, HttpStatus.OK);
     }
+    
+    
 
-    // neue Methode
-    /**
-     * Updates the rating of an event by a user.
-     *
-     * @param eventID The ID of the event.
-     * @param userID  The ID of the user.
-     * @param rating  The new rating for the event.
-     * @return ResponseEntity containing the updated Event object if successful, or
-     *         a not found response if the event ID is invalid.
-     */
-    @PutMapping(value = "events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID, @PathVariable("rating") int rating) {
-        log.debug("rateEvent() is called");
-        Event event = eventService.addRating(eventID, userID, rating);
-        if (eventID == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return new ResponseEntity<Event>(event, HttpStatus.OK);
+    @PutMapping(value = "events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+public ResponseEntity<Event> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
+    log.info("Update event: {}", eventID);
+    ResponseEntity<Event> response = eventService.update(eventID, event, Event.class);
+
+    if (response.getStatusCode() == HttpStatus.OK) {
+        Event updatedEvent = response.getBody();
+        return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
+    } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
+        return ResponseEntity.notFound().build();
+    } else {
+        log.warn("Error updating event. Status code: {}", response.getStatusCode());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
+}
+
+
+@DeleteMapping(value = "events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
+public ResponseEntity<?> deleteEvent(@PathVariable("eventID") UUID eventID) {
+    log.debug("deleteEvent() is called");
+    ResponseEntity<?> response = eventService.delete(eventID);
+
+    if (response.getStatusCode() == HttpStatus.OK) {
+        Object deletedEvent = response.getBody();
+        return new ResponseEntity<>(deletedEvent, HttpStatus.OK);
+    } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
+        return ResponseEntity.notFound().build();
+    } else {
+        log.warn("Error deleting event. Status code: {}", response.getStatusCode());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+}
+
+
+@PutMapping(value = "events/{eventID}/add/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
+    log.debug("addParticipant() is called");
+    ResponseEntity<?> response = eventService.addUser(eventID, userID);
+
+    if (response.getStatusCode() == HttpStatus.OK) {
+        Object updatedEvent = response.getBody();
+        return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
+    } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
+        return ResponseEntity.notFound().build();
+    } else {
+        log.warn("Error adding participant to event. Status code: {}", response.getStatusCode());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+}
+
+@PutMapping(value = "events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+public ResponseEntity<?> removeParticipant(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
+    log.debug("removeParticipant() is called");
+    ResponseEntity<?> response = eventService.removeUser(eventID, userID);
+
+    if (response.getStatusCode() == HttpStatus.OK) {
+        Object updatedEvent = response.getBody();
+        return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
+    } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
+        return ResponseEntity.notFound().build();
+    } else {
+        log.warn("Error removing participant from event. Status code: {}", response.getStatusCode());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+}
+
+
+   @PutMapping(value = "events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
+public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID, @PathVariable("rating") int rating) {
+    log.debug("rateEvent() is called");
+    ResponseEntity<?> response = eventService.addRating(eventID, userID, rating);
+
+    if (response.getStatusCode() == HttpStatus.OK) {
+        Object updatedEvent = response.getBody();
+        return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
+    } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
+        return ResponseEntity.notFound().build();
+    } else {
+        log.warn("Error updating event rating. Status code: {}", response.getStatusCode());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+}
 
 }

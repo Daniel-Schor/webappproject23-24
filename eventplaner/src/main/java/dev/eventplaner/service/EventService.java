@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -88,27 +89,27 @@ public class EventService {
         return response;
     }
 
-    public ResponseEntity<?> update(Event event) {
-        log.info("update event: {}", event);
+    public ResponseEntity<?> update(UUID eventID, Event event, ParameterizedTypeReference<ResponseEntity<Event>> responseType) {
+    log.info("update event: {}", event);
 
-        RestTemplate restTemplate = new RestTemplate();
-        String url = apiUrl + "/events";
+    RestTemplate restTemplate = new RestTemplate();
+    String url = apiUrl + "/events";
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Event> request = new HttpEntity<Event>(event, headers);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    HttpEntity<Event> request = new HttpEntity<>(event, headers);
 
-        ResponseEntity<?> response;
+    ResponseEntity<ResponseEntity<Event>> response;
 
-        try {
-            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
-        } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
-        }
+    try {
+        response = restTemplate.exchange(url, HttpMethod.PUT, request, responseType);
+    } catch (HttpClientErrorException e) {
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+        return new ResponseEntity<>(apiError, apiError.getStatus());
+    }
 
         return response;
-    }
+    }    
 
     public ResponseEntity<?> delete(UUID eventID) {
         log.info("delete eventID: {}", eventID);
@@ -187,6 +188,10 @@ public class EventService {
         }
 
         return response;
+    }
+
+    public ResponseEntity<Event> update(UUID eventID, Event event, Class<Event> class1) {
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
 }

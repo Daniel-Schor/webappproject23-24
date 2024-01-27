@@ -2,11 +2,14 @@ package dev.eventplaner.service;
 
 import dev.eventplaner.model.ApiError;
 import dev.eventplaner.model.User;
+import dev.eventplaner.model.UserDTO;
 
+import java.util.Collection;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -131,25 +134,17 @@ public class UserService {
         return response;
     }
 
-    public ResponseEntity<?> getAllDTO() {
-        log.info("get all Events as DTO");
+    public ResponseEntity<Collection<UserDTO>> getAllDTO() {
+    log.info("get all Users as DTO");
 
-        RestTemplate restTemplate = new RestTemplate();
-        String url = apiUrl + "/users";
+    RestTemplate restTemplate = new RestTemplate();
+    String url = apiUrl + "/users";
 
-        HttpHeaders headers = new HttpHeaders();
-        HttpEntity<String> request = new HttpEntity<String>(headers);
+    HttpHeaders headers = new HttpHeaders();
+    HttpEntity<String> request = new HttpEntity<>(headers);
 
-        ResponseEntity<?> response;
+    return restTemplate.exchange(url, HttpMethod.GET, request, new ParameterizedTypeReference<Collection<UserDTO>>() {});
+}
 
-        try {
-            response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
-        } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
-        }
-        return response;
-
-    }
 
 }

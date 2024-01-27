@@ -3,6 +3,8 @@ package dev.eventplaner.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,16 +18,15 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @Controller
 @RequestMapping("/web/")
-public SomeData requestMethodName(@RequestParam String param) {
+/*public SomeData requestMethodName(@RequestParam("param") String param) {
     return new SomeData();
-}
+} */
 
 public class WebController {
 
@@ -45,24 +46,35 @@ public class WebController {
     }
 
     @GetMapping("events/{eventID}")
-    public String showEventDetails(@PathVariable("eventID") UUID eventID, Model model) {
-        log.info("WebController: Showing details for event ID: {}", eventID);
-        try {
-            Event event = eventService.getEvent(eventID);
+public String showEventDetails(@PathVariable("eventID") UUID eventID, Model model) {
+    log.info("WebController: Showing details for event ID: {}", eventID);
+    ResponseEntity<?> response = eventService.getEvent(eventID);
+
+    if (response.getStatusCode() == HttpStatus.OK) {
+        Object responseBody = response.getBody();
+
+        if (responseBody instanceof Event) {
+            Event event = (Event) responseBody;
             model.addAttribute("event", event);
-        } catch (IllegalArgumentException e) {
-            log.warn("WebController: Invalid event ID format: {}", eventID);
+        } else {
+            log.warn("WebController: Invalid response body type for event ID: {}", eventID);
         }
-        return "event-details";
+    } else {
+        log.warn("WebController: Error retrieving event ID: {}. Status code: {}", eventID, response.getStatusCode());
     }
+
+    return "event-details";
+}
+
 
     @GetMapping("users")
     public String getUsers(Model model) {
-        Collection<UserDTO> users = userService.getAllDTO();
+        ResponseEntity<Collection<UserDTO>> users = userService.getAllDTO();
         model.addAttribute("users", users);
         log.info("Fetched all users"); 
         return "users";
     }
+    
 
     @GetMapping("home")
     public String home() {
