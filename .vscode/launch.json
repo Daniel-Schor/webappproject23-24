@@ -12,7 +12,8 @@
             "name": "eventcreatorApplication",
             "request": "launch",
             "mainClass": "dev.eventcreator.eventcreatorApplication",
-            "projectName": "eventcreator"
+            "projectName": "eventcreator",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1983 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=eventcreator"
         },
         {
             "type": "java",
@@ -28,6 +29,17 @@
             "cwd": "${workspaceFolder}",
             "mainClass": "dev.repoplaner.repoplanerApplication",
             "projectName": "repoplaner",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1991 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=repoplaner"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-userplanerApplication<userplaner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "dev.userplaner.userplanerApplication",
+            "projectName": "userplaner",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }
