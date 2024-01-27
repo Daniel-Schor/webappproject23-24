@@ -1,9 +1,15 @@
 package dev.eventplaner.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.UUID;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 /**
  * User class represents a user in the system.
@@ -12,7 +18,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class User {
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    private final UUID userID;
+    @JsonProperty("id")
+    private UUID userID;
     private String firstName;
     private String lastName;
     private String email;
@@ -93,6 +100,36 @@ public class User {
         return encoder.matches(password, this.password);
     }
 
+    public static Collection<User> collectionFromJson(String s) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        Collection<User> values = new ArrayList<>();
+
+        try {
+            values = mapper.readValue(s, new TypeReference<Collection<User>>() {
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+
+    public static User userFromJson(String s) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        User user = new User();
+
+        try {
+            user = mapper.readValue(s, new TypeReference<User>() {
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
     // -- GETTER AND SETTER --
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public UUID getID() {
@@ -138,6 +175,11 @@ public class User {
 
     public User setOrganizer(boolean organizer) {
         this.organizer = organizer;
+        return this;
+    }
+
+    public User setID(UUID userID) {
+        this.userID = userID;
         return this;
     }
 

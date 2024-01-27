@@ -134,17 +134,25 @@ public class UserService {
         return response;
     }
 
-    public ResponseEntity<Collection<UserDTO>> getAllDTO() {
-    log.info("get all Users as DTO");
+        public ResponseEntity<?> getAllDTO() {
+        log.info("get all Users as DTO");
 
-    RestTemplate restTemplate = new RestTemplate();
-    String url = apiUrl + "/users";
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/users";
 
-    HttpHeaders headers = new HttpHeaders();
-    HttpEntity<String> request = new HttpEntity<>(headers);
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> request = new HttpEntity<String>(headers);
 
-    return restTemplate.exchange(url, HttpMethod.GET, request, new ParameterizedTypeReference<Collection<UserDTO>>() {});
-}
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
+        }
+        return response;
+    }
 
 
 }

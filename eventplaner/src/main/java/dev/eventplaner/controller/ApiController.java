@@ -51,30 +51,12 @@ public class ApiController {
      * @return ResponseEntity containing a collection of UserDTO objects
      */
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Collection<UserDTO>> getAllUsers() {
+    public ResponseEntity<?> getAllUsers() {
         log.info("Get all users");
 
         ResponseEntity<?> response = userService.getAllDTO();
 
-        if (response.getStatusCode() == HttpStatus.OK) {
-            Object responseBody = response.getBody();
-
-            if (responseBody instanceof Collection<?>) {
-                Collection<UserDTO> usersDTO = (Collection<UserDTO>) (Collection<?>) responseBody;
-                if (usersDTO.isEmpty()) {
-                    return ResponseEntity.noContent().build();
-                }
-                return new ResponseEntity<>(usersDTO, HttpStatus.OK);
-            } else {
-                log.warn("Invalid response body type for getting all users as DTO");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
-        } else if (response.getStatusCode() == HttpStatus.NO_CONTENT) {
-            return ResponseEntity.noContent().build();
-        } else {
-            log.warn("Error retrieving all users as DTO. Status code: {}", response.getStatusCode());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return response;
     }
 
     /**
@@ -90,23 +72,8 @@ public class ApiController {
 
         ResponseEntity<?> response = userService.getUser(userID);
 
-        if (response.getStatusCode() == HttpStatus.OK) {
-            Object responseBody = response.getBody();
-
-            if (responseBody instanceof User) {
-                User user = (User) responseBody;
-                return new ResponseEntity<>(user, HttpStatus.OK);
-            } else {
-                log.warn("Invalid response body type for user ID: {}", userID);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
-        } else if (response.getStatusCode() == HttpStatus.NO_CONTENT) {
-            return ResponseEntity.noContent().build();
-        } else {
-            log.warn("Error retrieving user ID: {}. Status code: {}", userID, response.getStatusCode());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-       
-         } }
+        return response;
+    }
     /**
      * Creates a new user.
      *

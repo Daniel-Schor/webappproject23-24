@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import dev.eventplaner.model.Event;
 import dev.eventplaner.model.Geolocation;
+import dev.eventplaner.model.User;
 import dev.eventplaner.model.UserDTO;
 import dev.eventplaner.service.EventService;
 import dev.eventplaner.service.UserService;
@@ -69,7 +70,7 @@ public String showEventDetails(@PathVariable("eventID") UUID eventID, Model mode
 
     @GetMapping("users")
     public String getUsers(Model model) {
-        ResponseEntity<Collection<UserDTO>> users = userService.getAllDTO();
+        ResponseEntity<?> users = userService.getAllDTO();
         model.addAttribute("users", users);
         log.info("Fetched all users"); 
         return "users";

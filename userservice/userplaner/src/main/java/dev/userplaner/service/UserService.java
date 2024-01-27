@@ -1,8 +1,6 @@
 package dev.userplaner.service;
 
 import dev.userplaner.model.ApiError;
-import dev.userplaner.model.Event;
-import dev.userplaner.model.EventDTO;
 import dev.userplaner.model.User;
 import dev.userplaner.model.UserDTO;
 
@@ -159,7 +157,7 @@ public class UserService {
      *
      * @return An Collection of all User objects.
      */
-    public String getAll() {
+    public ResponseEntity<?> getAll() {
         log.info("getAllUsers");
 
         RestTemplate restTemplate = new RestTemplate();
@@ -176,7 +174,7 @@ public class UserService {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
             response = new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        return response.getBody().toString();
+        return response;
     }
 
     public String getAllDTO() {
@@ -197,20 +195,21 @@ public class UserService {
             response = new ResponseEntity<String>(apiError.toString(), apiError.getStatus());
         }
 
-        ObjectMapper mapper = new ObjectMapper();
-        Collection<User> values = new ArrayList<>();
+        String body = response.getBody();
+        Collection<User> values = User.collectionFromJson(body);
 
-        try {
-            values = mapper.readValue(response.getBody(), new TypeReference<Collection<User>>() {
-            });
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        log.info("values: {}", body);
+
+        for (User user : values) {
+            log.info("User: {}", user.getID());
         }
 
         Collection<UserDTO> usersDTO = new ArrayList<>();
         if (values != null) {
             for (User user : values) {
-                usersDTO.add(new UserDTO(user));
+                UserDTO newUser = new UserDTO(user);
+                log.info("newUser: {}", newUser.getUserID());
+                usersDTO.add(newUser);
             }
         }
         return convertCollectionToJson(usersDTO);

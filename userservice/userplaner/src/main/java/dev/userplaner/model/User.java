@@ -18,6 +18,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
  */
 public class User {
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    @JsonProperty("id")
     private UUID userID;
     private String firstName;
     private String lastName;
