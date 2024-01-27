@@ -76,36 +76,6 @@ public class EventService {
         return response.getBody().toString();
     }
 
-    private Collection<Event> collectionFromJson(String s) {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        Collection<Event> values = new ArrayList<>();
-
-        try {
-            values = mapper.readValue(s, new TypeReference<Collection<Event>>() {
-            });
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return values;
-    }
-
-    private Event eventFromJson(String s) {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        Event event = new Event();
-
-        try {
-            event = mapper.readValue(s, new TypeReference<Event>() {
-            });
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return event;
-    }
-
     // XXX this is needed in the api gateway
     public String getAllDTO() {
         log.info("get all Events as DTO");
@@ -126,7 +96,7 @@ public class EventService {
         }
 
         String body = response.getBody();
-        Collection<Event> values = collectionFromJson(body);
+        Collection<Event> values = Event.collectionFromJson(body);
 
         log.info("values: {}", body);
 
@@ -209,7 +179,7 @@ public class EventService {
     public Event addUser(UUID eventID, UUID userID) {
         log.info("addUser: eventID={}, userID={}", eventID, userID);
         String eventString = getEvent(eventID);
-        Event event = eventFromJson(eventString);
+        Event event = Event.eventFromJson(eventString);
 
         if (event == null || !event.addParticipant(userID)) {
             throw new IllegalArgumentException("Failed to add user to event");
@@ -223,7 +193,7 @@ public class EventService {
     public Event removeUser(UUID eventID, UUID userID) {
         log.info("removeUser: eventID={}, user={}", eventID, userID);
         String eventString = getEvent(eventID);
-        Event event = eventFromJson(eventString);
+        Event event = Event.eventFromJson(eventString);
 
         if (event == null || !event.removeParticipant(userID)) {
             throw new IllegalArgumentException("Failed to remove user from event");
@@ -236,7 +206,7 @@ public class EventService {
     // XXX das wird nur im api gateway gebraucht, falls ein user aus der datenbank gelöscht wird
     public void removeUser(UUID userID) {
         log.info("removeUser: userId={}", userID);
-        for (Event event : collectionFromJson(getAll())) {
+        for (Event event : Event.collectionFromJson(getAll())) {
             if (event.removeParticipant(userID)) {
                 update(event);
             }
@@ -247,7 +217,7 @@ public class EventService {
     public String addRating(UUID eventID, UUID userID, int rating) {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
         String eventString = getEvent(eventID);
-        Event event = eventFromJson(eventString);
+        Event event = Event.eventFromJson(eventString);
         if (event == null) {
             throw new IllegalArgumentException("Failed to add rating to event");
         }
@@ -260,7 +230,7 @@ public class EventService {
     public double getRating(UUID eventID) {
         log.info("getRating: eventID={}", eventID);
         String eventString = getEvent(eventID);
-        Event event = eventFromJson(eventString);
+        Event event = Event.eventFromJson(eventString);
         return event.rating();
     }
 

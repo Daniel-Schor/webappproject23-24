@@ -1,16 +1,24 @@
 package dev.eventplaner.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class Event {
 
-    private final UUID eventID;
+    @JsonProperty("id")
+    private UUID eventID;
     private String name;
     private String description;
     private LocalDateTime dateTime;
@@ -20,7 +28,7 @@ public class Event {
     private UUID organizerUserID;
 
     /**
-     * Default constructor for the Event class.
+     * Default constructor for the Event class. New Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
      * Initializes the event with default values.
      */
     public Event() {
@@ -28,7 +36,22 @@ public class Event {
         this.name = "Default Event";
         this.description = "Default Description";
         this.dateTime = LocalDateTime.now();
-        this.geolocation = new Geolocation(50.130444, 8.692556);//new Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
+        this.geolocation = new Geolocation(50.130444, 8.692556);
+        this.maxParticipants = 10;
+        this.participants = new HashMap<>();
+        this.organizerUserID = null;
+    }
+
+    /**
+     * Default constructor for the Event class. New Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
+     * Initializes the event with default values.
+     */
+    public Event(UUID eventID) {
+        this.eventID = eventID;
+        this.name = "Default Event";
+        this.description = "Default Description";
+        this.dateTime = LocalDateTime.now();
+        this.geolocation = new Geolocation(50.130444, 8.692556);
         this.maxParticipants = 10;
         this.participants = new HashMap<>();
         this.organizerUserID = null;
@@ -77,10 +100,13 @@ public class Event {
      * Removes a participant from the event.
      * 
      * @param participantID the ID of the participant to be removed
+     * @return true if the participant was removed successfully, false if the ID is not in the event
      */
-    public synchronized void removeParticipant(UUID participantID) {
+    public synchronized boolean removeParticipant(UUID participantID) {
         if (participantID != null) {
-            this.participants.remove(participantID);
+            return (this.participants.remove(participantID) != null);
+        } else {
+            return false;
         }
     }
 
@@ -89,7 +115,7 @@ public class Event {
      *
      * @return The average rating of the event. If no rating is available, 0 is
      */
-    public double getRating() {
+    public double rating() {
         double rating = 0;
         int nullValues = 0;
 
@@ -99,6 +125,9 @@ public class Event {
             } else {
                 rating += i;
             }
+        }
+        if (participants.size() == nullValues) {
+            return 0;
         }
         return ((double) rating) / (participants.size() - nullValues);
     }
@@ -121,6 +150,36 @@ public class Event {
 
     public boolean contains(UUID userID) {
         return this.participants.containsKey(userID);
+    }
+
+    public static Collection<Event> collectionFromJson(String s) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        Collection<Event> values = new ArrayList<>();
+
+        try {
+            values = mapper.readValue(s, new TypeReference<Collection<Event>>() {
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+
+    public static Event eventFromJson(String s) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        Event event = new Event();
+
+        try {
+            event = mapper.readValue(s, new TypeReference<Event>() {
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return event;
     }
 
     // -- GETTER AND SETTER --
@@ -200,5 +259,24 @@ public class Event {
             this.geolocation = geolocation;
         }
         return this;
+    }
+
+    public Event setID(UUID eventID) {
+        this.eventID = eventID;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        String s = "";
+        s += "EventID: " + this.eventID + "\n";
+        s += "Name: " + this.name + "\n";
+        s += "Description: " + this.description + "\n";
+        s += "DateTime: " + this.dateTime + "\n";
+        s += "Location: " + this.geolocation + "\n";
+        s += "MaxParticipants: " + this.maxParticipants + "\n";
+        s += "Participants: " + this.participants + "\n";
+        s += "OrganizerUserID: " + this.organizerUserID + "\n";
+        return s;
     }
 }

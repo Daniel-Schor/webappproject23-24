@@ -10,6 +10,10 @@ import java.util.UUID;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class Event {
 
@@ -146,6 +150,36 @@ public class Event {
 
     public boolean contains(UUID userID) {
         return this.participants.containsKey(userID);
+    }
+
+    public static Collection<Event> collectionFromJson(String s) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        Collection<Event> values = new ArrayList<>();
+
+        try {
+            values = mapper.readValue(s, new TypeReference<Collection<Event>>() {
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return values;
+    }
+
+    public static Event eventFromJson(String s) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        Event event = new Event();
+
+        try {
+            event = mapper.readValue(s, new TypeReference<Event>() {
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return event;
     }
 
     // -- GETTER AND SETTER --
