@@ -42,6 +42,16 @@
             "projectName": "userplaner",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-EventplanerApplication<eventplaner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "dev.eventplaner.EventplanerApplication",
+            "projectName": "eventplaner",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

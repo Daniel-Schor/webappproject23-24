@@ -104,7 +104,9 @@ public class Event {
      */
     public synchronized boolean removeParticipant(UUID participantID) {
         if (participantID != null) {
-            return (this.participants.remove(participantID) != null);
+            boolean containsKey = participants.containsKey(participantID);
+            boolean removed = participants.remove(participantID) != null;
+            return containsKey || removed;
         } else {
             return false;
         }
