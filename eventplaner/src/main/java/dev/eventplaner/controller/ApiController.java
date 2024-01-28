@@ -208,7 +208,7 @@ public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID, @
 }
 
 
-    @DeleteMapping(value = "remove/user/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "user/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteUser(@PathVariable("userID") UUID userID) {
         log.debug("deleteUser() is called");
         ResponseEntity<?> response = userService.delete(userID);
