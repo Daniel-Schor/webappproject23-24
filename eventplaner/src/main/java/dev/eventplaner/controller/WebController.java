@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import dev.eventplaner.model.Event;
+import dev.eventplaner.model.EventDTO;
 import dev.eventplaner.model.Geolocation;
 import dev.eventplaner.model.User;
 import dev.eventplaner.model.UserDTO;
@@ -18,8 +19,8 @@ import dev.eventplaner.service.UserService;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -40,11 +41,23 @@ public class WebController {
     private UserService userService;
 
     @GetMapping("/events")
+
+
     public String showAllEvents(Model model) {
-        log.info("WebController: Showing all events");
-        model.addAttribute("events", eventService.getAllDTO());
-        return "events";
+    log.info("WebController: Showing all events");
+
+    try {
+        List<EventDTO> events = (List<EventDTO>) eventService.getAllDTO();
+        model.addAttribute("events", events);
+    } catch (Exception e) {
+        log.error("Error retrieving events", e);
+        // Hier könnten Sie eine entsprechende Fehlerbehandlung implementieren, z.B. eine Fehlerseite anzeigen.
     }
+
+    return "events";
+}
+
+
 
     @GetMapping("events/{eventID}")
 public String showEventDetails(@PathVariable("eventID") UUID eventID, Model model) {
