@@ -140,23 +140,23 @@ public class ApiController {
         }
     }
     
-    @DeleteMapping(value = "events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<User> removeUserFromEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
-        log.debug("removeParticipant() is called");
-        ResponseEntity<?> responseEntity = eventService.removeUser(eventID, userID);
-    
-        if (responseEntity.getStatusCode() == HttpStatus.OK) {
-            Object deletedUser = responseEntity.getBody();
-            return new ResponseEntity<User>((User) deletedUser, HttpStatus.OK);
-        } else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
-            return ResponseEntity.notFound().build();
-        } else {
-            log.warn("Error removing participant. Status code: {}", responseEntity.getStatusCode());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    log.debug("removeParticipant() is called");
+    ResponseEntity<?> responseEntity = eventService.removeUser(eventID, userID);
+
+    if (responseEntity.getStatusCode() == HttpStatus.OK) {
+        Object deletedUser = responseEntity.getBody();
+        return new ResponseEntity<User>((User) deletedUser, HttpStatus.OK);
+    } else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
+        return ResponseEntity.notFound().build();
+    } else {
+        log.warn("Error removing participant. Status code: {}", responseEntity.getStatusCode());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
-    
+}
+
     
 
     @PutMapping(value = "events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
