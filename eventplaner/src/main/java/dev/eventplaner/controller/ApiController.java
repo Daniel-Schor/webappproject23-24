@@ -30,7 +30,6 @@ import dev.eventplaner.service.UserService;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
-@RequestMapping("/api/")
 public class ApiController {
 
     // Logger instance for this class, used to log system messages, warnings, and
@@ -140,22 +139,21 @@ public class ApiController {
         }
     }
     
-    @PutMapping(value = "/events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<User> removeUserFromEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
-    log.debug("removeParticipant() is called");
-    ResponseEntity<?> responseEntity = eventService.removeUser(eventID, userID);
-
-    if (responseEntity.getStatusCode() == HttpStatus.OK) {
-        Object deletedUser = responseEntity.getBody();
-        return new ResponseEntity<User>((User) deletedUser, HttpStatus.OK);
-    } else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
-        return ResponseEntity.notFound().build();
-    } else {
-        log.warn("Error removing participant. Status code: {}", responseEntity.getStatusCode());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    @PutMapping(value = "events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE) 
+    public ResponseEntity<?> removeUser(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
+        log.debug("removeUser() is called");
+        ResponseEntity<?> response = eventService.removeUser(eventID, userID);
+    
+        if (response.getStatusCode() == HttpStatus.OK) {
+            Object updatedEvent = response.getBody();
+            return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
+        } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
+            return ResponseEntity.notFound().build();
+        } else {
+            log.warn("Error removing participant from event. Status code: {}", response.getStatusCode());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
-}
 
     
 
