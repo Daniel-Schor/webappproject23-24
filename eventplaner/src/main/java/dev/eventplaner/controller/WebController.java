@@ -22,13 +22,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-
-
 @Controller
 @RequestMapping("/web/")
-/*public SomeData requestMethodName(@RequestParam("param") String param) {
-    return new SomeData();
-} */
+/*
+ * public SomeData requestMethodName(@RequestParam("param") String param) {
+ * return new SomeData();
+ * }
+ */
 
 public class WebController {
 
@@ -42,59 +42,57 @@ public class WebController {
 
     @GetMapping("/events")
 
-
     public String showAllEvents(Model model) {
-    log.info("WebController: Showing all events");
+        log.info("WebController: Showing all events");
 
-    try {
-        List<EventDTO> events = (List<EventDTO>) eventService.getAllDTO();
-        model.addAttribute("events", events);
-    } catch (Exception e) {
-        log.error("Error retrieving events", e);
-        // Hier könnten Sie eine entsprechende Fehlerbehandlung implementieren, z.B. eine Fehlerseite anzeigen.
+        try {
+            List<EventDTO> events = (List<EventDTO>) eventService.getAllDTO();
+            model.addAttribute("events", events);
+        } catch (Exception e) {
+            log.error("Error retrieving events", e);
+            // Hier könnten Sie eine entsprechende Fehlerbehandlung implementieren, z.B.
+            // eine Fehlerseite anzeigen.
+        }
+
+        return "events";
     }
-
-    return "events";
-}
-
-
 
     @GetMapping("events/{eventID}")
-public String showEventDetails(@PathVariable("eventID") UUID eventID, Model model) {
-    log.info("WebController: Showing details for event ID: {}", eventID);
-    ResponseEntity<?> response = eventService.getEvent(eventID);
+    public String showEventDetails(@PathVariable("eventID") UUID eventID, Model model) {
+        log.info("WebController: Showing details for event ID: {}", eventID);
+        ResponseEntity<?> response = eventService.getEvent(eventID);
 
-    if (response.getStatusCode() == HttpStatus.OK) {
-        Object responseBody = response.getBody();
+        if (response.getStatusCode() == HttpStatus.OK) {
+            Object responseBody = response.getBody();
 
-        if (responseBody instanceof Event) {
-            Event event = (Event) responseBody;
-            model.addAttribute("event", event);
+            if (responseBody instanceof Event) {
+                Event event = (Event) responseBody;
+                model.addAttribute("event", event);
+            } else {
+                log.warn("WebController: Invalid response body type for event ID: {}", eventID);
+            }
         } else {
-            log.warn("WebController: Invalid response body type for event ID: {}", eventID);
+            log.warn("WebController: Error retrieving event ID: {}. Status code: {}", eventID,
+                    response.getStatusCode());
         }
-    } else {
-        log.warn("WebController: Error retrieving event ID: {}. Status code: {}", eventID, response.getStatusCode());
+
+        return "event-details";
     }
-
-    return "event-details";
-}
-
 
     @GetMapping("users")
     public String getUsers(Model model) {
         ResponseEntity<?> users = userService.getAllDTO();
         model.addAttribute("users", users);
-        log.info("Fetched all users"); 
+        log.info("Fetched all users");
         return "users";
     }
-    
 
     @GetMapping("home")
     public String home() {
         log.info("WebController: Home page requested");
         return "index";
     }
+
     @GetMapping("manage")
     public String showManageEvents(Model model) {
         log.info("WebController: Showing manage events page");
@@ -107,15 +105,16 @@ public String showEventDetails(@PathVariable("eventID") UUID eventID, Model mode
         model.addAttribute("event", new Event());
         return "add-event";
     }
+
     @PostMapping("manage/add-event")
     public String addEvent(@RequestParam("name") String name,
-                           @RequestParam("description") String description,
-                           @RequestParam("dateTime") LocalDateTime dateTime,
-                           @RequestParam("latitude") Double latitude,
-                           @RequestParam("longitude") Double longitude,
-                           @RequestParam("maxParticipants") int maxParticipants,
-                           @RequestParam(value = "organizerUserID", required = false) UUID organizerUserID,
-                           Model model) {
+            @RequestParam("description") String description,
+            @RequestParam("dateTime") LocalDateTime dateTime,
+            @RequestParam("latitude") Double latitude,
+            @RequestParam("longitude") Double longitude,
+            @RequestParam("maxParticipants") int maxParticipants,
+            @RequestParam(value = "organizerUserID", required = false) UUID organizerUserID,
+            Model model) {
         log.info("WebController: Adding new event: {}", name);
 
         // Mache neue Event Instanz
@@ -142,5 +141,5 @@ public String showEventDetails(@PathVariable("eventID") UUID eventID, Model mode
         // Redirect the user to the event overview
         return "redirect:events";
     }
-    
+
 }
