@@ -209,22 +209,40 @@ public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID, @
     }
 }
 
-@PutMapping(value = "events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
-public ResponseEntity<?> removeParticipant(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
-    log.debug("removeParticipant() is called");
-    ResponseEntity<?> response = eventService.removeUser(eventID, userID);
 
-    if (response.getStatusCode() == HttpStatus.OK) {
-        Object updatedEvent = response.getBody();
-        return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
-    } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
-        return ResponseEntity.notFound().build();
-    } else {
-        log.warn("Error removing participant from event. Status code: {}", response.getStatusCode());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    @DeleteMapping(value = "remove/user/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteUser(@PathVariable("userID") UUID userID) {
+        log.debug("deleteUser() is called");
+        ResponseEntity<?> response = userService.delete(userID);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            Object deletedUser = response.getBody();
+            return new ResponseEntity<>(deletedUser, HttpStatus.OK);
+        } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
+            return ResponseEntity.notFound().build();
+        } else {
+            log.warn("Error deleting user. Status code: {}", response.getStatusCode());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
-}
 
+    @GetMapping(value = "events", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAllEvents() {
+        log.info("Get all events");
+
+        ResponseEntity<?> response = eventService.getAllDTO();
+
+        return response;
+    }
+
+    @GetMapping(value = "events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getEvent(@PathVariable("eventID") UUID eventID) {
+        log.info("Get event by eventID: {}", eventID);
+
+        ResponseEntity<?> response = eventService.getEvent(eventID);
+
+        return response;
+    }
 
    @PutMapping(value = "events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
 public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID, @PathVariable("rating") int rating) {

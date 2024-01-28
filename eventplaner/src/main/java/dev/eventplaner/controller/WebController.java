@@ -39,7 +39,7 @@ public class WebController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("events")
+    @GetMapping("/events")
     public String showAllEvents(Model model) {
         log.info("WebController: Showing all events");
         model.addAttribute("events", eventService.getAllDTO());
