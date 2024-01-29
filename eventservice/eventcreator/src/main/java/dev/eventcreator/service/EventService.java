@@ -56,6 +56,7 @@ public class EventService {
         return response.getBody().toString();
     }
 
+    // response angepasst
     // FIXME use this instead of getAllDTO; test this
     public String getAll() {
         log.info("get all Events");
@@ -76,8 +77,9 @@ public class EventService {
         return response.getBody().toString();
     }
 
+    // response angepasst
     // XXX this is needed in the api gateway
-    public ResponseEntity<String> getAllDTO() {
+    public String getAllDTO() {
         log.info("get all Events as DTO");
     
         RestTemplate restTemplate = new RestTemplate();
@@ -91,14 +93,22 @@ public class EventService {
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
-                ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            HttpStatus errorStatus = (HttpStatus) e.getStatusCode();
+            String responseBody = e.getResponseBodyAsString();
+        
+            if (errorStatus == HttpStatus.NOT_FOUND) {
+                ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, responseBody);
+                response = new ResponseEntity<>(apiError.toString(), apiError.getStatus());
+            } else if (errorStatus == HttpStatus.UNPROCESSABLE_ENTITY) {
+                ApiError apiError = new ApiError(HttpStatus.UNPROCESSABLE_ENTITY, responseBody);
                 response = new ResponseEntity<>(apiError.toString(), apiError.getStatus());
             } else {
-                ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, e.getResponseBodyAsString());
+                // Default für alle anderen Fehler
+                ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, responseBody);
                 response = new ResponseEntity<>(apiError.toString(), apiError.getStatus());
             }
         }
+        
     
 
         String body = response.getBody();
