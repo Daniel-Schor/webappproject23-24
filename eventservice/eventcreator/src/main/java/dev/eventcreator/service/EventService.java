@@ -189,7 +189,6 @@ public class EventService {
         return event;
     }
 
-    // TODO test this
     public Event removeUser(UUID eventID, UUID userID) {
         log.info("removeUser: eventID={}, user={}", eventID, userID);
         String eventString = getEvent(eventID);
@@ -212,8 +211,7 @@ public class EventService {
             }
         }
     }
-
-    // TODO test this
+    
     public String addRating(UUID eventID, UUID userID, int rating) {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
         String eventString = getEvent(eventID);
