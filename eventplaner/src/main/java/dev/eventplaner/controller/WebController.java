@@ -113,18 +113,7 @@ public static Collection<Event> collectionFromJson(String s) {
         return "users";
     }
 
-    public static Collection<User> collectionFromJson2(String s) {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        Collection<User> values = new ArrayList<>();
-
-        try {
-            values = mapper.readValue(s, new TypeReference<Collection<User>>() {});
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return values;
-    }
+    
 
     
 
