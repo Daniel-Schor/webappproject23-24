@@ -47,7 +47,8 @@ public class WebController {
 
         try {
             ResponseEntity<?> response = eventService.getAllDTO();
-            List<EventDTO> events = (List<EventDTO>) response.getBody(); // Explicitly cast the response body to List<EventDTO>
+            List<EventDTO> events = (List<EventDTO>) response.getBody(); // Explicitly cast the response body to
+                                                                         // List<EventDTO>
             model.addAttribute("events", events);
         } catch (Exception e) {
             log.error("Error retrieving events", e);
