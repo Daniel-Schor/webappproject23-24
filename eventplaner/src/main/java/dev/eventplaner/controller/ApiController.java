@@ -113,7 +113,7 @@ public class ApiController {
         }
     }
 
-    // neu Methode
+    //TODO fix this
 
     /**
      * Updates a user with the given user ID.
@@ -138,7 +138,8 @@ public class ApiController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    
+
+    //TODO fix this
     @PutMapping(value = "events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE) 
     public ResponseEntity<?> removeUser(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
         log.debug("removeUser() is called");
@@ -241,6 +242,7 @@ public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID, @
 
         return response;
     }
+
 
    @PutMapping(value = "events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
 public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID, @PathVariable("rating") int rating) {
