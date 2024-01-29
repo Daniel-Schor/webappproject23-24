@@ -95,22 +95,7 @@ public class ApiController {
 
         ResponseEntity<?> response = userService.create(user);
 
-        if (response.getStatusCode() == HttpStatus.CREATED) {
-            Object responseBody = response.getBody();
-
-            if (responseBody instanceof User) {
-                User createdUser = (User) responseBody;
-                return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-            } else {
-                log.warn("Invalid response body type for user creation");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
-        } else if (response.getStatusCode() == HttpStatus.UNPROCESSABLE_ENTITY) {
-            return ResponseEntity.unprocessableEntity().body(response.getBody());
-        } else {
-            log.warn("Error creating user. Status code: {}", response.getStatusCode());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return response;
     }
 
     // neu Methode
@@ -144,15 +129,7 @@ public class ApiController {
         log.debug("removeUser() is called");
         ResponseEntity<?> response = eventService.removeUser(eventID, userID);
     
-        if (response.getStatusCode() == HttpStatus.OK) {
-            Object updatedEvent = response.getBody();
-            return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
-        } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
-            return ResponseEntity.notFound().build();
-        } else {
-            log.warn("Error removing participant from event. Status code: {}", response.getStatusCode());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return response;
     }
 
     
@@ -162,15 +139,7 @@ public ResponseEntity<Event> updateEvent(@PathVariable("eventID") UUID eventID, 
     log.info("Update event: {}", eventID);
     ResponseEntity<Event> response = eventService.update(eventID, event, Event.class);
 
-    if (response.getStatusCode() == HttpStatus.OK) {
-        Event updatedEvent = response.getBody();
-        return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
-    } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
-        return ResponseEntity.notFound().build();
-    } else {
-        log.warn("Error updating event. Status code: {}", response.getStatusCode());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
+        return response;
 }
 
 
@@ -179,15 +148,7 @@ public ResponseEntity<?> deleteEvent(@PathVariable("eventID") UUID eventID) {
     log.debug("deleteEvent() is called");
     ResponseEntity<?> response = eventService.delete(eventID);
 
-    if (response.getStatusCode() == HttpStatus.OK) {
-        Object deletedEvent = response.getBody();
-        return new ResponseEntity<>(deletedEvent, HttpStatus.OK);
-    } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
-        return ResponseEntity.notFound().build();
-    } else {
-        log.warn("Error deleting event. Status code: {}", response.getStatusCode());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
+        return response;
 }
 
 
@@ -196,15 +157,7 @@ public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID, @
     log.debug("addParticipant() is called");
     ResponseEntity<?> response = eventService.addUser(eventID, userID);
 
-    if (response.getStatusCode() == HttpStatus.OK) {
-        Object updatedEvent = response.getBody();
-        return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
-    } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
-        return ResponseEntity.notFound().build();
-    } else {
-        log.warn("Error adding participant to event. Status code: {}", response.getStatusCode());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
+        return response;
 }
 
 
@@ -213,15 +166,7 @@ public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID, @
         log.debug("deleteUser() is called");
         ResponseEntity<?> response = userService.delete(userID);
 
-        if (response.getStatusCode() == HttpStatus.OK) {
-            Object deletedUser = response.getBody();
-            return new ResponseEntity<>(deletedUser, HttpStatus.OK);
-        } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
-            return ResponseEntity.notFound().build();
-        } else {
-            log.warn("Error deleting user. Status code: {}", response.getStatusCode());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return response;
     }
 
     @GetMapping(value = "events", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -247,15 +192,6 @@ public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathV
     log.debug("rateEvent() is called");
     ResponseEntity<?> response = eventService.addRating(eventID, userID, rating);
 
-    if (response.getStatusCode() == HttpStatus.OK) {
-        Object updatedEvent = response.getBody();
-        return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
-    } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
-        return ResponseEntity.notFound().build();
-    } else {
-        log.warn("Error updating event rating. Status code: {}", response.getStatusCode());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        return response;
     }
-}
-
 }
