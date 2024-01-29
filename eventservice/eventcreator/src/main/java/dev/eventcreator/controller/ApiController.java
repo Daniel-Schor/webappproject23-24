@@ -187,7 +187,6 @@ public class ApiController {
      * @return ResponseEntity containing the updated Event object if successful, or
      *         a not found response if the event ID is invalid.
      */
-    // TODO test this
     @PutMapping(value = "/events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID,
