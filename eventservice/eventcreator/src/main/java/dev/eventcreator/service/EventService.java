@@ -77,23 +77,29 @@ public class EventService {
     }
 
     // XXX this is needed in the api gateway
-    public String getAllDTO() {
+    public ResponseEntity<String> getAllDTO() {
         log.info("get all Events as DTO");
-
+    
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events";
-
+    
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<>(headers);
-
+    
         ResponseEntity<String> response;
-
+    
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError.toString(), apiError.getStatus());
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+                response = new ResponseEntity<>(apiError.toString(), apiError.getStatus());
+            } else {
+                ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, e.getResponseBodyAsString());
+                response = new ResponseEntity<>(apiError.toString(), apiError.getStatus());
+            }
         }
+    
 
         String body = response.getBody();
         Collection<Event> values = Event.collectionFromJson(body);
