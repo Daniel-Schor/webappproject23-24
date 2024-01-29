@@ -11,25 +11,15 @@ import org.springframework.web.bind.annotation.*;
 import dev.eventplaner.model.Event;
 import dev.eventplaner.model.EventDTO;
 import dev.eventplaner.model.Geolocation;
-import dev.eventplaner.model.User;
-import dev.eventplaner.model.UserDTO;
 import dev.eventplaner.service.EventService;
 import dev.eventplaner.service.UserService;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 @Controller
 @RequestMapping("/web/")
-/*
- * public SomeData requestMethodName(@RequestParam("param") String param) {
- * return new SomeData();
- * }
- */
-
 public class WebController {
 
     private static final Logger log = LoggerFactory.getLogger(WebController.class);
