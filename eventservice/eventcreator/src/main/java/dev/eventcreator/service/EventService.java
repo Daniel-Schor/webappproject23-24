@@ -157,8 +157,7 @@ public class EventService {
                 return apiError.toString();
             }
         }
-    
-        // Hier weiter mit der Verarbeitung der Antwort, wenn erfolgreich
+
         return response.getBody();
     }
     
