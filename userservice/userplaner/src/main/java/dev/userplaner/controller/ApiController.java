@@ -46,12 +46,8 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<String> getAllUsers() {
         log.info("Get all users");
-        String users = userService.getAllDTO();
 
-        if (users.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return userService.getAllDTO();
     }
 
     /**
@@ -63,14 +59,10 @@ public class ApiController {
      */
     @GetMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<String> getUser(@PathVariable("userID") UUID userID) {
+    public ResponseEntity<?> getUser(@PathVariable("userID") UUID userID) {
         log.info("Get all users");
-        String user = userService.getUser(userID);
 
-        if (user == null) {
-            return ResponseEntity.noContent().build();
-        }
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return userService.getUser(userID);
     }
 
     /**
@@ -83,17 +75,9 @@ public class ApiController {
     @PostMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> createUser(@RequestBody User user) {
-        String fullname = user.getFirstName() + user.getLastName();
-        log.info("Create new user: ", fullname);
-        if (fullname == null || fullname.isEmpty()) {
-            String detail = "User name must not be null or empty";
-            ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, detail);
-            pd.setInstance(URI.create("/users"));
-            pd.setTitle("User creation error");
-            return ResponseEntity.unprocessableEntity().body(pd);
-        }
-        String createdUser = userService.create(user);
-        return new ResponseEntity<String>(createdUser, HttpStatus.CREATED);
+        log.info("Create new user");
+        
+        return userService.create(user);
     }
 
     // neu Methode
@@ -108,25 +92,18 @@ public class ApiController {
      */
     @PutMapping(value = "/users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<String> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
+    public ResponseEntity<?> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
         log.info("Update user: {}", userID);
-        if (userService.getUser(userID) == null) {
-            return ResponseEntity.notFound().build();
-        }
-        String updatedUser = userService.update(user.setID(userID));
 
-        return new ResponseEntity<String>(updatedUser, HttpStatus.OK);
+        return userService.update(user.setID(userID));
     }
 
     @DeleteMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> deleteEvent(@PathVariable("userID") UUID userID) {
         log.debug("deleteEvent() is called");
-        String user = userService.delete(userID);
-        if (userID == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return new ResponseEntity<String>(user, HttpStatus.OK);
+        
+        return userService.delete(userID);
     }
 
 }

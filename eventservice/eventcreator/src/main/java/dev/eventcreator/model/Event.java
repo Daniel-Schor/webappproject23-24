@@ -22,6 +22,7 @@ public class Event {
     private String name;
     private String description;
     private LocalDateTime dateTime;
+    @JsonProperty("location")
     private Geolocation geolocation;
     private int maxParticipants;
     private Map<UUID, Integer> participants;

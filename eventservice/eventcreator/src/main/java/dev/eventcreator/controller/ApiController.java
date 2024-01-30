@@ -43,14 +43,10 @@ public class ApiController {
      */
     @GetMapping(value = "/events", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<String> getAllEvents() {
+    public ResponseEntity<?> getAllEvents() {
         log.info("Get all events");
-        String events = eventService.getAllDTO();
 
-        if (events.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return new ResponseEntity<>(events, HttpStatus.OK);
+        return eventService.getAllDTO();
     }
 
     /**
@@ -62,14 +58,10 @@ public class ApiController {
      */
     @GetMapping(value = "/events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<String> getEvent(@PathVariable("eventID") UUID eventID) {
+    public ResponseEntity<?> getEvent(@PathVariable("eventID") UUID eventID) {
         log.info("Get all users");
-        String event = eventService.getEvent(eventID);
 
-        if (event == null) {
-            return ResponseEntity.noContent().build();
-        }
-        return new ResponseEntity<>(event, HttpStatus.OK);
+        return eventService.getEvent(eventID);
     }
 
     /**
@@ -84,15 +76,18 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
         log.info("Create new Event: {}", event.getName());
-        if (event.getName() == null || event.getName().isEmpty()) {
-            String detail = "Event name must not be null or empty";
-            ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, detail);
-            pd.setInstance(URI.create("/events"));
-            pd.setTitle("Event creation error");
-            return ResponseEntity.unprocessableEntity().body(pd);
-        }
-        String createdEvent = eventService.create(event);
-        return new ResponseEntity<String>(createdEvent, HttpStatus.CREATED);
+        /*
+         * TODO implement this in repository
+         * if (event.getName() == null || event.getName().isEmpty()) {
+         * String detail = "Event name must not be null or empty";
+         * ProblemDetail pd =
+         * ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, detail);
+         * pd.setInstance(URI.create("/events"));
+         * pd.setTitle("Event creation error");
+         * return ResponseEntity.unprocessableEntity().body(pd);
+         * }
+         */
+        return eventService.create(event);
     }
 
     // neue Methode
@@ -107,14 +102,10 @@ public class ApiController {
      */
     @PutMapping(value = "/events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<String> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
+    public ResponseEntity<?> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
         log.info("Update event: {}", eventID);
-        String updatedEvent = eventService.update(event.setID(eventID));
 
-        if (updatedEvent == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return new ResponseEntity<String>(updatedEvent, HttpStatus.OK);
+        return eventService.update(event.setID(eventID));
     }
 
     /**
@@ -128,11 +119,8 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<?> deleteEvent(@PathVariable("eventID") UUID eventID) {
         log.debug("deleteEvent() is called");
-        String event = eventService.delete(eventID);
-        if (eventID == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return new ResponseEntity<String>(event, HttpStatus.OK);
+
+        return eventService.delete(eventID);
     }
 
     // neue Methode
@@ -149,10 +137,19 @@ public class ApiController {
     public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID,
             @PathVariable("userID") UUID userID) {
         log.debug("addParticipant() is called");
-        Event event = eventService.addUser(eventID, userID);
-        if (eventService.getEvent(eventID) == null) {
-            return ResponseEntity.notFound().build();
+
+        int maxParticipants = Event.eventFromJson(eventService.getEventString(eventID)).getMaxParticipants();
+        int participants = Event.eventFromJson(eventService.getEventString(eventID)).getParticipants().size();
+        if (maxParticipants <= participants + 1) {
+            return ResponseEntity.badRequest().build();
         }
+        ResponseEntity<?> response = eventService.getEvent(eventID);
+        if (response.getStatusCode() != HttpStatus.OK) {
+            return response;
+        }
+
+        Event event = eventService.addUser(eventID, userID);
+
         return new ResponseEntity<Event>(event, HttpStatus.OK);
     }
 
@@ -166,13 +163,20 @@ public class ApiController {
      * @return A ResponseEntity containing the updated event if successful, or a not
      *         found response if the event ID is invalid.
      */
+    // TODO 404 if user is not a participant
     @PutMapping(value = "/events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> removeParticipant(@PathVariable("eventID") UUID eventID,
             @PathVariable("userID") UUID userID) {
         log.debug("removeParticipant() is called");
+
+        ResponseEntity<?> response = eventService.getEvent(eventID);
+        if (response.getStatusCode() != HttpStatus.OK) {
+            return response;
+        }
+
         Event event = eventService.removeUser(eventID, userID);
-        if (eventService.getEvent(eventID) == null) {
+        if (event == null) {
             return ResponseEntity.notFound().build();
         }
         return new ResponseEntity<Event>(event, HttpStatus.OK);
@@ -187,15 +191,28 @@ public class ApiController {
      * @return ResponseEntity containing the updated Event object if successful, or
      *         a not found response if the event ID is invalid.
      */
+    // TODO dont add rating if user is not a participant
+    // TODO 404 if user is not a participant
     @PutMapping(value = "/events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID,
             @PathVariable("rating") int rating) {
         log.debug("rateEvent() is called");
+
+        if (rating <= 0 || rating > 5) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        ResponseEntity<?> response = eventService.getEvent(eventID);
+        if (response.getStatusCode() != HttpStatus.OK) {
+            return response;
+        }
+
         String event = eventService.addRating(eventID, userID, rating);
-        if (eventID == null) {
+        if (event == null) {
             return ResponseEntity.notFound().build();
         }
+
         return new ResponseEntity<String>(event, HttpStatus.OK);
     }
 
