@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-de">
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en-de" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>User Details</title>
@@ -66,14 +65,16 @@
 <table>
     <thead>
         <tr>
-            <th>Full Name</th>
-            <th>Is Organizer</th> 
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Organizer?</th> 
         </tr>
     </thead>
     <tbody>
         <tr th:each="user : ${users}">
-            <td th:text="${user.fullName}"></td> <!-- Zeigt den Namen an -->
-            <td th:text="${user.isOrganizer ? 'Yes' : 'No'}"></td> <!-- Zeigt an ob User Organizer ist -->
+            <td th:text="${user.firstName}"></td>
+            <td th:text="${user.lastName}"></td>
+            <td th:text="${user.organizer}"></td>
         </tr>
     </tbody>
 </table>

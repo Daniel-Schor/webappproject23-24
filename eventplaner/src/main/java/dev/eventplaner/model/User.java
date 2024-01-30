@@ -72,14 +72,7 @@ public class User {
         this(firstName, lastName, email, password, false);
     }
 
-    /**
-     * Sets the user's password.
-     * If the provided password is not null, it is encrypted and stored in the user
-     * object's password field.
-     * If the provided password is null, the password field remains unchanged.
-     *
-     * @param password The password to be set
-     */
+
 
     public User setPassword(String password) {
         if (password != null) {
@@ -88,27 +81,15 @@ public class User {
         return this;
     }
 
-    /**
-     * Checks if the provided password matches the user's password.
-     *
-     * @param password The password to be checked
-     * @return True if the provided password matches the user's password, false
-     *         otherwise
-     */
 
-    public boolean checkPassword(String password) {
-        return encoder.matches(password, this.password);
-    }
-
+  
     public static Collection<User> collectionFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         Collection<User> values = new ArrayList<>();
 
         try {
-            values = mapper.readValue(s, new TypeReference<Collection<User>>() {
-            });
+            values = mapper.readValue(s, new TypeReference<Collection<User>>() {});
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -118,12 +99,10 @@ public class User {
     public static User userFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         User user = new User();
 
         try {
-            user = mapper.readValue(s, new TypeReference<User>() {
-            });
+            user = mapper.readValue(s, new TypeReference<User>() {});
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

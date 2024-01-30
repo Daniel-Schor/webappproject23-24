@@ -70,8 +70,6 @@
 
 <nav>
     <a href="/web/home">Home</a>
-    <a href="/web/events">Event List</a>
-    
 </nav>
 
 <h1>Event List</h1>
@@ -85,8 +83,8 @@
     </thead>
     <tbody>
         <tr th:each="event : ${events}">
-            <td th:text="${event.eventID}"></td>
-            <td><a th:href="@{/web/events/{eventID}(eventID=${event.eventID})}" th:text="${event.name}"></a></td>
+            <td th:text="${event.ID}"></td>
+            <td th:text="${event.name}"></td>
         </tr>
     </tbody>
     
