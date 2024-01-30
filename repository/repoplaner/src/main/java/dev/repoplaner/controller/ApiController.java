@@ -3,18 +3,12 @@ package dev.repoplaner.controller;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,10 +55,11 @@ public class ApiController {
 
     @GetMapping("/events/{eventID}")
     public ResponseEntity<Event> getEvent(@PathVariable UUID eventID) {
-        if (repositoryService.getEvent(eventID) == null) {
+        Event event = repositoryService.getEvent(eventID);
+        if (event == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(repositoryService.getEvent(eventID));
+        return ResponseEntity.ok(event);
     }
 
     @DeleteMapping("/events/{eventID}")
@@ -102,10 +97,11 @@ public class ApiController {
 
     @GetMapping("/users/{userID}")
     public ResponseEntity<User> getUsers(@PathVariable UUID userID) {
-        if (repositoryService.getUser(userID) == null) {
+        User user = repositoryService.getUser(userID);
+        if (user == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(repositoryService.getUser(userID));
+        return ResponseEntity.ok(user);
     }
 
     @DeleteMapping("/users/{userID}")

@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +22,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.type.TypeReference;
 
 @Service
 public class UserService {
@@ -44,11 +42,6 @@ public class UserService {
      */
     public ResponseEntity<?> getUser(UUID userID) {
         log.info("get user by userID: {}", userID);
-        // User user = userRepository.get(userID);
-        // if (user == null) {
-        // log.warn("User with ID {} not found", userID);
-        // }
-        // return user;
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users/" + userID;
 
