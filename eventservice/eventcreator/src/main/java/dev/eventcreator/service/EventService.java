@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -81,21 +82,21 @@ public class EventService {
     // XXX this is needed in the api gateway
     public String getAllDTO() {
         log.info("get all Events as DTO");
-    
+
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events";
-    
+
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<>(headers);
-    
+
         ResponseEntity<String> response;
-    
+
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
             HttpStatus errorStatus = (HttpStatus) e.getStatusCode();
             String responseBody = e.getResponseBodyAsString();
-        
+
             if (errorStatus == HttpStatus.NOT_FOUND) {
                 ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, responseBody);
                 response = new ResponseEntity<>(apiError.toString(), apiError.getStatus());
@@ -108,8 +109,6 @@ public class EventService {
                 response = new ResponseEntity<>(apiError.toString(), apiError.getStatus());
             }
         }
-        
-    
 
         String body = response.getBody();
         Collection<Event> values = Event.collectionFromJson(body);
@@ -131,25 +130,38 @@ public class EventService {
         return convertObjectToJson(eventDTO);
     }
 
+    // response angepasst
     public String getEvent(UUID eventID) {
         log.info("get event by eventID: {}", eventID);
-
+    
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/" + eventID;
-
+    
         HttpHeaders headers = new HttpHeaders();
-        HttpEntity<String> request = new HttpEntity<String>(headers);
-
-        ResponseEntity<?> response;
-
+        HttpEntity<String> request = new HttpEntity<>(headers);
+    
+        ResponseEntity<String> response;
+    
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            HttpStatus errorStatus = (HttpStatus) e.getStatusCode();
+            String responseBody = e.getResponseBodyAsString();
+    
+            if (errorStatus == HttpStatus.NOT_FOUND) {
+                ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, responseBody);
+                return apiError.toString();
+            } else {
+                // Default für alle anderen Fehler
+                ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, responseBody);
+                return apiError.toString();
+            }
         }
-        return response.getBody().toString();
+    
+        // Hier weiter mit der Verarbeitung der Antwort, wenn erfolgreich
+        return response.getBody();
     }
+    
 
     public String update(Event event) {
         log.info("update event: {}", event.getID());
@@ -218,7 +230,8 @@ public class EventService {
         return event;
     }
 
-    // XXX das wird nur im api gateway gebraucht, falls ein user aus der datenbank gelöscht wird
+    // XXX das wird nur im api gateway gebraucht, falls ein user aus der datenbank
+    // gelöscht wird
     public void removeUser(UUID userID) {
         log.info("removeUser: userId={}", userID);
         for (Event event : Event.collectionFromJson(getAll())) {
@@ -227,7 +240,7 @@ public class EventService {
             }
         }
     }
-    
+
     public String addRating(UUID eventID, UUID userID, int rating) {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
         String eventString = getEvent(eventID);
@@ -240,7 +253,8 @@ public class EventService {
         return convertObjectToJson(event);
     }
 
-    // XXX wird das gebraucht? wie wird das Rating im event angezeigt? braucht man eine extra double rating im event?
+    // XXX wird das gebraucht? wie wird das Rating im event angezeigt? braucht man
+    // eine extra double rating im event?
     public double getRating(UUID eventID) {
         log.info("getRating: eventID={}", eventID);
         String eventString = getEvent(eventID);
