@@ -78,8 +78,6 @@ public class EventService {
         return response.getBody().toString();
     }
 
-    // response angepasst
-    // XXX this is needed in the api gateway
     public ResponseEntity<?> getAllDTO() {
         log.info("get all Events as DTO");
 
@@ -258,8 +256,6 @@ public class EventService {
         return event;
     }
 
-    // XXX das wird nur im api gateway gebraucht, falls ein user aus der datenbank
-    // gelöscht wird
     public void removeUser(UUID userID) {
         log.info("removeUser: userId={}", userID);
         for (Event event : Event.collectionFromJson(getAll())) {
@@ -282,8 +278,6 @@ public class EventService {
         return convertObjectToJson(event);
     }
 
-    // XXX wird das gebraucht? wie wird das Rating im event angezeigt? braucht man
-    // eine extra double rating im event?
     public double getRating(UUID eventID) {
         log.info("getRating: eventID={}", eventID);
         String eventString = getEventString(eventID);

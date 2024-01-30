@@ -2,14 +2,11 @@ package dev.eventplaner.service;
 
 import dev.eventplaner.model.ApiError;
 import dev.eventplaner.model.User;
-import dev.eventplaner.model.UserDTO;
 
-import java.util.Collection;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -98,6 +95,7 @@ public class UserService {
         ResponseEntity<?> response;
 
         try {
+            restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
             response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
         } catch (HttpClientErrorException e) {
             ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());

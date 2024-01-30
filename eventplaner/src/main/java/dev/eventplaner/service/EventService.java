@@ -170,6 +170,26 @@ public class EventService {
         return response;
     }
 
+    public ResponseEntity<?> removeUserFromAllEvents(UUID userID) {
+        log.info("removeUser: userID={}", userID);
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/events/remove/" + userID;
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        ResponseEntity<?> response;
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            response = new ResponseEntity<>(apiError, apiError.getStatus());
+        }
+
+        return response;
+    }
+
     public ResponseEntity<?> addRating(UUID eventID, UUID userID, int rating) {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
         

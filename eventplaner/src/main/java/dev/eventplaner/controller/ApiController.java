@@ -1,8 +1,6 @@
 package dev.eventplaner.controller;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -17,14 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.eventplaner.model.EventDTO;
 import dev.eventplaner.model.User;
 import dev.eventplaner.model.Event;
-import dev.eventplaner.model.UserDTO;
 import dev.eventplaner.service.EventService;
 import dev.eventplaner.service.UserService;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -164,6 +158,7 @@ public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID, @
     @DeleteMapping(value = "user/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteUser(@PathVariable("userID") UUID userID) {
         log.debug("deleteUser() is called");
+        eventService.removeUserFromAllEvents(userID);
         ResponseEntity<?> response = userService.delete(userID);
 
         return response;

@@ -159,7 +159,6 @@ public class ApiController {
      * @return A ResponseEntity containing the updated event if successful, or a not
      *         found response if the event ID is invalid.
      */
-    // TODO 404 if user is not a participant
     @PutMapping(value = "/events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> removeParticipant(@PathVariable("eventID") UUID eventID,
@@ -178,6 +177,15 @@ public class ApiController {
         return new ResponseEntity<Event>(event, HttpStatus.OK);
     }
 
+    @PutMapping(value = "/events/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> removeParticipantFromAllEvents(@PathVariable("userID") UUID userID) {
+        log.debug("removeParticipant() is called");
+
+        eventService.removeUser(userID);
+        return ResponseEntity.noContent().build();
+    }
+
     /**
      * Updates the rating of an event by a user.
      *
@@ -187,8 +195,6 @@ public class ApiController {
      * @return ResponseEntity containing the updated Event object if successful, or
      *         a not found response if the event ID is invalid.
      */
-    // TODO dont add rating if user is not a participant
-    // TODO 404 if user is not a participant
     @PutMapping(value = "/events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID,
