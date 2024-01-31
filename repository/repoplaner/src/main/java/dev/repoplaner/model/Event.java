@@ -128,6 +128,12 @@ public class Event {
         return true;
     }
 
+    /**
+     * Checks if the event contains a participant with the specified user ID.
+     *
+     * @param userID the user ID to check
+     * @return true if the event contains the participant, false otherwise
+     */
     public boolean contains(UUID userID) {
         return this.participants.containsKey(userID);
     }

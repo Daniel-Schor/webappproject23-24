@@ -12,14 +12,29 @@ import jakarta.annotation.PostConstruct;
 
 import java.time.LocalDateTime;
 
+/**
+                 * This class is responsible for initializing data in the application.
+                 * It creates events and users using the RepositoryService.
+                 */
 @Component
 public class InitData {
 
+        /**
+         * The logger used for logging messages in the InitData class.
+         */
         private final Logger log = LoggerFactory.getLogger(InitData.class);
 
+        /**
+         * Autowired field for accessing the repository service.
+         */
         @Autowired
         RepositoryService repositoryService;
 
+        /**
+         * Initializes the data for the application.
+         * This method is annotated with @PostConstruct to indicate that it should be executed after the bean is constructed.
+         * It creates events and users in the repository service.
+         */
         @PostConstruct
         public void init() {
                 log.debug("### Initialize Data ###");
