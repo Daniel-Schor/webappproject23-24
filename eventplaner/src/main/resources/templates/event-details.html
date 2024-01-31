@@ -138,15 +138,13 @@
     </div>
 
     <script th:inline="javascript">
-        /*<![CDATA[*/
-        initMap(/*[[${event.getLocation().getLatitude()}]]*/, /*[[${event.getLocation().getLongitude()}]]*/);
-        /*]]>*/
+        
     </script>
 
     <script th:inline="javascript">
         /*<![CDATA[*/
         document.addEventListener("DOMContentLoaded", function () {
-            var rating = /*[[${event.getRating()}]]*/;
+            var rating = 4.5; // Replace with the actual rating value
             var totalStars = 5;
 
             for (var i = 1; i <= totalStars; i++) {

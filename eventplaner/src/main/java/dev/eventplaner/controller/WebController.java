@@ -104,6 +104,12 @@ public class WebController {
         return "event-details";
     }
 
+    @GetMapping("/web/event-details/{id}")
+    public String showEventDetailsById(@PathVariable("id") UUID id, Model model) {
+        ResponseEntity<?> event = eventService.getEvent(id);
+        model.addAttribute("event", event);
+        return "event-details";
+    }
     /**
      * Show all users.
      *
@@ -170,20 +176,21 @@ public class WebController {
 }
 
 
-    @DeleteMapping("/manage/delete-event/{eventID}")
-    public String deleteEvent(@PathVariable("eventID") UUID eventID, Model model) {
-        log.info("WebController: Deleting event ID: {}", eventID);
-        ResponseEntity<?> response = eventService.delete(eventID);
+@DeleteMapping("/manage/delete-event/{eventID}")
+public String deleteEvent(@PathVariable("eventID") UUID eventID, Model model) {
+    log.info("WebController: Deleting event ID: {}", eventID);
+    
+    ResponseEntity<?> response = eventService.delete(eventID);
 
-        if (response.getStatusCode() == HttpStatus.OK) {
-            log.info("WebController: Event ID: {} deleted", eventID);
+    if (response.getStatusCode() == HttpStatus.OK) {
+        log.info("WebController: Event ID: {} deleted", eventID);
+        return "redirect:/web/manage"; 
         } else {
-            log.warn("WebController: Error deleting event ID: {}. Status code: {}", eventID, response.getStatusCode());
-        }
-
-    // Hier kannst du entscheiden, wohin du nach dem Löschen weiterleiten möchtest
-    return "redirect:/web/manage"; // Beispiel: Weiterleitung zur Manage-Seite
+        log.warn("WebController: Error deleting event ID: {}. Status code: {}", eventID, response.getStatusCode());
+        return "redirect:/web/events";
+    }
 }
+
 
 
     @PostMapping("manage/add-event")
