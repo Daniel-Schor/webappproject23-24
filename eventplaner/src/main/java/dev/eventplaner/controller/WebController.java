@@ -55,6 +55,14 @@ public class WebController {
         } catch (Exception e) {
             log.error("Error retrieving events", e);
         }
+        try {
+            ResponseEntity<?> response = eventService.getAllDTO();
+            String jsonResponse = (String) response.getBody(); // Assuming the response body is a JSON string
+            Collection<Event> events = collectionFromJson(jsonResponse);
+            model.addAttribute("events", events);
+        } catch (Exception e) {
+            log.error("Error retrieving events", e);
+        }
 
         return "events";
     }
@@ -96,14 +104,20 @@ public class WebController {
         return "event-details";
     }
 
+    /**
+     * Show all users.
+     *
+     * @param model The Model object to be populated with user data.
+     * @return String Returns the name of the view to be rendered.
+     */
     @GetMapping("users")
     public String showAllUsers(Model model) {
         try {
             ResponseEntity<?> response = userService.getAllDTO();
             String jsonResponse = response.getBody().toString(); // Assuming the response body is a JSON string
-
+           
             Collection<UserDTO> users = UserDTO.collectionFromJsonUserDTO(jsonResponse);
-
+            
             model.addAttribute("users", users);
         } catch (Exception e) {
             log.error("Error retrieving events", e);
@@ -111,18 +125,35 @@ public class WebController {
         return "users";
     }
 
+    /**
+     * Show the home page.
+     *
+     * @return String Returns the name of the view to be rendered.
+     */
     @GetMapping("home")
     public String home() {
         log.info("WebController: Home page requested");
         return "index";
     }
 
+    /**
+     * Show the manage events page.
+     *
+     * @param model The Model object to be populated with event data.
+     * @return String Returns the name of the view to be rendered.
+     */
     @GetMapping("manage")
     public String showManageEvents(Model model) {
         log.info("WebController: Showing manage events page");
         return "manage-events";
     }
 
+    /**
+     * Show the add event form.
+     *
+     * @param model The Model object to be populated with event data.
+     * @return String Returns the name of the view to be rendered.
+     */
     @GetMapping("manage/add-event")
     public String showAddEventForm(Model model) {
         log.info("WebController: Showing add event form");
@@ -150,8 +181,10 @@ public class WebController {
             log.warn("WebController: Error deleting event ID: {}. Status code: {}", eventID, response.getStatusCode());
         }
 
-        return "redirect:/web/manage";
-    }
+    // Hier kannst du entscheiden, wohin du nach dem Löschen weiterleiten möchtest
+    return "redirect:/web/manage"; // Beispiel: Weiterleitung zur Manage-Seite
+}
+
 
     @PostMapping("manage/add-event")
     public String addEvent(@RequestParam("name") String name,
@@ -164,22 +197,22 @@ public class WebController {
             Model model) {
         log.info("WebController: Adding new event: {}", name);
 
-        // Mache neue Event Instanz
+        // Create new event instance
         Event event = new Event();
 
-        // Stecke die Parameter in die Event Instanz
+        // Insert the parameters into the event instance
         event.setName(name);
         event.setDescription(description);
         event.setDateTime(dateTime);
 
-        // Erstelle eine Geolocation Instanz und stecke sie in die Event Instanz
+        // Create a geolocation instance and insert it into the event instance
         Geolocation geolocation = new Geolocation(latitude, longitude);
         event.setLocation(geolocation);
 
         event.setMaxParticipants(maxParticipants);
         event.setOrganizerUserID(organizerUserID);
 
-        // Füge das Event der Eventliste hinzu
+        // Add the event to the event list
         eventService.create(event);
 
         // Redirect the user to the event overview

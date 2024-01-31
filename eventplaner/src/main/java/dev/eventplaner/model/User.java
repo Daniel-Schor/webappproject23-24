@@ -67,12 +67,9 @@ public class User {
      * @param email     The email of the user
      * @param password  The password of the user
      */
-
     public User(String firstName, String lastName, String email, String password) {
         this(firstName, lastName, email, password, false);
     }
-
-
 
     public User setPassword(String password) {
         if (password != null) {
@@ -81,28 +78,40 @@ public class User {
         return this;
     }
 
-
-  
+    /**
+     * Converts a JSON string into a collection of User objects.
+     *
+     * @param s The JSON string.
+     * @return A collection of User objects.
+     */
     public static Collection<User> collectionFromJsonUser(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         Collection<User> values = new ArrayList<>();
 
         try {
-            values = mapper.readValue(s, new TypeReference<Collection<User>>() {});
+            values = mapper.readValue(s, new TypeReference<Collection<User>>() {
+            });
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         return values;
     }
 
+    /**
+     * Converts a JSON string into a User object.
+     *
+     * @param s The JSON string.
+     * @return A User object.
+     */
     public static User userFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         User user = new User();
 
         try {
-            user = mapper.readValue(s, new TypeReference<User>() {});
+            user = mapper.readValue(s, new TypeReference<User>() {
+            });
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

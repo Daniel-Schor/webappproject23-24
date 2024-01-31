@@ -20,6 +20,10 @@ import dev.eventcreator.model.Event;
 import dev.eventcreator.service.EventService;
 import org.springframework.web.bind.annotation.PutMapping;
 
+/**
+ * This class is a REST controller for managing events.
+ * It includes methods for creating, retrieving, updating, deleting, and rating events, as well as adding and removing participants.
+ */
 @RestController
 public class ApiController {
 
@@ -33,9 +37,10 @@ public class ApiController {
     private EventService eventService;
 
     /**
-     * Retrieves all events.
+     * Removes a participant from all events.
      *
-     * @return ResponseEntity containing a collection of EventDTO objects
+     * @param userID The ID of the user to be removed.
+     * @return A ResponseEntity indicating that the operation was successful.
      */
     @GetMapping(value = "/events", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -76,8 +81,6 @@ public class ApiController {
         return eventService.create(event);
     }
 
-    // neue Methode
-
     /**
      * Updates an event with the given event ID.
      *
@@ -109,8 +112,6 @@ public class ApiController {
         return eventService.delete(eventID);
     }
 
-    // neue Methode
-
     /**
      * Adds a participant to an event.
      *
@@ -138,8 +139,6 @@ public class ApiController {
 
         return new ResponseEntity<Event>(event, HttpStatus.OK);
     }
-
-    // neue Methode
 
     /**
      * Removes a participant from an event.

@@ -17,6 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * This class provides services for managing users.
+ * It includes methods for creating, retrieving, updating, and deleting users.
+ */
 @Service
 public class UserService {
 
@@ -58,6 +62,7 @@ public class UserService {
      * Creates a new user.
      *
      * @param user The User object to create.
+     * @return The response from the server.
      */
     public ResponseEntity<?> create(User user) {
         log.info("User Created: {}", user.getID());
@@ -84,6 +89,7 @@ public class UserService {
      * Deletes a user by their ID.
      *
      * @param userID The ID of the user to delete.
+     * @return The response from the server.
      */
     public ResponseEntity<?> delete(UUID userID) {
         RestTemplate restTemplate = new RestTemplate();
@@ -109,6 +115,7 @@ public class UserService {
      * Updates a user.
      *
      * @param user The User object to update.
+     * @return The response from the server.
      */
     public ResponseEntity<?> update(User user) {
         log.info("User Updated: {}", user.getID());
@@ -132,7 +139,12 @@ public class UserService {
         return response;
     }
 
-        public ResponseEntity<?> getAllDTO() {
+    /**
+     * Retrieves all users as DTOs.
+     *
+     * @return The response from the server.
+     */
+    public ResponseEntity<?> getAllDTO() {
         log.info("get all Users as DTO");
 
         RestTemplate restTemplate = new RestTemplate();
@@ -151,6 +163,5 @@ public class UserService {
         }
         return response;
     }
-
 
 }

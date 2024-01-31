@@ -23,6 +23,9 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * This class represents a service for managing user-related operations.
+ */
 @Service
 public class UserService {
 
@@ -170,6 +173,11 @@ public class UserService {
         return response;
     }
 
+    /**
+     * Retrieves all users as DTO (Data Transfer Object).
+     * 
+     * @return ResponseEntity<String> containing the response with the list of users as DTO in the body.
+     */
     public ResponseEntity<String> getAllDTO() {
         log.info("get all Users as DTO");
 
@@ -213,6 +221,12 @@ public class UserService {
         return response;
     }
 
+    /**
+     * Converts a collection of UserDTO objects to a JSON string representation.
+     *
+     * @param usersDTO the collection of UserDTO objects to be converted
+     * @return the JSON string representation of the collection
+     */
     public String convertCollectionToJson(Collection<UserDTO> usersDTO) {
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = "";
