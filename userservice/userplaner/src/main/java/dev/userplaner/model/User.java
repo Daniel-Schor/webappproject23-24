@@ -100,6 +100,12 @@ public class User {
         return encoder.matches(password, this.password);
     }
 
+    /**
+     * Converts a JSON string into a collection of User objects.
+     *
+     * @param s the JSON string to be converted
+     * @return a collection of User objects
+     */
     public static Collection<User> collectionFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -115,6 +121,9 @@ public class User {
         return values;
     }
 
+    /**
+     * Represents a user.
+     */
     public static User userFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
