@@ -8,6 +8,14 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * The Event class represents an event with its properties and functionality.
+ * An event has a unique ID, name, description, date and time, location, maximum number of participants,
+ * participants, and organizer user ID.
+ * 
+ * The Event class provides methods to add and remove participants, calculate the average rating of the event,
+ * add ratings for the event, and get and set the event's properties.
+ */
 public class Event {
 
     private UUID eventID;
