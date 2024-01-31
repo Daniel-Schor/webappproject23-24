@@ -1,30 +1,34 @@
 <!DOCTYPE html>
 <html lang="en-de" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>User Details</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(to bottom, #ff6f61, #1e3c72); /* Lebhafte Farbkombination */
+            background: linear-gradient(to bottom, #ff6f61, #1e3c72);
+            /* Lebhafte Farbkombination */
             margin: 0;
             padding: 0;
             display: flex;
-            flex-direction: column; 
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-        }   
+        }
 
         table {
-            width: 80%;
+            width: 30%;
             margin: 20px auto;
             border-collapse: collapse;
-            background-color: rgba(0, 0, 0, 0.7); /* Dunkler transparenter Hintergrund */
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Dunkler transparenter Hintergrund */
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
@@ -34,51 +38,66 @@
         th {
             background-color: #1e3c72;
             color: #ffc947;
+            text-align: center;
         }
 
         h1 {
             font-size: 3em;
             margin-bottom: 20px;
-            color: #ffc947; /* Gelb-Orange für den Titel */
+            color: #ffc947;
+            /* Gelb-Orange für den Titel */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
             margin-top: 0;
         }
 
         a {
             text-decoration: none;
-            color: #f5a623; /* Goldgelb für die Links */
+            color: #f5a623;
+            /* Goldgelb für die Links */
             font-weight: bold;
             font-size: 20px;
             transition: color 0.3s ease-in-out;
         }
 
         a:hover {
-            color: #e07a02; /* Dunkleres Gelb beim Hover */
+            color: #e07a02;
+            /* Dunkleres Gelb beim Hover */
         }
 
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     </style>
 </head>
+
 <body>
 
-<h1>User Details</h1>
+    <h1>OUR USERS</h1>
 
-<table>
-    <thead>
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Organizer?</th> 
-        </tr>
-        
-    </thead>
-    <tbody>
-        <tr th:each="user : ${users}">
-            <td th:text="${user.firstName}"></td>
-            <td th:text="${user.lastName}"></td>
-            <td th:text="${user.organizer}"></td>
-        </tr>
+    <table>
+        <thead>
+            <tr>
+                <th>Users</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td>
+                    <div class="flex-container">
+                        <a th:href="@{/users/{userID}(userID=${user.userID})}"
+                            th:text="${user.firstName + ' ' + user.lastName}"></a>
+                        <a class="right-align" th:if="${user.organizer}"
+                            th:href="@{/users/{userID}(userID=${user.userID})}" th:text="' Organizer'"></a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-<a href="/web/home">Back to Home</a>
+    <a href="/web/home">Back to Home</a>
 
 </body>
+
 </html>
