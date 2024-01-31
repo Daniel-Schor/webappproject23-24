@@ -41,7 +41,7 @@ public class ApiController {
     /**
      * Retrieves all users from the database.
      *
-     * @return ResponseEntity containing a collection of UserDTO objects
+     * @return ResponseEntity containing a collection of UserDTO objects.
      */
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllUsers() {
@@ -53,11 +53,11 @@ public class ApiController {
     }
 
     /**
-     * Retrieves a user by their ID.
+     * Retrieves a user by their ID
      *
-     * @param userID the ID of the user to retrieve
+     * @param userID the ID of the user to retrieve.
      * @return the ResponseEntity containing the user if found, or no content if not
-     *         found
+     *         found.
      */
     @GetMapping(value = "users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUser(@PathVariable("userID") UUID userID) {
@@ -67,6 +67,7 @@ public class ApiController {
 
         return response;
     }
+
     /**
      * Creates a new user.
      *
@@ -92,8 +93,6 @@ public class ApiController {
         return response;
     }
 
-    // neu Methode
-
     /**
      * Updates a user with the given user ID.
      *
@@ -106,7 +105,7 @@ public class ApiController {
     public ResponseEntity<User> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
         log.info("Update user: {}", userID);
         ResponseEntity<?> responseEntity = userService.update(user);
-    
+
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             User updatedUser = (User) responseEntity.getBody();
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
@@ -117,53 +116,93 @@ public class ApiController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    
-    @PutMapping(value = "events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE) 
+
+    /**
+     * Removes the User from a Event.
+     *
+     * @param eventID The ID of the event from which the user will be removed.
+     * @param userID  The ID of the user to be removed from the event.
+     * @return ResponseEntity<?> Returns the response entity that includes the
+     *         status of the operation.
+     */
+    @PutMapping(value = "events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeUser(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
         log.debug("removeUser() is called");
         ResponseEntity<?> response = eventService.removeUser(eventID, userID);
-    
+
         return response;
     }
 
-    
-
+    /**
+     * Update an existing event.
+     *
+     * @param eventID The ID of the event to be updated.
+     * @param event   An object of type Event that contains the updated event
+     *                details.
+     * @return ResponseEntity<Event> Returns the response entity that includes the
+     *         updated event.
+     */
     @PutMapping(value = "events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-public ResponseEntity<Event> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
-    log.info("Update event: {}", eventID);
-    ResponseEntity<Event> response = eventService.update(eventID, event, Event.class);
+    public ResponseEntity<Event> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
+        log.info("Update event: {}", eventID);
+        ResponseEntity<Event> response = eventService.update(eventID, event, Event.class);
 
         return response;
-}
+    }
 
-
-@DeleteMapping(value = "events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
-public ResponseEntity<?> deleteEvent(@PathVariable("eventID") UUID eventID) {
-    log.debug("deleteEvent() is called");
-    ResponseEntity<?> response = eventService.delete(eventID);
-
-        return response;
-}
-
-
-@PutMapping(value = "events/{eventID}/add/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
-public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
-    log.debug("addParticipant() is called");
-    ResponseEntity<?> response = eventService.addUser(eventID, userID);
+    /**
+     * Delete an existing event.
+     *
+     * @param eventID The UUID of the event to be deleted.
+     * @return ResponseEntity<?> Returns the response entity that includes the
+     *         status of the operation.
+     */
+    @DeleteMapping(value = "events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteEvent(@PathVariable("eventID") UUID eventID) {
+        log.debug("deleteEvent() is called");
+        ResponseEntity<?> response = eventService.delete(eventID);
 
         return response;
-}
+    }
 
+    /**
+     * Add a participant to an event.
+     *
+     * @param eventID The ID of the event to which the user will be added.
+     * @param userID  The ID of the user to be added to the event.
+     * @return ResponseEntity<?> Returns the response entity that includes the
+     *         status of the operation.
+     */
+    @PutMapping(value = "events/{eventID}/add/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID,
+            @PathVariable("userID") UUID userID) {
+        log.debug("addParticipant() is called");
+        ResponseEntity<?> response = eventService.addUser(eventID, userID);
 
+        return response;
+    }
+
+    /**
+     * Delete a user.
+     *
+     * @param userID The ID of the user to be deleted.
+     * @return ResponseEntity<?> Returns the response entity that includes the
+     *         status of the operation.
+     */
     @DeleteMapping(value = "user/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteUser(@PathVariable("userID") UUID userID) {
         log.debug("deleteUser() is called");
-        eventService.removeUserFromAllEvents(userID);
         ResponseEntity<?> response = userService.delete(userID);
 
         return response;
     }
 
+    /**
+     * Used to get all events.
+     *
+     * @return ResponseEntity<?> Returns the response entity that includes all
+     *         events.
+     */
     @GetMapping(value = "events", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllEvents() {
         log.info("Get all events");
@@ -173,6 +212,13 @@ public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID, @
         return response;
     }
 
+    /**
+     * Get a specific event by its ID.
+     *
+     * @param eventID The ID of the event to be retrieved.
+     * @return ResponseEntity<?> Returns the response entity that includes the
+     *         requested event.
+     */
     @GetMapping(value = "events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getEvent(@PathVariable("eventID") UUID eventID) {
         log.info("Get event by eventID: {}", eventID);
@@ -182,10 +228,20 @@ public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID, @
         return response;
     }
 
-   @PutMapping(value = "events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
-public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID, @PathVariable("rating") int rating) {
-    log.debug("rateEvent() is called");
-    ResponseEntity<?> response = eventService.addRating(eventID, userID, rating);
+    /**
+     * Rating of an event by a user.
+     *
+     * @param eventID The ID of the event to be rated.
+     * @param userID  The ID of the user who rates the event.
+     * @param rating  The rating given by the user to the event.
+     * @return ResponseEntity<?> Returns the response entity that includes the
+     *         status of the operation.
+     */
+    @PutMapping(value = "events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID,
+            @PathVariable("rating") int rating) {
+        log.debug("rateEvent() is called");
+        ResponseEntity<?> response = eventService.addRating(eventID, userID, rating);
 
         return response;
     }
