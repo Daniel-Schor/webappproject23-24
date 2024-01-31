@@ -19,7 +19,12 @@ import org.springframework.web.client.RestTemplate;
 import dev.eventplaner.model.ApiError;
 import dev.eventplaner.model.Event;
 
-
+/**
+ * This class provides services for managing events.
+ * It includes methods for creating, retrieving, updating, and deleting events.
+ * It also includes methods for adding and removing users from events, and for
+ * adding ratings to events.
+ */
 @Service
 public class EventService {
 
@@ -29,6 +34,12 @@ public class EventService {
     @Value("${eventservice.url}")
     String apiUrl;
 
+    /**
+     * Creates a new event.
+     *
+     * @param event The event to create.
+     * @return The response from the server.
+     */
     public ResponseEntity<?> create(Event event) {
         log.info("event Created: {}", event.getID());
 
@@ -50,6 +61,11 @@ public class EventService {
         return response;
     }
 
+    /**
+     * Retrieves all events as DTOs.
+     *
+     * @return The response from the server.
+     */
     public ResponseEntity<?> getAllDTO() {
         log.info("get all Events as DTO");
 
@@ -70,6 +86,12 @@ public class EventService {
         return response;
     }
 
+    /**
+     * Retrieves an event by its ID.
+     *
+     * @param eventID The ID of the event to retrieve.
+     * @return The response from the server.
+     */
     public ResponseEntity<?> getEvent(UUID eventID) {
         log.info("get event by eventID: {}", eventID);
         RestTemplate restTemplate = new RestTemplate();
@@ -89,28 +111,43 @@ public class EventService {
         return response;
     }
 
-    public ResponseEntity<?> update(UUID eventID, Event event, ParameterizedTypeReference<ResponseEntity<Event>> responseType) {
-    log.info("update event: {}", event);
+    /**
+     * Updates an event.
+     *
+     * @param eventID      The ID of the event to update.
+     * @param event        The new event data.
+     * @param responseType The type of the response.
+     * @return The response from the server.
+     */
+    public ResponseEntity<?> update(UUID eventID, Event event,
+            ParameterizedTypeReference<ResponseEntity<Event>> responseType) {
+        log.info("update event: {}", event);
 
-    RestTemplate restTemplate = new RestTemplate();
-    String url = apiUrl + "/events";
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/events";
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    HttpEntity<Event> request = new HttpEntity<>(event, headers);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Event> request = new HttpEntity<>(event, headers);
 
-    ResponseEntity<ResponseEntity<Event>> response;
+        ResponseEntity<ResponseEntity<Event>> response;
 
-    try {
-        response = restTemplate.exchange(url, HttpMethod.PUT, request, responseType);
-    } catch (HttpClientErrorException e) {
-        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-        return new ResponseEntity<>(apiError, apiError.getStatus());
-    }
+        try {
+            response = restTemplate.exchange(url, HttpMethod.PUT, request, responseType);
+        } catch (HttpClientErrorException e) {
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
+        }
 
         return response;
-    }    
+    }
 
+    /**
+     * Deletes an event.
+     *
+     * @param eventID The ID of the event to delete.
+     * @return The response from the server.
+     */
     public ResponseEntity<?> delete(UUID eventID) {
         log.info("delete eventID: {}", eventID);
         RestTemplate restTemplate = new RestTemplate();
@@ -130,6 +167,13 @@ public class EventService {
         return response;
     }
 
+    /**
+     * Adds a user to an event.
+     *
+     * @param eventID The ID of the event.
+     * @param userID  The ID of the user to add.
+     * @return The response from the server.
+     */
     public ResponseEntity<?> addUser(UUID eventID, UUID userID) {
         log.info("addUser: eventID={}, userID={}", eventID, userID);
         RestTemplate restTemplate = new RestTemplate();
@@ -150,6 +194,13 @@ public class EventService {
         return response;
     }
 
+    /**
+     * Removes a user from an event.
+     *
+     * @param eventID The ID of the event.
+     * @param userID  The ID of the user to remove.
+     * @return The response from the server.
+     */
     public ResponseEntity<?> removeUser(UUID eventID, UUID userID) {
         log.info("removeUser: eventID={}, user={}", eventID, userID);
         RestTemplate restTemplate = new RestTemplate();
@@ -170,6 +221,12 @@ public class EventService {
         return response;
     }
 
+    /**
+     * Removes a user from all events.
+     *
+     * @param userID The ID of the user to remove.
+     * @return The response from the server.
+     */
     public ResponseEntity<?> removeUserFromAllEvents(UUID userID) {
         log.info("removeUser: userID={}", userID);
         RestTemplate restTemplate = new RestTemplate();
@@ -190,9 +247,17 @@ public class EventService {
         return response;
     }
 
+    /**
+     * Adds a rating to an event.
+     *
+     * @param eventID The ID of the event.
+     * @param userID  The ID of the user adding the rating.
+     * @param rating  The rating to add.
+     * @return The response from the server.
+     */
     public ResponseEntity<?> addRating(UUID eventID, UUID userID, int rating) {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
-        
+
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/" + eventID + "/" + userID + "/" + rating;
         HttpHeaders headers = new HttpHeaders();
@@ -210,6 +275,14 @@ public class EventService {
         return response;
     }
 
+    /**
+     * Updates an event.
+     *
+     * @param eventID The ID of the event to update.
+     * @param event   The new event data.
+     * @param class1  The class of the event.
+     * @return The response from the server.
+     */
     public ResponseEntity<Event> update(UUID eventID, Event event, Class<Event> class1) {
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
