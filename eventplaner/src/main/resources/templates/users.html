@@ -69,6 +69,7 @@
             <th>Last Name</th>
             <th>Organizer?</th> 
         </tr>
+        
     </thead>
     <tbody>
         <tr th:each="user : ${users}">
@@ -76,8 +77,6 @@
             <td th:text="${user.lastName}"></td>
             <td th:text="${user.organizer}"></td>
         </tr>
-    </tbody>
-</table>
 
 <a href="/web/home">Back to Home</a>
 

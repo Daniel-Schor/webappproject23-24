@@ -83,7 +83,7 @@ public class User {
 
 
   
-    public static Collection<User> collectionFromJson(String s) {
+    public static Collection<User> collectionFromJsonUser(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         Collection<User> values = new ArrayList<>();

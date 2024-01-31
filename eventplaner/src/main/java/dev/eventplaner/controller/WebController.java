@@ -102,15 +102,31 @@ public static Collection<Event> collectionFromJson(String s) {
     }
 
     @GetMapping("users")
-    public String getUsers(Model model) {
-        ResponseEntity<?> response = userService.getAllDTO();
-        String jsonResponse = (String) response.getBody();
-        Collection<User> users = User.collectionFromJson(jsonResponse);
-        model.addAttribute("users", users);
-        
-        log.info("Fetched all users");
-        
+    public String showAllUsers(Model model) {
+        try {
+            ResponseEntity<?> response = userService.getAllDTO();
+            String jsonResponse = (String) response.getBody(); // Assuming the response body is a JSON string
+            Collection<UserDTO> users = collectionFromJsonUser(jsonResponse);
+            log.info("Size : ", users.size());
+            model.addAttribute("users", jsonResponse);
+        } catch (Exception e) {
+            log.error("Error retrieving events", e);
+        }
+    
         return "users";
+    }    
+    
+    public static Collection<UserDTO> collectionFromJsonUser(String s) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        Collection<UserDTO> values = new ArrayList<>();
+
+        try {
+            values = mapper.readValue(s, new TypeReference<Collection<UserDTO>>() {});
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return values;
     }
 
     
