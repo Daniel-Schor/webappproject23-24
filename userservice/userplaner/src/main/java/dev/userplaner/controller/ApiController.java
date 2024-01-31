@@ -94,6 +94,12 @@ public class ApiController {
         return userService.update(user.setID(userID));
     }
 
+    /**
+        * Deletes a user event based on the provided userID.
+        *
+        * @param userID the ID of the user event to be deleted
+        * @return a ResponseEntity representing the result of the deletion operation
+        */
     @DeleteMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> deleteEvent(@PathVariable("userID") UUID userID) {
