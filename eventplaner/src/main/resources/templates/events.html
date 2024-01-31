@@ -70,6 +70,7 @@
 
 <nav>
     <a href="/web/home">Home</a>
+    <li><a href="/web/manage">Manage Events</a></li>
 </nav>
 
 <h1>Event List</h1>
@@ -85,6 +86,7 @@
         <tr th:each="event : ${events}">
             <td th:text="${event.ID}"></td>
             <td th:text="${event.name}"></td>
+            
         </tr>
     </tbody>
     

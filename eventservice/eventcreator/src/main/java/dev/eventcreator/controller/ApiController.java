@@ -72,17 +72,7 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
         log.info("Create new Event: {}", event.getName());
-        /*
-         * TODO implement this in repository
-         * if (event.getName() == null || event.getName().isEmpty()) {
-         * String detail = "Event name must not be null or empty";
-         * ProblemDetail pd =
-         * ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, detail);
-         * pd.setInstance(URI.create("/events"));
-         * pd.setTitle("Event creation error");
-         * return ResponseEntity.unprocessableEntity().body(pd);
-         * }
-         */
+        
         return eventService.create(event);
     }
 

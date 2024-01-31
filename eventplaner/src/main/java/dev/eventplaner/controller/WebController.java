@@ -43,37 +43,36 @@ public class WebController {
     @Autowired
     private UserService userService;
 
-  @GetMapping("/events")
-public String showAllEvents(Model model) {
-    log.info("WebController: Showing all events");
+    @GetMapping("/events")
+    public String showAllEvents(Model model) {
+        log.info("WebController: Showing all events");
 
-    try {
-        ResponseEntity<?> response = eventService.getAllDTO();
-        String jsonResponse = (String) response.getBody(); // Assuming the response body is a JSON string
-        Collection<Event> events = collectionFromJson(jsonResponse);
-        model.addAttribute("events", events);
-    } catch (Exception e) {
-        log.error("Error retrieving events", e);
+        try {
+            ResponseEntity<?> response = eventService.getAllDTO();
+            String jsonResponse = (String) response.getBody(); // Assuming the response body is a JSON string
+            Collection<Event> events = collectionFromJson(jsonResponse);
+            model.addAttribute("events", events);
+        } catch (Exception e) {
+            log.error("Error retrieving events", e);
+        }
+
+        return "events";
     }
 
-    return "events";
-}
+    public static Collection<Event> collectionFromJson(String s) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        Collection<Event> values = new ArrayList<>();
 
-public static Collection<Event> collectionFromJson(String s) {
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.registerModule(new JavaTimeModule());
-    //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    Collection<Event> values = new ArrayList<>();
-
-    try {
-        values = mapper.readValue(s, new TypeReference<Collection<Event>>() {
-        });
-    } catch (JsonProcessingException e) {
-        e.printStackTrace();
+        try {
+            values = mapper.readValue(s, new TypeReference<Collection<Event>>() {
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return values;
     }
-    return values;
-}
-
 
     @GetMapping("events/{eventID}")
     public String showEventDetails(@PathVariable("eventID") UUID eventID, Model model) {
@@ -102,15 +101,15 @@ public static Collection<Event> collectionFromJson(String s) {
         try {
             ResponseEntity<?> response = userService.getAllDTO();
             String jsonResponse = response.getBody().toString(); // Assuming the response body is a JSON string
-           
+
             Collection<UserDTO> users = UserDTO.collectionFromJsonUserDTO(jsonResponse);
-            
+
             model.addAttribute("users", users);
         } catch (Exception e) {
             log.error("Error retrieving events", e);
         }
         return "users";
-    }    
+    }
 
     @GetMapping("home")
     public String home() {
@@ -131,27 +130,28 @@ public static Collection<Event> collectionFromJson(String s) {
         return "add-event";
     }
 
-    @GetMapping("manage/delete-event")
-public String showDeleteEventPage(@PathVariable("eventID") UUID eventID, Model model) {
-    // Füge ggf. benötigte Daten zum Model hinzu
+    @GetMapping("/web/manage/delete-event")
+    public String showDeleteEventPage(Model model) {
+       
+    
     return "delete-event";
+    
 }
 
-@DeleteMapping("manage/delete-event")
-public String deleteEvent(@PathVariable("eventID") UUID eventID, Model model) {
-    log.info("WebController: Deleting event ID: {}", eventID);
-    ResponseEntity<?> response = eventService.delete(eventID);
 
-    if (response.getStatusCode() == HttpStatus.OK) {
-        log.info("WebController: Event ID: {} deleted", eventID);
-    } else {
-        log.warn("WebController: Error deleting event ID: {}. Status code: {}", eventID, response.getStatusCode());
+    @DeleteMapping("/manage/delete-event/{eventID}")
+    public String deleteEvent(@PathVariable("eventID") UUID eventID, Model model) {
+        log.info("WebController: Deleting event ID: {}", eventID);
+        ResponseEntity<?> response = eventService.delete(eventID);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            log.info("WebController: Event ID: {} deleted", eventID);
+        } else {
+            log.warn("WebController: Error deleting event ID: {}. Status code: {}", eventID, response.getStatusCode());
+        }
+
+        return "redirect:/web/manage";
     }
-
-    // Hier kannst du entscheiden, wohin du nach dem Löschen weiterleiten möchtest
-    return "redirect:/web/manage"; // Beispiel: Weiterleitung zur Manage-Seite
-}
-
 
     @PostMapping("manage/add-event")
     public String addEvent(@RequestParam("name") String name,
