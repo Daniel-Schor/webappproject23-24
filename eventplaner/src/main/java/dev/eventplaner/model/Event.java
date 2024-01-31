@@ -8,13 +8,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+/**
+ * The Event class represents an event with its properties and functionality.
+ * An event has a unique ID, name, description, date and time, location, maximum
+ * number of participants,
+ * participants, and organizer user ID.
+ * 
+ * The Event class provides methods to add and remove participants, calculate
+ * the average rating of the event,
+ * add ratings for the event, and get and set the event's properties.
+ */
 public class Event {
 
     @JsonProperty("id")
@@ -29,7 +38,8 @@ public class Event {
     private UUID organizerUserID;
 
     /**
-     * Default constructor for the Event class. New Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
+     * Default constructor for the Event class. New Address("Nibelungenplatz", "1",
+     * "60318", "Frankfurt am Main", "Deutschland");
      * Initializes the event with default values.
      */
     public Event() {
@@ -44,7 +54,8 @@ public class Event {
     }
 
     /**
-     * Default constructor for the Event class. New Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
+     * Default constructor for the Event class. New Address("Nibelungenplatz", "1",
+     * "60318", "Frankfurt am Main", "Deutschland");
      * Initializes the event with default values.
      */
     public Event(UUID eventID) {
@@ -101,7 +112,8 @@ public class Event {
      * Removes a participant from the event.
      * 
      * @param participantID the ID of the participant to be removed
-     * @return true if the participant was removed successfully, false if the ID is not in the event
+     * @return true if the participant was removed successfully, false if the ID is
+     *         not in the event
      */
     public synchronized boolean removeParticipant(UUID participantID) {
         if (participantID == null) {
@@ -152,14 +164,26 @@ public class Event {
         return true;
     }
 
+    /**
+     * Checks if a user is a participant in the event.
+     *
+     * @param userID The ID of the user.
+     * @return true if the user is a participant, false otherwise.
+     */
     public boolean contains(UUID userID) {
         return this.participants.containsKey(userID);
     }
 
+    /**
+     * Converts a JSON string into a collection of Event objects.
+     *
+     * @param s The JSON string.
+     * @return A collection of Event objects.
+     */
     public static Collection<Event> collectionFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         Collection<Event> values = new ArrayList<>();
 
         try {
@@ -171,10 +195,16 @@ public class Event {
         return values;
     }
 
+    /**
+     * Converts a JSON string into an Event object.
+     *
+     * @param s The JSON string.
+     * @return An Event object.
+     */
     public static Event eventFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         Event event = new Event();
 
         try {
