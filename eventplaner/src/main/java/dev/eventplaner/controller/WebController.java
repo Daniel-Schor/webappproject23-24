@@ -15,9 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import dev.eventplaner.model.Event;
-import dev.eventplaner.model.EventDTO;
 import dev.eventplaner.model.Geolocation;
-import dev.eventplaner.model.User;
 import dev.eventplaner.model.UserDTO;
 import dev.eventplaner.service.EventService;
 import dev.eventplaner.service.UserService;
@@ -25,8 +23,6 @@ import dev.eventplaner.service.UserService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -105,33 +101,16 @@ public static Collection<Event> collectionFromJson(String s) {
     public String showAllUsers(Model model) {
         try {
             ResponseEntity<?> response = userService.getAllDTO();
-            String jsonResponse = (String) response.getBody(); // Assuming the response body is a JSON string
-            Collection<UserDTO> users = collectionFromJsonUser(jsonResponse);
-            log.info("Size : ", users.size());
-            model.addAttribute("users", jsonResponse);
+            String jsonResponse = response.getBody().toString(); // Assuming the response body is a JSON string
+           
+            Collection<UserDTO> users = UserDTO.collectionFromJsonUserDTO(jsonResponse);
+            
+            model.addAttribute("users", users);
         } catch (Exception e) {
             log.error("Error retrieving events", e);
         }
-    
         return "users";
     }    
-    
-    public static Collection<UserDTO> collectionFromJsonUser(String s) {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        Collection<UserDTO> values = new ArrayList<>();
-
-        try {
-            values = mapper.readValue(s, new TypeReference<Collection<UserDTO>>() {});
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return values;
-    }
-
-    
-
-    
 
     @GetMapping("home")
     public String home() {
