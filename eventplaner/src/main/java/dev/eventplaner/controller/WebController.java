@@ -43,38 +43,56 @@ public class WebController {
     @Autowired
     private UserService userService;
 
-  @GetMapping("/events")
-public String showAllEvents(Model model) {
-    log.info("WebController: Showing all events");
+    /**
+     * Show all events.
+     *
+     * @param model The Model object to be populated with event data.
+     * @return String Returns the name of the view to be rendered.
+     */
+    @GetMapping("/events")
+    public String showAllEvents(Model model) {
+        log.info("WebController: Showing all events");
 
-    try {
-        ResponseEntity<?> response = eventService.getAllDTO();
-        String jsonResponse = (String) response.getBody(); // Assuming the response body is a JSON string
-        Collection<Event> events = collectionFromJson(jsonResponse);
-        model.addAttribute("events", events);
-    } catch (Exception e) {
-        log.error("Error retrieving events", e);
+        try {
+            ResponseEntity<?> response = eventService.getAllDTO();
+            String jsonResponse = (String) response.getBody(); // Assuming the response body is a JSON string
+            Collection<Event> events = collectionFromJson(jsonResponse);
+            model.addAttribute("events", events);
+        } catch (Exception e) {
+            log.error("Error retrieving events", e);
+        }
+
+        return "events";
     }
 
-    return "events";
-}
+    /**
+     * Convert a JSON string to a collection of Event objects.
+     *
+     * @param s The JSON string to be converted.
+     * @return Collection<Event> Returns the collection of Event objects.
+     */
+    public static Collection<Event> collectionFromJson(String s) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        Collection<Event> values = new ArrayList<>();
 
-public static Collection<Event> collectionFromJson(String s) {
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.registerModule(new JavaTimeModule());
-    //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    Collection<Event> values = new ArrayList<>();
-
-    try {
-        values = mapper.readValue(s, new TypeReference<Collection<Event>>() {
-        });
-    } catch (JsonProcessingException e) {
-        e.printStackTrace();
+        try {
+            values = mapper.readValue(s, new TypeReference<Collection<Event>>() {
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return values;
     }
-    return values;
-}
 
-
+    /**
+     * Show the details of a specific event.
+     *
+     * @param eventID The ID of the event to be shown.
+     * @param model   The Model object to be populated with event data.
+     * @return String Returns the name of the view to be rendered.
+     */
     @GetMapping("events/{eventID}")
     public String showEventDetails(@PathVariable("eventID") UUID eventID, Model model) {
         log.info("WebController: Showing details for event ID: {}", eventID);
@@ -97,33 +115,56 @@ public static Collection<Event> collectionFromJson(String s) {
         return "event-details";
     }
 
+    /**
+     * Show all users.
+     *
+     * @param model The Model object to be populated with user data.
+     * @return String Returns the name of the view to be rendered.
+     */
     @GetMapping("users")
     public String showAllUsers(Model model) {
         try {
             ResponseEntity<?> response = userService.getAllDTO();
             String jsonResponse = response.getBody().toString(); // Assuming the response body is a JSON string
-           
+
             Collection<UserDTO> users = UserDTO.collectionFromJsonUserDTO(jsonResponse);
-            
+
             model.addAttribute("users", users);
         } catch (Exception e) {
             log.error("Error retrieving events", e);
         }
         return "users";
-    }    
+    }
 
+    /**
+     * Show the home page.
+     *
+     * @return String Returns the name of the view to be rendered.
+     */
     @GetMapping("home")
     public String home() {
         log.info("WebController: Home page requested");
         return "index";
     }
 
+    /**
+     * Show the manage events page.
+     *
+     * @param model The Model object to be populated with event data.
+     * @return String Returns the name of the view to be rendered.
+     */
     @GetMapping("manage")
     public String showManageEvents(Model model) {
         log.info("WebController: Showing manage events page");
         return "manage-events";
     }
 
+    /**
+     * Show the add event form.
+     *
+     * @param model The Model object to be populated with event data.
+     * @return String Returns the name of the view to be rendered.
+     */
     @GetMapping("manage/add-event")
     public String showAddEventForm(Model model) {
         log.info("WebController: Showing add event form");
@@ -131,28 +172,54 @@ public static Collection<Event> collectionFromJson(String s) {
         return "add-event";
     }
 
+    /**
+     * Show the delete event page.
+     *
+     * @param eventID The ID of the event to be deleted.
+     * @param model   The Model object to be populated with event data.
+     * @return String Returns the name of the view to be rendered.
+     */
     @GetMapping("manage/delete-event")
-public String showDeleteEventPage(@PathVariable("eventID") UUID eventID, Model model) {
-    // Füge ggf. benötigte Daten zum Model hinzu
-    return "delete-event";
-}
-
-@DeleteMapping("manage/delete-event")
-public String deleteEvent(@PathVariable("eventID") UUID eventID, Model model) {
-    log.info("WebController: Deleting event ID: {}", eventID);
-    ResponseEntity<?> response = eventService.delete(eventID);
-
-    if (response.getStatusCode() == HttpStatus.OK) {
-        log.info("WebController: Event ID: {} deleted", eventID);
-    } else {
-        log.warn("WebController: Error deleting event ID: {}. Status code: {}", eventID, response.getStatusCode());
+    public String showDeleteEventPage(@PathVariable("eventID") UUID eventID, Model model) {
+        // Add any necessary data to the model when needed
+        return "delete-event";
     }
 
-    // Hier kannst du entscheiden, wohin du nach dem Löschen weiterleiten möchtest
-    return "redirect:/web/manage"; // Beispiel: Weiterleitung zur Manage-Seite
-}
+    /**
+     * Delete an event.
+     *
+     * @param eventID The ID of the event to be deleted.
+     * @param model   The Model object to be populated with event data.
+     * @return String Returns the name of the view to be rendered.
+     */
+    @DeleteMapping("manage/delete-event")
+    public String deleteEvent(@PathVariable("eventID") UUID eventID, Model model) {
+        log.info("WebController: Deleting event ID: {}", eventID);
+        ResponseEntity<?> response = eventService.delete(eventID);
 
+        if (response.getStatusCode() == HttpStatus.OK) {
+            log.info("WebController: Event ID: {} deleted", eventID);
+        } else {
+            log.warn("WebController: Error deleting event ID: {}. Status code: {}", eventID, response.getStatusCode());
+        }
 
+        // Here you can decide where you want to redirect to after deletion
+        return "redirect:/web/manage"; // Example: Redirect to the Manage page
+    }
+
+    /**
+     * Add a new event.
+     *
+     * @param name            The name of the event.
+     * @param description     The description of the event.
+     * @param dateTime        The date and time of the event.
+     * @param latitude        The latitude of the event's location.
+     * @param longitude       The longitude of the event's location.
+     * @param maxParticipants The maximum number of participants for the event.
+     * @param organizerUserID The UUID of the user who is organizing the event.
+     * @param model           The Model object to be populated with event data.
+     * @return String Returns the name of the view to be rendered.
+     */
     @PostMapping("manage/add-event")
     public String addEvent(@RequestParam("name") String name,
             @RequestParam("description") String description,
@@ -164,22 +231,22 @@ public String deleteEvent(@PathVariable("eventID") UUID eventID, Model model) {
             Model model) {
         log.info("WebController: Adding new event: {}", name);
 
-        // Mache neue Event Instanz
+        // Create new event instance
         Event event = new Event();
 
-        // Stecke die Parameter in die Event Instanz
+        // Insert the parameters into the event instance
         event.setName(name);
         event.setDescription(description);
         event.setDateTime(dateTime);
 
-        // Erstelle eine Geolocation Instanz und stecke sie in die Event Instanz
+        // Create a geolocation instance and insert it into the event instance
         Geolocation geolocation = new Geolocation(latitude, longitude);
         event.setLocation(geolocation);
 
         event.setMaxParticipants(maxParticipants);
         event.setOrganizerUserID(organizerUserID);
 
-        // Füge das Event der Eventliste hinzu
+        // Add the event to the event list
         eventService.create(event);
 
         // Redirect the user to the event overview
