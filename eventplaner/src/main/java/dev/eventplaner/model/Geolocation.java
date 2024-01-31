@@ -10,7 +10,7 @@ public class Geolocation {
     private double longitude;
 
     /**
-     * Constructs a new Geolocation object with default latitude and longitude values.
+     * Constructs a new Geolocation object.
      */
     public Geolocation() {
     }
