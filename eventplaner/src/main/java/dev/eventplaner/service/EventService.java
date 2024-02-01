@@ -47,14 +47,11 @@ public class EventService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Event> request = new HttpEntity<Event>(event, headers);
 
-        ResponseEntity<?> response;
-
         try {
-            response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
+            return restTemplate.exchange(url, HttpMethod.POST, request, String.class);
         } catch (HttpClientErrorException e) {
-            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
-        return response;
     }
 
     /**
@@ -71,14 +68,11 @@ public class EventService {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<String>(headers);
 
-        ResponseEntity<?> response;
-
         try {
-            response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+            return restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
-            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
-        return response;
     }
 
     /**
@@ -97,14 +91,11 @@ public class EventService {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<String>(headers);
 
-        ResponseEntity<?> response;
-
         try {
-            response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+            return restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
-            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
-        return response;
     }
 
     /**
@@ -125,15 +116,11 @@ public class EventService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Event> request = new HttpEntity<>(event, headers);
 
-        ResponseEntity<?> response;
-
         try {
-            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
+            return restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
-            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
-
-        return response;
     }
 
     /**
@@ -151,14 +138,11 @@ public class EventService {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<String>(headers);
 
-        ResponseEntity<?> response;
-
         try {
-            response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
+            return restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
         } catch (HttpClientErrorException e) {
-            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
-        return response;
     }
 
     /**
@@ -177,15 +161,11 @@ public class EventService {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<String>(headers);
 
-        ResponseEntity<?> response;
-
         try {
-            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
+            return restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
-            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
-
-        return response;
     }
 
     /**
@@ -204,15 +184,11 @@ public class EventService {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<String>(headers);
 
-        ResponseEntity<?> response;
-
         try {
-            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
+            return restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
-            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
-
-        return response;
     }
 
     /**
@@ -230,15 +206,11 @@ public class EventService {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<String>(headers);
 
-        ResponseEntity<?> response;
-
         try {
-            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
+            return restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
-            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
-
-        return response;
     }
 
     /**
@@ -257,15 +229,11 @@ public class EventService {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<String>(headers);
 
-        ResponseEntity<?> response;
-
         try {
-            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
+            return restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
-            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
-
-        return response;
     }
 
 }

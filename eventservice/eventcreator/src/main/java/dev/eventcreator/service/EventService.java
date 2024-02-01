@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -16,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-
 
 import dev.eventcreator.model.Event;
 import dev.eventcreator.model.EventDTO;
@@ -49,17 +49,11 @@ public class EventService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Event> request = new HttpEntity<Event>(event, headers);
 
-        ResponseEntity<?> response;
-
         try {
-            response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
-            if (response.getStatusCode() != HttpStatus.CREATED) {
-                return response;
-            }
+            return restTemplate.exchange(url, HttpMethod.POST, request, String.class);
         } catch (HttpClientErrorException e) {
-            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
-        return response;
     }
 
     /**
@@ -75,14 +69,11 @@ public class EventService {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<String>(headers);
 
-        ResponseEntity<?> response;
-
         try {
-            response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+            return restTemplate.exchange(url, HttpMethod.GET, request, String.class).getBody().toString();
         } catch (HttpClientErrorException e) {
-            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+            return e.getResponseBodyAsString();
         }
-        return response.getBody().toString();
     }
 
     /**
@@ -146,17 +137,11 @@ public class EventService {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<String>(headers);
 
-        ResponseEntity<?> response;
-
         try {
-            response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
-            if (response.getStatusCode() != HttpStatus.OK) {
-                return response.getBody().toString();
-            }
+            return restTemplate.exchange(url, HttpMethod.GET, request, String.class).getBody().toString();
         } catch (HttpClientErrorException e) {
-            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+            return e.getResponseBodyAsString();
         }
-        return response.getBody().toString();
     }
 
     /**
@@ -174,17 +159,11 @@ public class EventService {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> request = new HttpEntity<String>(headers);
 
-        ResponseEntity<?> response;
-
         try {
-            response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
-            if (response.getStatusCode() != HttpStatus.OK) {
-                return response;
-            }
+            return restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
-            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
-        return response;
     }
 
     /**
@@ -203,17 +182,11 @@ public class EventService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Event> request = new HttpEntity<Event>(event, headers);
 
-        ResponseEntity<?> response;
-
         try {
-            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
-            if (response.getStatusCode() != HttpStatus.OK) {
-                return response;
-            }
+            return restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
-            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
-        return response;
     }
 
     /**
@@ -232,17 +205,11 @@ public class EventService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<String>(headers);
 
-        ResponseEntity<?> response;
-
         try {
-            response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
-            if (response.getStatusCode() != HttpStatus.NO_CONTENT) {
-                return response;
-            }
+            return restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
         } catch (HttpClientErrorException e) {
-            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
-        return response;
     }
 
     /**
@@ -252,15 +219,17 @@ public class EventService {
      * @param userID  The ID of the user.
      * @return The updated event.
      */
-    public Event addUser(UUID eventID, UUID userID) {
+    public Event addUser(UUID eventID, UUID userID) throws IllegalArgumentException {
         log.info("addUser: eventID={}, userID={}", eventID, userID);
         String eventString = getEventString(eventID);
         Event event = Event.eventFromJson(eventString).setID(eventID);
 
-        if (event == null || !event.addParticipant(userID)) {
-            throw new IllegalArgumentException("Failed to add user to event");
+        if (event.contains(userID)) {
+            throw new IllegalArgumentException("User is already event participant.");
         }
-
+        if (!event.addParticipant(userID)) {
+            throw new IllegalArgumentException("Participant limit reached.");
+        }
         log.info("addUser, participants: {}", event.getParticipants());
         update(event);
         return event;
@@ -278,7 +247,7 @@ public class EventService {
         String eventString = getEventString(eventID);
         Event event = Event.eventFromJson(eventString);
 
-        if (event == null || !event.removeParticipant(userID)) {
+        if (!event.removeParticipant(userID)) {
             return null;
         }
 
@@ -308,16 +277,19 @@ public class EventService {
      * @param userID  The ID of the user.
      * @param rating  The rating to add.
      * @return A string representation of the updated event.
+     * @throws NotFoundException
      */
-    public Event addRating(UUID eventID, UUID userID, int rating) {
+    public Event addRating(UUID eventID, UUID userID, int rating) throws NotFoundException, IllegalArgumentException {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
         String eventString = getEventString(eventID);
         Event event = Event.eventFromJson(eventString);
         if (event == null || !event.contains(userID)) {
-            return null;
+            throw new NotFoundException();
         }
 
-        event.rate(userID, rating);
+        if (!event.rate(userID, rating)) {
+            throw new IllegalArgumentException("Rating not valid.");
+        }
         update(event);
         return event;
     }
