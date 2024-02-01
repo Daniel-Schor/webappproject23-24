@@ -13,7 +13,7 @@
         <label for="eventId">Event ID:</label>
         <input type="text" id="eventId" name="eventID" required>
         <br>
-        <button type="button" onclick="confirmDelete()">Next</button>
+        <button type="button" onclick="checkEvent()">Next</button>
     </form>
     <div id="confirmation" style="display: none;">
         <p>Do you really want to delete this event?</p>
@@ -24,36 +24,56 @@
     <a href="/web/manage">Go Back</a>
 
     <script>
-        function confirmDelete() {
-            document.getElementById("deleteForm").style.display = "none";
-            document.getElementById("confirmation").style.display = "block";
+        function checkEvent() {
+            var eventId = document.getElementById("eventId").value;
+
+            fetch('/web/manage/check-event/' + eventId, {
+                method: 'GET',
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.exists) {
+                        document.getElementById("deleteForm").style.display = "none";
+                        document.getElementById("confirmation").style.display = "block";
+                    } else {
+                        alert("Event doesn't exist!");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Something went wrong! " + error.toString());
+                });
         }
 
         function deleteEvent() {
-    var eventId = document.getElementById("eventId").value;
+            var eventId = document.getElementById("eventId").value;
 
-    fetch('/web/manage/delete-event/' + eventId, {
-        method: 'DELETE',
-    })
-    .then(response => {
-        if (!response.ok) {
-            if (response.status === 404) {
-                alert("Event not found. The event may have already been deleted.");
-                window.location.href = '/web/events';
-            } else {
-                alert("Something went wrong!" + response.status);
-            }
-        } else {
-            alert("The event has been deleted!");
-            window.location.href = '/web/events';
+            fetch('/web/manage/delete-event/' + eventId, {
+                method: 'DELETE',
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 405) {
+                            alert("The event has been deleted!");
+                            window.location.href = '/web/events';
+                        } else {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                    } else {
+                        alert("The event has been deleted!");
+                        window.location.href = '/web/events';
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert("Something went wrong! " + error.toString());
+                });
         }
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-        alert("Something went wrong!" + error.toString());
-    });
-}
-
 
         function cancelDelete() {
             document.getElementById("deleteForm").style.display = "block";

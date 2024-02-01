@@ -191,6 +191,17 @@ public String deleteEvent(@PathVariable("eventID") UUID eventID, Model model) {
     }
 }
 
+@GetMapping("/manage/check-event/{eventID}")
+public ResponseEntity<?> checkEvent(@PathVariable("eventID") UUID eventID) {
+    ResponseEntity<?> response = eventService.getEvent(eventID);
+
+    if (response.getStatusCode() == HttpStatus.OK) {
+        return ResponseEntity.ok("{\"exists\": true}");
+    } else {
+        return ResponseEntity.ok("{\"exists\": false}");
+    }
+}
+
 
 
     @PostMapping("manage/add-event")
