@@ -1,26 +1,17 @@
 package dev.eventplaner.model;
 
-/**
- * The Geolocation class represents a geographical location specified by
- * latitude and longitude coordinates.
- */
-public class Geolocation {
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class Geolocation{
 
     private double latitude;
     private double longitude;
 
-    /**
-     * Constructs a new Geolocation object with default latitude and longitude values.
-     */
     public Geolocation() {
+        this.latitude = 0;
+        this.longitude = 0;
     }
 
-    /**
-     * Constructs a Geolocation with the specified latitude and longitude.
-     *
-     * @param latitude  The latitude of the geolocation.
-     * @param longitude The longitude of the geolocation.
-     */
     public Geolocation(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -40,5 +31,23 @@ public class Geolocation {
 
     public void setLongitude(double longtitude) {
         this.longitude = longtitude;
+    }
+
+    public static Geolocation fromString(String jsonString) {
+        ObjectMapper mapper = new ObjectMapper();
+        Geolocation geolocation = null;
+        try {
+            geolocation = mapper.readValue(jsonString, Geolocation.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return geolocation;
+    }
+
+    @Override
+    public String toString() {
+        String s = "";
+        s += "Latitude: " + this.latitude + "\n";
+        return s;
     }
 }

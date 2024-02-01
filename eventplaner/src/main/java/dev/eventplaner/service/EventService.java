@@ -5,18 +5,15 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import dev.eventplaner.model.ApiError;
 import dev.eventplaner.model.Event;
 
 /**
@@ -44,7 +41,7 @@ public class EventService {
         log.info("event Created: {}", event.getID());
 
         RestTemplate restTemplate = new RestTemplate();
-        String url = apiUrl + "/events/";
+        String url = apiUrl + "/events";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -55,8 +52,7 @@ public class EventService {
         try {
             response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response;
     }
@@ -80,8 +76,7 @@ public class EventService {
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response;
     }
@@ -105,8 +100,7 @@ public class EventService {
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response;
     }
@@ -119,24 +113,22 @@ public class EventService {
      * @param responseType The type of the response.
      * @return The response from the server.
      */
-    public ResponseEntity<?> update(UUID eventID, Event event,
-            ParameterizedTypeReference<ResponseEntity<Event>> responseType) {
+    public ResponseEntity<?> update(Event event) {
         log.info("update event: {}", event);
 
         RestTemplate restTemplate = new RestTemplate();
-        String url = apiUrl + "/events";
+        String url = apiUrl + "/events/" + event.getID();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Event> request = new HttpEntity<>(event, headers);
 
-        ResponseEntity<ResponseEntity<Event>> response;
+        ResponseEntity<?> response;
 
         try {
-            response = restTemplate.exchange(url, HttpMethod.PUT, request, responseType);
+            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            return new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
 
         return response;
@@ -161,8 +153,7 @@ public class EventService {
         try {
             response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response;
     }
@@ -187,8 +178,7 @@ public class EventService {
         try {
             response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
 
         return response;
@@ -212,10 +202,9 @@ public class EventService {
         ResponseEntity<?> response;
 
         try {
-            response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
+            response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
 
         return response;
@@ -240,8 +229,7 @@ public class EventService {
         try {
             response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
 
         return response;
@@ -268,23 +256,10 @@ public class EventService {
         try {
             response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
 
         return response;
-    }
-
-    /**
-     * Updates an event.
-     *
-     * @param eventID The ID of the event to update.
-     * @param event   The new event data.
-     * @param class1  The class of the event.
-     * @return The response from the server.
-     */
-    public ResponseEntity<Event> update(UUID eventID, Event event, Class<Event> class1) {
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
 }

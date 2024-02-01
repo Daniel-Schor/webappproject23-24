@@ -109,7 +109,7 @@ public class User {
     public static Collection<User> collectionFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         Collection<User> values = new ArrayList<>();
 
         try {
@@ -127,7 +127,7 @@ public class User {
     public static User userFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         User user = new User();
 
         try {
@@ -137,6 +137,25 @@ public class User {
             e.printStackTrace();
         }
         return user;
+    }
+
+    // TODO add javadoc
+    public static String isValid(User user) {
+        String detail = null;
+        if (user.getFirstName() == null) {
+            detail = "Event datetime must not be null";
+        } else if (user.getFirstName().length() < 1 || user.getFirstName().length() > 30) {
+            detail = "User firstname must be between 1 and 30 characters long";
+        } else if (user.getLastName() == null) {
+            detail = "User lastname must not be null";
+        } else if (user.getLastName().length() < 1 || user.getLastName().length() > 30) {
+            detail = "User lastname must be between 1 and 30 characters long";
+        } else if (user.getEmail() == null) {
+            detail = "User email must not be null";
+        } else if (user.getEmail().length() < 5 || user.getEmail().length() > 50) {
+            detail = "User email must be between 5 and 50 characters long";
+        }
+        return detail;
     }
 
     // -- GETTER AND SETTER --

@@ -1,5 +1,4 @@
 package dev.eventplaner.model;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,16 +13,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-/**
- * The Event class represents an event with its properties and functionality.
- * An event has a unique ID, name, description, date and time, location, maximum
- * number of participants,
- * participants, and organizer user ID.
- * 
- * The Event class provides methods to add and remove participants, calculate
- * the average rating of the event,
- * add ratings for the event, and get and set the event's properties.
- */
 public class Event {
 
     @JsonProperty("id")
@@ -34,6 +23,7 @@ public class Event {
     @JsonProperty("location")
     private Geolocation geolocation;
     private int maxParticipants;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Map<UUID, Integer> participants;
     private UUID organizerUserID;
 
@@ -164,22 +154,10 @@ public class Event {
         return true;
     }
 
-    /**
-     * Checks if a user is a participant in the event.
-     *
-     * @param userID The ID of the user.
-     * @return true if the user is a participant, false otherwise.
-     */
     public boolean contains(UUID userID) {
         return this.participants.containsKey(userID);
     }
 
-    /**
-     * Converts a JSON string into a collection of Event objects.
-     *
-     * @param s The JSON string.
-     * @return A collection of Event objects.
-     */
     public static Collection<Event> collectionFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -195,12 +173,6 @@ public class Event {
         return values;
     }
 
-    /**
-     * Converts a JSON string into an Event object.
-     *
-     * @param s The JSON string.
-     * @return An Event object.
-     */
     public static Event eventFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -214,6 +186,27 @@ public class Event {
             e.printStackTrace();
         }
         return event;
+    }
+
+    // TODO add javadoc
+    public static String isValid(Event event) {
+        String detail = null;
+        if (event.getDateTime() == null) {
+            detail = "Event datetime must not be null";
+        } else if (event.getName() == null) {
+            detail = "Event name must not be null";
+        } else if (event.getName().length() < 1 || event.getName().length() > 30) {
+            detail = "Event name must be between 1 and 30 characters";
+        } else if (event.getDescription() == null) {
+            detail = "Event description must not be null";
+        } else if (event.getDescription().length() < 1 || event.getDescription().length() > 1000) {
+            detail = "Event description must be between 1 and 1000 characters";
+        } else if (event.getLocation() == null) {
+            detail = "Event location must not be null";
+        } else if (event.getMaxParticipants() <= 0) {
+            detail = "Event maxParticipants must be greater than 0";
+        }
+        return detail;
     }
 
     // -- GETTER AND SETTER --

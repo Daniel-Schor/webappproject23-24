@@ -1,11 +1,14 @@
 package dev.userplaner.controller;
 
+import java.net.URI;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +35,18 @@ public class ApiController {
     // instance into this class.
     @Autowired
     private UserService userService;
+
+    // TODO add javadoc
+    public ResponseEntity<?> checkProcessability(User user) {
+        String detail = User.isValid(user);
+        if (detail != null) {
+            ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, detail);
+            pd.setInstance(URI.create("/users"));
+            pd.setTitle("JSON Object Error");
+            return ResponseEntity.unprocessableEntity().body(pd);
+        }
+        return null;
+    }
 
     /**
      * Retrieves all users from the database.
@@ -72,8 +87,12 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<?> createUser(@RequestBody User user) {
         log.info("Create new user");
-        
-        return userService.create(user);
+
+        ResponseEntity<?> response = checkProcessability(user);
+        if (response == null) {
+            return userService.create(user);
+        }
+        return response;
     }
 
     // neu Methode
@@ -91,20 +110,24 @@ public class ApiController {
     public ResponseEntity<?> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
         log.info("Update user: {}", userID);
 
-        return userService.update(user.setID(userID));
+        ResponseEntity<?> response = checkProcessability(user);
+        if (response == null) {
+            return userService.update(user.setID(userID));
+        }
+        return response;
     }
 
     /**
-        * Deletes a user event based on the provided userID.
-        *
-        * @param userID the ID of the user event to be deleted
-        * @return a ResponseEntity representing the result of the deletion operation
-        */
+     * Deletes a user event based on the provided userID.
+     *
+     * @param userID the ID of the user event to be deleted
+     * @return a ResponseEntity representing the result of the deletion operation
+     */
     @DeleteMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> deleteEvent(@PathVariable("userID") UUID userID) {
         log.debug("deleteEvent() is called");
-        
+
         return userService.delete(userID);
     }
 

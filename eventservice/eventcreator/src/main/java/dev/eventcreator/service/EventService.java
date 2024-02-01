@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import dev.eventcreator.model.ApiError;
 import dev.eventcreator.model.Event;
 import dev.eventcreator.model.EventDTO;
 
@@ -51,8 +50,7 @@ public class EventService {
                 return response;
             }
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response;
     }
@@ -72,8 +70,7 @@ public class EventService {
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response.getBody().toString();
     }
@@ -95,20 +92,7 @@ public class EventService {
                 return response;
             }
         } catch (HttpClientErrorException e) {
-            HttpStatus errorStatus = (HttpStatus) e.getStatusCode();
-            String responseBody = e.getResponseBodyAsString();
-
-            if (errorStatus == HttpStatus.NOT_FOUND) {
-                ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, responseBody);
-                response = new ResponseEntity<>(apiError.toString(), apiError.getStatus());
-            } else if (errorStatus == HttpStatus.UNPROCESSABLE_ENTITY) {
-                ApiError apiError = new ApiError(HttpStatus.UNPROCESSABLE_ENTITY, responseBody);
-                response = new ResponseEntity<>(apiError.toString(), apiError.getStatus());
-            } else {
-                // Default für alle anderen Fehler
-                ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, responseBody);
-                response = new ResponseEntity<>(apiError.toString(), apiError.getStatus());
-            }
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
 
         String body = response.getBody();
@@ -149,8 +133,7 @@ public class EventService {
                 return response.getBody().toString();
             }
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response.getBody().toString();
     }
@@ -173,8 +156,7 @@ public class EventService {
                 return response;
             }
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response;
     }
@@ -198,8 +180,7 @@ public class EventService {
                 return response;
             }
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response;
     }
@@ -222,8 +203,7 @@ public class EventService {
                 return response;
             }
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response;
     }

@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -29,7 +28,8 @@ public class Event {
     private UUID organizerUserID;
 
     /**
-     * Default constructor for the Event class. New Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
+     * Default constructor for the Event class. New Address("Nibelungenplatz", "1",
+     * "60318", "Frankfurt am Main", "Deutschland");
      * Initializes the event with default values.
      */
     public Event() {
@@ -44,7 +44,8 @@ public class Event {
     }
 
     /**
-     * Default constructor for the Event class. New Address("Nibelungenplatz", "1", "60318", "Frankfurt am Main", "Deutschland");
+     * Default constructor for the Event class. New Address("Nibelungenplatz", "1",
+     * "60318", "Frankfurt am Main", "Deutschland");
      * Initializes the event with default values.
      */
     public Event(UUID eventID) {
@@ -101,7 +102,8 @@ public class Event {
      * Removes a participant from the event.
      * 
      * @param participantID the ID of the participant to be removed
-     * @return true if the participant was removed successfully, false if the ID is not in the event
+     * @return true if the participant was removed successfully, false if the ID is
+     *         not in the event
      */
     public synchronized boolean removeParticipant(UUID participantID) {
         if (participantID == null) {
@@ -159,7 +161,7 @@ public class Event {
     public static Collection<Event> collectionFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         Collection<Event> values = new ArrayList<>();
 
         try {
@@ -174,7 +176,7 @@ public class Event {
     public static Event eventFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         Event event = new Event();
 
         try {
@@ -184,6 +186,27 @@ public class Event {
             e.printStackTrace();
         }
         return event;
+    }
+
+    // TODO add javadoc
+    public static String isValid(Event event) {
+        String detail = null;
+        if (event.getDateTime() == null) {
+            detail = "Event datetime must not be null";
+        } else if (event.getName() == null) {
+            detail = "Event name must not be null";
+        } else if (event.getName().length() < 1 || event.getName().length() > 30) {
+            detail = "Event name must be between 1 and 30 characters";
+        } else if (event.getDescription() == null) {
+            detail = "Event description must not be null";
+        } else if (event.getDescription().length() < 1 || event.getDescription().length() > 1000) {
+            detail = "Event description must be between 1 and 1000 characters";
+        } else if (event.getLocation() == null) {
+            detail = "Event location must not be null";
+        } else if (event.getMaxParticipants() <= 0) {
+            detail = "Event maxParticipants must be greater than 0";
+        }
+        return detail;
     }
 
     // -- GETTER AND SETTER --

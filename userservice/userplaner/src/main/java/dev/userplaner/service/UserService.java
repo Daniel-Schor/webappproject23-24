@@ -1,6 +1,5 @@
 package dev.userplaner.service;
 
-import dev.userplaner.model.ApiError;
 import dev.userplaner.model.User;
 import dev.userplaner.model.UserDTO;
 
@@ -56,8 +55,7 @@ public class UserService {
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response;
     }
@@ -82,8 +80,7 @@ public class UserService {
         try {
             response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response;
     }
@@ -95,15 +92,7 @@ public class UserService {
      */
     public ResponseEntity<?> delete(UUID userID) {
         log.info("delete userID: {}", userID);
-        // if (userRepository.get(userID) == null) {
-        // log.warn("User with ID {} not found", userID);
-        // }
-        // if (userRepository.get(userID) != null) {
-        // log.warn("User with ID {} found", userID);
-        // log.info("User Deleted: {}", userID);
-        // return userRepository.remove(userID);
-        // }
-        // return null;
+
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users/" + userID;
 
@@ -116,8 +105,7 @@ public class UserService {
         try {
             response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response;
     }
@@ -142,8 +130,7 @@ public class UserService {
         try {
             response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response;
     }
@@ -167,8 +154,7 @@ public class UserService {
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response;
     }
@@ -195,8 +181,7 @@ public class UserService {
                 return response;
             }
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<String>(apiError.toString(), apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
             return response;
         }
 

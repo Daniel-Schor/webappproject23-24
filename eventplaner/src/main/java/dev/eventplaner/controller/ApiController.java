@@ -1,14 +1,11 @@
 package dev.eventplaner.controller;
 
-import java.net.URI;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -80,17 +77,7 @@ public class ApiController {
         String fullname = user.getFirstName() + " " + user.getLastName();
         log.info("Create new user: {}", fullname);
 
-        if (fullname == null || fullname.trim().isEmpty()) {
-            String detail = "User name must not be null or empty";
-            ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, detail);
-            pd.setInstance(URI.create("/api/users"));
-            pd.setTitle("User creation error");
-            return ResponseEntity.unprocessableEntity().body(pd);
-        }
-
-        ResponseEntity<?> response = userService.create(user);
-
-        return response;
+        return userService.create(user);
     }
 
     /**
@@ -102,19 +89,11 @@ public class ApiController {
      *         or a not found response if the user does not exist.
      */
     @PutMapping(value = "users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
+    public ResponseEntity<?> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
         log.info("Update user: {}", userID);
-        ResponseEntity<?> responseEntity = userService.update(user);
+        ResponseEntity<?> response = userService.update(user.setID(userID));
 
-        if (responseEntity.getStatusCode() == HttpStatus.OK) {
-            User updatedUser = (User) responseEntity.getBody();
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-        } else if (responseEntity.getStatusCode() == HttpStatus.NOT_FOUND) {
-            return ResponseEntity.notFound().build();
-        } else {
-            log.warn("Error updating user. Status code: {}", responseEntity.getStatusCode());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return response;
     }
 
     /**
@@ -133,6 +112,13 @@ public class ApiController {
         return response;
     }
 
+    @PostMapping(value = "events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createEvent(@RequestBody Event event) {
+        log.info("Create new event: {}", event.getName());
+
+        return eventService.create(event);
+    }
+
     /**
      * Update an existing event.
      *
@@ -143,9 +129,9 @@ public class ApiController {
      *         updated event.
      */
     @PutMapping(value = "events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Event> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
-        log.info("Update event: {}", eventID);
-        ResponseEntity<Event> response = eventService.update(eventID, event, Event.class);
+    public ResponseEntity<?> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
+        log.info("Update event: {}", event.setID(eventID).getID());
+        ResponseEntity<?> response = eventService.update(event);
 
         return response;
     }

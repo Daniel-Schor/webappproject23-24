@@ -1,6 +1,5 @@
 package dev.eventplaner.service;
 
-import dev.eventplaner.model.ApiError;
 import dev.eventplaner.model.User;
 
 import java.util.UUID;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -52,8 +50,7 @@ public class UserService {
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response;
     }
@@ -79,9 +76,8 @@ public class UserService {
         try {
             response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
-        }
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+       }
         return response;
     }
 
@@ -101,12 +97,10 @@ public class UserService {
         ResponseEntity<?> response;
 
         try {
-            restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
             response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
-        }
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+       }
         return response;
 
     }
@@ -121,7 +115,7 @@ public class UserService {
         log.info("User Updated: {}", user.getID());
 
         RestTemplate restTemplate = new RestTemplate();
-        String url = apiUrl + "/users";
+        String url = apiUrl + "/users/" + user.getID();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -132,8 +126,7 @@ public class UserService {
         try {
             response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
 
         return response;
@@ -158,8 +151,7 @@ public class UserService {
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
         } catch (HttpClientErrorException e) {
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, e.getResponseBodyAsString());
-            response = new ResponseEntity<>(apiError, apiError.getStatus());
+            response = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
         }
         return response;
     }

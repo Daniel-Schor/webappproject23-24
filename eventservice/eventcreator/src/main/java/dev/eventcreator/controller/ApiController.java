@@ -1,5 +1,6 @@
 package dev.eventcreator.controller;
 
+import java.net.URI;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -7,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.eventcreator.model.Event;
 import dev.eventcreator.service.EventService;
+import io.micrometer.core.ipc.http.HttpSender.Response;
+
 import org.springframework.web.bind.annotation.PutMapping;
 
 /**
  * This class is a REST controller for managing events.
- * It includes methods for creating, retrieving, updating, deleting, and rating events, as well as adding and removing participants.
+ * It includes methods for creating, retrieving, updating, deleting, and rating
+ * events, as well as adding and removing participants.
  */
 @RestController
 public class ApiController {
@@ -35,6 +40,18 @@ public class ApiController {
     // instance into this class.
     @Autowired
     private EventService eventService;
+
+    // TODO add javadoc
+    public ResponseEntity<?> checkProcessability(Event event) {
+        String detail = Event.isValid(event);
+        if (detail != null) {
+            ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, detail);
+            pd.setInstance(URI.create("/events"));
+            pd.setTitle("JSON Object Error");
+            return ResponseEntity.unprocessableEntity().body(pd);
+        }
+        return null;
+    }
 
     /**
      * Removes a participant from all events.
@@ -77,18 +94,12 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
         log.info("Create new Event: {}", event.getName());
-        /*
-         * TODO implement this in repository
-         * if (event.getName() == null || event.getName().isEmpty()) {
-         * String detail = "Event name must not be null or empty";
-         * ProblemDetail pd =
-         * ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, detail);
-         * pd.setInstance(URI.create("/events"));
-         * pd.setTitle("Event creation error");
-         * return ResponseEntity.unprocessableEntity().body(pd);
-         * }
-         */
-        return eventService.create(event);
+
+        ResponseEntity<?> response = checkProcessability(event);
+        if (response == null) {
+            return eventService.create(event);
+        }
+        return response;
     }
 
     /**
@@ -104,7 +115,11 @@ public class ApiController {
     public ResponseEntity<?> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
         log.info("Update event: {}", eventID);
 
-        return eventService.update(event.setID(eventID));
+        ResponseEntity<?> response = checkProcessability(event);
+        if (response == null) {
+            return eventService.update(event.setID(eventID));
+        }
+        return response;
     }
 
     /**

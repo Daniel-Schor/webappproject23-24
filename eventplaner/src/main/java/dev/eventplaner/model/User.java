@@ -67,9 +67,19 @@ public class User {
      * @param email     The email of the user
      * @param password  The password of the user
      */
+
     public User(String firstName, String lastName, String email, String password) {
         this(firstName, lastName, email, password, false);
     }
+
+    /**
+     * Sets the user's password.
+     * If the provided password is not null, it is encrypted and stored in the user
+     * object's password field.
+     * If the provided password is null, the password field remains unchanged.
+     *
+     * @param password The password to be set
+     */
 
     public User setPassword(String password) {
         if (password != null) {
@@ -79,14 +89,27 @@ public class User {
     }
 
     /**
+     * Checks if the provided password matches the user's password.
+     *
+     * @param password The password to be checked
+     * @return True if the provided password matches the user's password, false
+     *         otherwise
+     */
+
+    public boolean checkPassword(String password) {
+        return encoder.matches(password, this.password);
+    }
+
+    /**
      * Converts a JSON string into a collection of User objects.
      *
-     * @param s The JSON string.
-     * @return A collection of User objects.
+     * @param s the JSON string to be converted
+     * @return a collection of User objects
      */
-    public static Collection<User> collectionFromJsonUser(String s) {
+    public static Collection<User> collectionFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
+        // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         Collection<User> values = new ArrayList<>();
 
         try {
@@ -99,14 +122,12 @@ public class User {
     }
 
     /**
-     * Converts a JSON string into a User object.
-     *
-     * @param s The JSON string.
-     * @return A User object.
+     * Represents a user.
      */
     public static User userFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
+        // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         User user = new User();
 
         try {
@@ -116,6 +137,25 @@ public class User {
             e.printStackTrace();
         }
         return user;
+    }
+
+    // TODO add javadoc
+    public static String isValid(User user) {
+        String detail = null;
+        if (user.getFirstName() == null) {
+            detail = "Event datetime must not be null";
+        } else if (user.getFirstName().length() < 1 || user.getFirstName().length() > 30) {
+            detail = "User firstname must be between 1 and 30 characters long";
+        } else if (user.getLastName() == null) {
+            detail = "User lastname must not be null";
+        } else if (user.getLastName().length() < 1 || user.getLastName().length() > 30) {
+            detail = "User lastname must be between 1 and 30 characters long";
+        } else if (user.getEmail() == null) {
+            detail = "User email must not be null";
+        } else if (user.getEmail().length() < 5 || user.getEmail().length() > 50) {
+            detail = "User email must be between 5 and 50 characters long";
+        }
+        return detail;
     }
 
     // -- GETTER AND SETTER --
