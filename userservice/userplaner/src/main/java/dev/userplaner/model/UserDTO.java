@@ -73,7 +73,11 @@ public class UserDTO {
     public String getFirstName() {
         return firstName;
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> c2f6757743f990f85505a8f097a152722f5d9046
     public String getLastName() {
         return lastName;
     }
@@ -86,11 +90,19 @@ public class UserDTO {
         this.lastName = lastName;
     }
 
+<<<<<<< HEAD
     public boolean isOrganizer() {
         return organizer;
     }
 
     public void setOrganizer(boolean organizer) {
+=======
+    public boolean isOrganizer() { // Add this method
+        return organizer;
+    }
+
+    public void setOrganizer(boolean organizer) { // Add this method
+>>>>>>> c2f6757743f990f85505a8f097a152722f5d9046
         this.organizer = organizer;
     }
 

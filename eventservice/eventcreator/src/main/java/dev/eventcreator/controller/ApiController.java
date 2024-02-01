@@ -94,12 +94,17 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
         log.info("Create new Event: {}", event.getName());
+<<<<<<< HEAD
 
         ResponseEntity<?> response = checkProcessability(event);
         if (response == null) {
             return eventService.create(event);
         }
         return response;
+=======
+        
+        return eventService.create(event);
+>>>>>>> c2f6757743f990f85505a8f097a152722f5d9046
     }
 
     /**

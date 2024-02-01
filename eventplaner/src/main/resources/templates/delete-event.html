@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Event</title>
+</head>
+
+<body>
+    <h1>Delete Event</h1>
+    <form id="deleteForm">
+        <label for="eventId">Event ID:</label>
+        <input type="text" id="eventId" name="eventID" required>
+        <br>
+        <button type="button" onclick="confirmDelete()">Next</button>
+    </form>
+    <div id="confirmation" style="display: none;">
+        <p>Do you really want to delete this event?</p>
+        <button type="button" onclick="deleteEvent()">Yes</button>
+        <button type="button" onclick="cancelDelete()">No</button>
+    </div>
+    <br>
+    <a href="/web/manage">Go Back</a>
+
+    <script>
+        function confirmDelete() {
+            document.getElementById("deleteForm").style.display = "none";
+            document.getElementById("confirmation").style.display = "block";
+        }
+
+        function deleteEvent() {
+    var eventId = document.getElementById("eventId").value;
+
+    fetch('/web/manage/delete-event/' + eventId, {
+        method: 'DELETE',
+    })
+    .then(response => {
+        if (!response.ok) {
+            if (response.status === 404) {
+                alert("Event not found. The event may have already been deleted.");
+                window.location.href = '/web/events';
+            } else {
+                alert("Something went wrong!" + response.status);
+            }
+        } else {
+            alert("The event has been deleted!");
+            window.location.href = '/web/events';
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        alert("Something went wrong!" + error.toString());
+    });
+}
+
+
+        function cancelDelete() {
+            document.getElementById("deleteForm").style.display = "block";
+            document.getElementById("confirmation").style.display = "none";
+        }
+    </script>
+</body>
+
+</html>

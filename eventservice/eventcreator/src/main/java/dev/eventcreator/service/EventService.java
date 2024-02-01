@@ -24,6 +24,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dev.eventcreator.model.Event;
 import dev.eventcreator.model.EventDTO;
 
+/**
+ * This class provides services for managing events.
+ * It includes methods for creating, retrieving, updating, and deleting events.
+ */
 @Service
 public class EventService {
 
@@ -32,6 +36,12 @@ public class EventService {
     @Value("${repository.url}")
     private String apiUrl;
 
+    /**
+     * Creates a new event.
+     *
+     * @param event The event to create.
+     * @return The response from the repository.
+     */
     public ResponseEntity<?> create(Event event) {
         log.info("Event Created: {}, {}", event.getName(), event.getID());
 
@@ -55,7 +65,11 @@ public class EventService {
         return response;
     }
 
-    // response angepasst
+    /**
+     * Retrieves all events.
+     *
+     * @return A string representation of all events.
+     */
     // FIXME use this instead of getAllDTO; test this
     public String getAll() {
         log.info("get all Events");
@@ -75,6 +89,11 @@ public class EventService {
         return response.getBody().toString();
     }
 
+    /**
+     * Retrieves all events as DTOs.
+     *
+     * @return The response from the repository.
+     */
     public ResponseEntity<?> getAllDTO() {
         log.info("get all Events as DTO");
 
@@ -116,6 +135,12 @@ public class EventService {
         return response;
     }
 
+    /**
+     * Retrieves an event string by its ID.
+     *
+     * @param eventID The ID of the event to retrieve.
+     * @return A string representation of the event.
+     */
     public String getEventString(UUID eventID) {
         log.info("get event by eventID: {}", eventID);
 
@@ -129,7 +154,7 @@ public class EventService {
 
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
-            if (response.getStatusCode() != HttpStatus.OK){
+            if (response.getStatusCode() != HttpStatus.OK) {
                 return response.getBody().toString();
             }
         } catch (HttpClientErrorException e) {
@@ -138,7 +163,12 @@ public class EventService {
         return response.getBody().toString();
     }
 
-    // response angepasst
+    /**
+     * Retrieves an event by its ID.
+     *
+     * @param eventID The ID of the event to retrieve.
+     * @return The response from the repository.
+     */
     public ResponseEntity<?> getEvent(UUID eventID) {
         log.info("get event by eventID: {}", eventID);
 
@@ -152,7 +182,7 @@ public class EventService {
 
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
-            if (response.getStatusCode() != HttpStatus.OK){
+            if (response.getStatusCode() != HttpStatus.OK) {
                 return response;
             }
         } catch (HttpClientErrorException e) {
@@ -160,8 +190,13 @@ public class EventService {
         }
         return response;
     }
-    
 
+    /**
+     * Updates an event.
+     *
+     * @param event The event to update.
+     * @return The response from the repository.
+     */
     public ResponseEntity<?> update(Event event) {
         log.info("update event: {}", event.getID());
         log.info("event Participants: {}", event.getParticipants());
@@ -185,6 +220,12 @@ public class EventService {
         return response;
     }
 
+    /**
+     * Deletes an event.
+     *
+     * @param eventID The ID of the event to delete.
+     * @return The response from the repository.
+     */
     public ResponseEntity<?> delete(UUID eventID) {
         log.info("delete eventID: {}", eventID);
 
@@ -199,7 +240,7 @@ public class EventService {
 
         try {
             response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
-            if (response.getStatusCode() != HttpStatus.NO_CONTENT){
+            if (response.getStatusCode() != HttpStatus.NO_CONTENT) {
                 return response;
             }
         } catch (HttpClientErrorException e) {
@@ -208,6 +249,13 @@ public class EventService {
         return response;
     }
 
+    /**
+     * Adds a user to an event.
+     *
+     * @param eventID The ID of the event.
+     * @param userID  The ID of the user.
+     * @return The updated event.
+     */
     public Event addUser(UUID eventID, UUID userID) {
         log.info("addUser: eventID={}, userID={}", eventID, userID);
         String eventString = getEventString(eventID);
@@ -222,6 +270,13 @@ public class EventService {
         return event;
     }
 
+    /**
+     * Removes a user from an event.
+     *
+     * @param eventID The ID of the event.
+     * @param userID  The ID of the user.
+     * @return The updated event.
+     */
     public Event removeUser(UUID eventID, UUID userID) {
         log.info("removeUser: eventID={}, user={}", eventID, userID);
         String eventString = getEventString(eventID);
@@ -236,6 +291,11 @@ public class EventService {
         return event;
     }
 
+    /**
+     * Removes a user from all events.
+     *
+     * @param userID The ID of the user.
+     */
     public void removeUser(UUID userID) {
         log.info("removeUser: userId={}", userID);
         for (Event event : Event.collectionFromJson(getAll())) {
@@ -245,6 +305,14 @@ public class EventService {
         }
     }
 
+    /**
+     * Adds a rating to an event.
+     *
+     * @param eventID The ID of the event.
+     * @param userID  The ID of the user.
+     * @param rating  The rating to add.
+     * @return A string representation of the updated event.
+     */
     public String addRating(UUID eventID, UUID userID, int rating) {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
         String eventString = getEventString(eventID);
@@ -252,7 +320,7 @@ public class EventService {
         if (event == null || !event.contains(userID)) {
             return null;
         }
-        
+
         event.rate(userID, rating);
         update(event);
         return convertObjectToJson(event);
