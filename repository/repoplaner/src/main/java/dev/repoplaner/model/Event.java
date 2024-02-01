@@ -26,6 +26,7 @@ public class Event {
     private int maxParticipants;
     private Map<UUID, Integer> participants;
     private UUID organizerUserID;
+    private double rating;
 
     /**
      * Default constructor for the Event class. New Address("Nibelungenplatz", "1",
@@ -41,6 +42,7 @@ public class Event {
         this.maxParticipants = 10;
         this.participants = new HashMap<>();
         this.organizerUserID = null;
+        this.rating = 0;
     }
 
     /**
@@ -121,7 +123,7 @@ public class Event {
      *
      * @return The average rating of the event. If no rating is available, 0 is
      */
-    public double rating() {
+    public double calcRating() {
         double rating = 0;
         int nullValues = 0;
 
@@ -151,6 +153,7 @@ public class Event {
             return false;
         }
         participants.put(userID, rating);
+        this.rating = calcRating();
         return true;
     }
 
@@ -292,6 +295,10 @@ public class Event {
         return this;
     }
 
+    public double getRating() {
+        return this.rating;
+    }
+    
     @Override
     public String toString() {
         String s = "";

@@ -14,12 +14,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-/**
- * This class represents an event.
- * It includes properties for the event's ID, name, description, date and time,
- * geolocation, maximum number of participants, participants, and organizer's
- * user ID.
- */
 public class Event {
 
     @JsonProperty("id")
@@ -32,6 +26,7 @@ public class Event {
     private int maxParticipants;
     private Map<UUID, Integer> participants;
     private UUID organizerUserID;
+    private double rating;
 
     /**
      * Default constructor for the Event class. New Address("Nibelungenplatz", "1",
@@ -47,6 +42,7 @@ public class Event {
         this.maxParticipants = 10;
         this.participants = new HashMap<>();
         this.organizerUserID = null;
+        this.rating = 0;
     }
 
     /**
@@ -127,7 +123,7 @@ public class Event {
      *
      * @return The average rating of the event. If no rating is available, 0 is
      */
-    public double rating() {
+    public double calcRating() {
         double rating = 0;
         int nullValues = 0;
 
@@ -157,25 +153,14 @@ public class Event {
             return false;
         }
         participants.put(userID, rating);
+        this.rating = calcRating();
         return true;
     }
 
-    /**
-     * Checks if a user is a participant in the event.
-     *
-     * @param userID The ID of the user to check.
-     * @return true if the user is a participant, false otherwise.
-     */
     public boolean contains(UUID userID) {
         return this.participants.containsKey(userID);
     }
 
-    /**
-     * Deserializes a JSON string into a collection of Event objects.
-     *
-     * @param s The JSON string to deserialize.
-     * @return A collection of Event objects.
-     */
     public static Collection<Event> collectionFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -191,12 +176,6 @@ public class Event {
         return values;
     }
 
-    /**
-     * Deserializes a JSON string into an Event object.
-     *
-     * @param s The JSON string to deserialize.
-     * @return An Event object.
-     */
     public static Event eventFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -316,6 +295,10 @@ public class Event {
         return this;
     }
 
+    public double getRating() {
+        return this.rating;
+    }
+    
     @Override
     public String toString() {
         String s = "";

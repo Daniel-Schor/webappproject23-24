@@ -322,11 +322,4 @@ public class EventService {
         return event;
     }
 
-    public double getRating(UUID eventID) {
-        log.info("getRating: eventID={}", eventID);
-        String eventString = getEventString(eventID);
-        Event event = Event.eventFromJson(eventString);
-        return event.rating();
-    }
-
 }
