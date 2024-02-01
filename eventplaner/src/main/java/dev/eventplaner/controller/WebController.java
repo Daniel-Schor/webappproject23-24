@@ -91,7 +91,7 @@ public class WebController {
     // TODO javadoc
     @GetMapping("events/{eventID}")
     public String showEventDetails(@PathVariable("eventID") UUID eventID, Model model) {
-        log.info("GET localhost:8080/web/events/{eventID} -> showEventDetails() is called: {}", eventID);
+        log.info("GET localhost:8080/web/events/{} -> showEventDetails() is called: {}", eventID, eventID);
 
         ResponseEntity<?> response = eventService.getEvent(eventID);
 
@@ -116,7 +116,7 @@ public class WebController {
     // TODO mapping ohne /web
     @GetMapping("/web/event-details/{id}")
     public String showEventDetailsById(@PathVariable("id") UUID id, Model model) {
-        log.info("GET localhost:8080/web/event-details/{id} -> showEventDetailsById() is called: {}", id);
+        log.info("GET localhost:8080/web/event-details/{} -> showEventDetailsById() is called: {}", id, id);
 
         ResponseEntity<?> event = eventService.getEvent(id);
         model.addAttribute("event", event);
@@ -200,7 +200,7 @@ public class WebController {
     // TODO javadoc
     @DeleteMapping("/manage/delete-event/{eventID}")
     public String deleteEvent(@PathVariable("eventID") UUID eventID, Model model) {
-        log.info("DELETE localhost:8080/web/manage/delete-event/{eventID} -> deleteEvent() is called: {}", eventID);
+        log.info("DELETE localhost:8080/web/manage/delete-event/{} -> deleteEvent() is called: {}", eventID, eventID);
 
         ResponseEntity<?> response = eventService.delete(eventID);
 
@@ -216,7 +216,7 @@ public class WebController {
     // TODO javadoc
     @GetMapping("/manage/check-event/{eventID}")
     public ResponseEntity<?> checkEvent(@PathVariable("eventID") UUID eventID) {
-        log.info("GET localhost:8080/web/manage/check-event/{eventID} -> checkEvent() is called: {}", eventID);
+        log.info("GET localhost:8080/web/manage/check-event/{} -> checkEvent() is called: {}", eventID, eventID);
 
 
         ResponseEntity<?> response = eventService.getEvent(eventID);
@@ -269,7 +269,7 @@ public class WebController {
 
     @GetMapping("/user-details/{userID}")
     public String showUserDetails(@PathVariable("userID") UUID userID, Model model) {
-        log.info("GET localhost:8080/web/user-details/{userID} -> showUserDetails() is called: {}", userID);
+        log.info("GET localhost:8080/web/user-details/{} -> showUserDetails() is called: {}", userID, userID);
 
         ResponseEntity<?> userResponse = userService.getUser(userID);
 
