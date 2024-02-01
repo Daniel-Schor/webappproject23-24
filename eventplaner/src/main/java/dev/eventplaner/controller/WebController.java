@@ -43,6 +43,7 @@ public class WebController {
     @Autowired
     private UserService userService;
 
+    // TODO javadoc
     @GetMapping("/events")
     public String showAllEvents(Model model) {
         log.info("WebController: Showing all events");
@@ -67,6 +68,7 @@ public class WebController {
         return "events";
     }
 
+    // TODO javadoc
     public static Collection<Event> collectionFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -82,6 +84,7 @@ public class WebController {
         return values;
     }
 
+    // TODO javadoc
     @GetMapping("events/{eventID}")
     public String showEventDetails(@PathVariable("eventID") UUID eventID, Model model) {
         log.info("WebController: Showing details for event ID: {}", eventID);
@@ -104,12 +107,14 @@ public class WebController {
         return "event-details";
     }
 
+    // TODO javadoc
     @GetMapping("/web/event-details/{id}")
     public String showEventDetailsById(@PathVariable("id") UUID id, Model model) {
         ResponseEntity<?> event = eventService.getEvent(id);
         model.addAttribute("event", event);
         return "event-details";
     }
+
     /**
      * Show all users.
      *
@@ -121,9 +126,9 @@ public class WebController {
         try {
             ResponseEntity<?> response = userService.getAllDTO();
             String jsonResponse = response.getBody().toString(); // Assuming the response body is a JSON string
-           
+
             Collection<UserDTO> users = UserDTO.collectionFromJsonUserDTO(jsonResponse);
-            
+
             model.addAttribute("users", users);
         } catch (Exception e) {
             log.error("Error retrieving events", e);
@@ -167,43 +172,42 @@ public class WebController {
         return "add-event";
     }
 
+    // TODO javadoc
     @GetMapping("/web/manage/delete-event")
     public String showDeleteEventPage(Model model) {
-       
-    
-    return "delete-event";
-    
-}
+        return "delete-event";
 
+    }
 
-@DeleteMapping("/manage/delete-event/{eventID}")
-public String deleteEvent(@PathVariable("eventID") UUID eventID, Model model) {
-    log.info("WebController: Deleting event ID: {}", eventID);
-    
-    ResponseEntity<?> response = eventService.delete(eventID);
+    // TODO javadoc
+    @DeleteMapping("/manage/delete-event/{eventID}")
+    public String deleteEvent(@PathVariable("eventID") UUID eventID, Model model) {
+        log.info("WebController: Deleting event ID: {}", eventID);
 
-    if (response.getStatusCode() == HttpStatus.OK) {
-        log.info("WebController: Event ID: {} deleted", eventID);
-        return "redirect:/web/manage"; 
+        ResponseEntity<?> response = eventService.delete(eventID);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            log.info("WebController: Event ID: {} deleted", eventID);
+            return "redirect:/web/manage";
         } else {
-        log.warn("WebController: Error deleting event ID: {}. Status code: {}", eventID, response.getStatusCode());
-        return "redirect:/web/events";
+            log.warn("WebController: Error deleting event ID: {}. Status code: {}", eventID, response.getStatusCode());
+            return "redirect:/web/events";
+        }
     }
-}
 
-@GetMapping("/manage/check-event/{eventID}")
-public ResponseEntity<?> checkEvent(@PathVariable("eventID") UUID eventID) {
-    ResponseEntity<?> response = eventService.getEvent(eventID);
+    // TODO javadoc
+    @GetMapping("/manage/check-event/{eventID}")
+    public ResponseEntity<?> checkEvent(@PathVariable("eventID") UUID eventID) {
+        ResponseEntity<?> response = eventService.getEvent(eventID);
 
-    if (response.getStatusCode() == HttpStatus.OK) {
-        return ResponseEntity.ok("{\"exists\": true}");
-    } else {
-        return ResponseEntity.ok("{\"exists\": false}");
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return ResponseEntity.ok("{\"exists\": true}");
+        } else {
+            return ResponseEntity.ok("{\"exists\": false}");
+        }
     }
-}
 
-
-
+    // TODO javadoc
     @PostMapping("manage/add-event")
     public String addEvent(@RequestParam("name") String name,
             @RequestParam("description") String description,
