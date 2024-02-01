@@ -46,7 +46,7 @@ public class ApiController {
      */
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllUsers() {
-        log.info("Get all users");
+        log.info("GET localhost:8080/users -> getAllUsers() is called");
 
         ResponseEntity<?> response = userService.getAllDTO();
 
@@ -62,7 +62,7 @@ public class ApiController {
      */
     @GetMapping(value = "users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUser(@PathVariable("userID") UUID userID) {
-        log.info("Get user by userID: {}", userID);
+        log.info("GET localhost:8080/users/{} -> getUser({}) is called", userID, userID);
 
         ResponseEntity<?> response = userService.getUser(userID);
 
@@ -79,7 +79,7 @@ public class ApiController {
     @PostMapping(value = "users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createUser(@RequestBody User user) {
         String fullname = user.getFirstName() + " " + user.getLastName();
-        log.info("Create new user: {}", fullname);
+        log.info("POST localhost:8080/users -> createUser(Name: {}) is called", fullname);
 
         return userService.create(user);
     }
@@ -94,7 +94,8 @@ public class ApiController {
      */
     @PutMapping(value = "users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
-        log.info("Update user: {}", userID);
+        String fullname = user.getFirstName() + " " + user.getLastName();
+        log.info("PUT localhost:8080/users/{} -> updateUser({}, Name: {}) is called", userID, userID, fullname);
         ResponseEntity<?> response = userService.update(user.setID(userID));
 
         return response;
@@ -110,7 +111,7 @@ public class ApiController {
      */
     @PutMapping(value = "events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeUser(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
-        log.debug("removeUser() is called");
+        log.info("PUT localhost:8080/events/{}/remove/{} -> removeUser({}, {}) is called", eventID, userID, eventID, userID);
         ResponseEntity<?> response = eventService.removeUser(eventID, userID);
 
         return response;
@@ -118,7 +119,7 @@ public class ApiController {
 
     @PostMapping(value = "events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
-        log.info("Create new event: {}", event.getName());
+        log.info("POST localhost:8080/events -> createEvent(Name: {}) is called", event.getName());
 
         return eventService.create(event);
     }
@@ -134,7 +135,8 @@ public class ApiController {
      */
     @PutMapping(value = "events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
-        log.info("Update event: {}", event.setID(eventID).getID());
+        log.info("PUT localhost:8080/events/{} -> updateEvent({}, Name: {}) is called", eventID, event.getName());
+
         ResponseEntity<?> response = eventService.update(event);
 
         return response;
@@ -149,7 +151,8 @@ public class ApiController {
      */
     @DeleteMapping(value = "events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteEvent(@PathVariable("eventID") UUID eventID) {
-        log.debug("deleteEvent() is called");
+        log.info("DELETE localhost:8080/events/{} -> deleteEvent({}) is called", eventID, eventID);
+
         ResponseEntity<?> response = eventService.delete(eventID);
 
         return response;
@@ -166,7 +169,8 @@ public class ApiController {
     @PutMapping(value = "events/{eventID}/add/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID,
             @PathVariable("userID") UUID userID) {
-        log.debug("addParticipant() is called");
+        log.info("PUT localhost:8080/events/{}/add/{} -> addParticipant({}, {}) is called", eventID, userID, eventID, userID);
+
         ResponseEntity<?> response;
         if (userService.getUser(userID).getStatusCode() == HttpStatus.NOT_FOUND) {
             response = ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
@@ -184,9 +188,10 @@ public class ApiController {
      * @return ResponseEntity<?> Returns the response entity that includes the
      *         status of the operation.
      */
-    @DeleteMapping(value = "user/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteUser(@PathVariable("userID") UUID userID) {
-        log.debug("deleteUser() is called");
+        log.info("PUT localhost:8080/users/{} -> deleteUser({})", userID, userID);
+
         eventService.removeUserFromAllEvents(userID);
         ResponseEntity<?> response = userService.delete(userID);
 
@@ -201,7 +206,7 @@ public class ApiController {
      */
     @GetMapping(value = "events", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllEvents() {
-        log.info("Get all events");
+        log.info("GET localhost:8080/events -> getAllEvents() is called");
 
         ResponseEntity<?> response = eventService.getAllDTO();
 
@@ -217,7 +222,7 @@ public class ApiController {
      */
     @GetMapping(value = "events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getEvent(@PathVariable("eventID") UUID eventID) {
-        log.info("Get event by eventID: {}", eventID);
+        log.info("GET localhost:8080/events/{} -> getEvent({}) is called", eventID, eventID);
 
         ResponseEntity<?> response = eventService.getEvent(eventID);
 
@@ -226,7 +231,7 @@ public class ApiController {
 
     @GetMapping(value = "events/{eventID}/participants", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getEventParticipants(@PathVariable("eventID") UUID eventID) {
-        log.info("Get event Participants by eventID: {}", eventID);
+        log.info("GET localhost:8080/events/{}/participants -> getEventParticipants({}) is called", eventID, eventID);
 
         ResponseEntity<?> response;
         Collection<UserDTO> participants = new ArrayList<>();
@@ -264,7 +269,8 @@ public class ApiController {
     @PutMapping(value = "events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID,
             @PathVariable("rating") int rating) {
-        log.debug("rateEvent() is called");
+        log.info("PUT localhost:8080/events/{}/{}/{} -> rateEvent({}, {}, {}) is called", eventID, userID, rating, eventID, userID, rating);
+
         ResponseEntity<?> response = eventService.addRating(eventID, userID, rating);
 
         return response;
