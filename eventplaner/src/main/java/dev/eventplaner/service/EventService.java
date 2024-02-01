@@ -38,7 +38,7 @@ public class EventService {
      * @return The response from the server.
      */
     public ResponseEntity<?> create(Event event) {
-        log.info("event Created: {}", event.getID());
+        log.info("Eventplaner EventService -> create() is called: {}", event.getID());
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events";
@@ -63,7 +63,7 @@ public class EventService {
      * @return The response from the server.
      */
     public ResponseEntity<?> getAllDTO() {
-        log.info("get all Events as DTO");
+        log.info("Eventplaner EventService -> getAllDTO() is called");
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events";
@@ -88,7 +88,9 @@ public class EventService {
      * @return The response from the server.
      */
     public ResponseEntity<?> getEvent(UUID eventID) {
-        log.info("get event by eventID: {}", eventID);
+        log.info("Eventplaner EventService -> getEvent() is called: {}", eventID);
+
+
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/" + eventID;
 
@@ -114,7 +116,7 @@ public class EventService {
      * @return The response from the server.
      */
     public ResponseEntity<?> update(Event event) {
-        log.info("update event: {}", event);
+        log.info("Eventplaner EventService -> update() is called: {}", event.getID());
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/" + event.getID();
@@ -141,7 +143,8 @@ public class EventService {
      * @return The response from the server.
      */
     public ResponseEntity<?> delete(UUID eventID) {
-        log.info("delete eventID: {}", eventID);
+        log.info("Eventplaner EventService -> delete() is called: {}", eventID);
+
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/" + eventID;
 
@@ -166,7 +169,8 @@ public class EventService {
      * @return The response from the server.
      */
     public ResponseEntity<?> addUser(UUID eventID, UUID userID) {
-        log.info("addUser: eventID={}, userID={}", eventID, userID);
+        log.info("Eventplaner EventService -> addUser() is called: {} and {}", eventID, userID);
+
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/" + eventID + "/add/" + userID;
 
@@ -192,7 +196,8 @@ public class EventService {
      * @return The response from the server.
      */
     public ResponseEntity<?> removeUser(UUID eventID, UUID userID) {
-        log.info("removeUser: eventID={}, user={}", eventID, userID);
+        log.info("Eventplaner EventService -> removeUser() is called: {} and {}", eventID, userID);
+
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/" + eventID + "/remove/" + userID;
 
@@ -217,7 +222,8 @@ public class EventService {
      * @return The response from the server.
      */
     public ResponseEntity<?> removeUserFromAllEvents(UUID userID) {
-        log.info("removeUser: userID={}", userID);
+        log.info("Eventplaner EventService -> removeUserFromAllEvents() is called: {}", userID);
+
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/remove/" + userID;
 
@@ -244,7 +250,7 @@ public class EventService {
      * @return The response from the server.
      */
     public ResponseEntity<?> addRating(UUID eventID, UUID userID, int rating) {
-        log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
+        log.info("Eventplaner EventService -> addRating() is called: {} and {} and {}", eventID, userID, rating);
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/" + eventID + "/" + userID + "/" + rating;
