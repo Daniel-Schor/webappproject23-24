@@ -8,7 +8,6 @@
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(to bottom, #ff6f61, #1e3c72);
-            /* Lebhafte Farbkombination */
             margin: 0;
             padding: 0;
             display: flex;
@@ -23,7 +22,6 @@
             margin: 20px auto;
             border-collapse: collapse;
             background-color: rgba(0, 0, 0, 0.7);
-            /* Dunkler transparenter Hintergrund */
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
         }
 
@@ -45,7 +43,6 @@
             font-size: 3em;
             margin-bottom: 20px;
             color: #ffc947;
-            /* Gelb-Orange für den Titel */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
             margin-top: 0;
         }
@@ -53,7 +50,6 @@
         a {
             text-decoration: none;
             color: #f5a623;
-            /* Goldgelb für die Links */
             font-weight: bold;
             font-size: 20px;
             transition: color 0.3s ease-in-out;
@@ -61,7 +57,6 @@
 
         a:hover {
             color: #e07a02;
-            /* Dunkleres Gelb beim Hover */
         }
 
         .flex-container {
@@ -86,31 +81,18 @@
             <tr th:each="user : ${users}">
                 <td>
                     <div class="flex-container">
-                        <a th:href="@{/web/user-details/{userID}(userID=${user.userID})}"
-                            onclick="getUser('${user.userID}')"
-                            th:text="${user.firstName + ' ' + user.lastName}"></a>
-
-                        <a class="right-align" th:if="${user.organizer}"
-                            th:href="@{/users/{userID}(userID=${user.userID})}" th:text="' Organizer'"></a>
+                        <div>
+                            <p th:text="${user.username}"></p>
+                        </div>
                     </div>
                 </td>
             </tr>
         </tbody>
     </table>
 
-    <a href="/web/home">Back to Home</a>
+    
 
-    <script>
-        function getUser(userID) {
-            fetch(`/web/user-details/${userID}`)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('userDetailsContainer').innerHTML = data;
-                })
-                .catch(error => console.error('Error:', error));
-        }
-    </script>
-
+    <a href="/web/users">Back to Home</a>
 
 </body>
 

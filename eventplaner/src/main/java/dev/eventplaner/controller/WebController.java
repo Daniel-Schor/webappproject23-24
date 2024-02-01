@@ -244,4 +244,25 @@ public class WebController {
         return "redirect:events";
     }
 
+    @GetMapping("/user-details/{userID}")
+public String showUserDetails(@PathVariable("userID") UUID userID, Model model) {
+    ResponseEntity<?> userResponse = userService.getUser(userID);
+
+    if (userResponse.getStatusCode() == HttpStatus.OK) {
+        Object responseBody = userResponse.getBody();
+
+        if (responseBody instanceof UserDTO) {
+            UserDTO user = (UserDTO) responseBody;
+            model.addAttribute("user", user);
+        } else {
+            log.warn("WebController: Invalid response body type for user ID: {}", userID);
+        }
+    } else {
+        log.warn("WebController: Error retrieving user ID: {}. Status code: {}", userID, userResponse.getStatusCode());
+    }
+
+    return "user-details";
+}
+
+
 }
