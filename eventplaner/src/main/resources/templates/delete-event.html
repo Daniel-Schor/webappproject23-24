@@ -30,32 +30,30 @@
         }
 
         function deleteEvent() {
-            var eventId = document.getElementById("eventId").value;
+    var eventId = document.getElementById("eventId").value;
 
-            fetch('web/manage/delete-event/' + eventId, {
-                method: 'DELETE',
-
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        if (response.status === 404) {
-                            alert("Event not found. The event may have already been deleted.");
-                            window.location.href = '/web/events';
-                        } else {
-                            console.log('Status:', response.status);
-                            console.log('Status text:', response.statusText);
-                            alert("Something went wrong!");
-                        }
-                    } else {
-                        alert("The event has been deleted!");
-                        window.location.href = '/web/events';
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    alert("Something went wrong!" + error.toString());
-                });
+    fetch('/web/manage/delete-event/' + eventId, {
+        method: 'DELETE',
+    })
+    .then(response => {
+        if (!response.ok) {
+            if (response.status === 404) {
+                alert("Event not found. The event may have already been deleted.");
+                window.location.href = '/web/events';
+            } else {
+                alert("Something went wrong!" + response.status);
+            }
+        } else {
+            alert("The event has been deleted!");
+            window.location.href = '/web/events';
         }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        alert("Something went wrong!" + error.toString());
+    });
+}
+
 
         function cancelDelete() {
             document.getElementById("deleteForm").style.display = "block";
