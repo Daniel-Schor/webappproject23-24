@@ -38,7 +38,8 @@ public class UserService {
      *         user exists.
      */
     public ResponseEntity<?> getUser(UUID userID) {
-        log.info("get user by userID: {}", userID);
+        log.info("Eventplaner UserService -> getUser() is called: {}", userID);
+
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users/" + userID;
 
@@ -62,7 +63,7 @@ public class UserService {
      * @return The response from the server.
      */
     public ResponseEntity<?> create(User user) {
-        log.info("User Created: {}", user.getID());
+        log.info("Eventplaner UserService -> create() is called: {}", user.getID());
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users";
@@ -88,6 +89,8 @@ public class UserService {
      * @return The response from the server.
      */
     public ResponseEntity<?> delete(UUID userID) {
+        log.info("Eventplaner UserService -> delete() is called: {}", userID);
+
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users/" + userID;
 
@@ -112,7 +115,7 @@ public class UserService {
      * @return The response from the server.
      */
     public ResponseEntity<?> update(User user) {
-        log.info("User Updated: {}", user.getID());
+        log.info("Eventplaner UserService -> update() is called: {}", user.getID());
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users/" + user.getID();
@@ -138,7 +141,7 @@ public class UserService {
      * @return The response from the server.
      */
     public ResponseEntity<?> getAllDTO() {
-        log.info("get all Users as DTO");
+        log.info("Eventplaner UserService -> getAllDTO() is called");
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users";
