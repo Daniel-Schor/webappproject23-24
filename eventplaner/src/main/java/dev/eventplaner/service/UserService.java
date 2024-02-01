@@ -31,11 +31,19 @@ public class UserService {
     String apiUrl;
 
     /**
-     * Retrieves a user by their ID.
+     * Retrieves a specific user from the repository.
      *
-     * @param userID The ID of the user to retrieve.
-     * @return The User object corresponding to the given ID, or null if no such
-     *         user exists.
+     * This method sends a GET request to the repository to retrieve a user with the
+     * specified ID. The URL for the repository is constructed by appending
+     * "/users/" and the user ID to the base API URL. If the repository returns an
+     * error, the method catches the HttpClientErrorException and returns a
+     * ResponseEntity with the error message and status code from the exception.
+     *
+     * @param userID The ID of the user to be retrieved.
+     * @return A ResponseEntity containing the response from the repository. If the
+     *         retrieval was successful, the status code will be HttpStatus.OK and
+     *         the body will contain the user. If an error occurred, the status code
+     *         and error message from the HttpClientErrorException will be returned.
      */
     public ResponseEntity<?> getUser(UUID userID) {
         log.info("Eventplaner UserService -> getUser() is called: {}", userID);
@@ -54,10 +62,21 @@ public class UserService {
     }
 
     /**
-     * Creates a new user.
+     * Creates a new user in the repository.
      *
-     * @param user The User object to create.
-     * @return The response from the server.
+     * This method sends a POST request to the repository to create a new user. The
+     * URL for the repository is constructed by appending "/users" to the base API
+     * URL. The user to be created is included in the body of the request. If the
+     * repository returns an error, the method catches the HttpClientErrorException
+     * and returns a ResponseEntity with the error message and status code from the
+     * exception.
+     *
+     * @param user The user to be created.
+     * @return A ResponseEntity containing the response from the repository. If the
+     *         creation was successful, the status code will be HttpStatus.CREATED
+     *         and the body will contain the ID of the created user. If an error
+     *         occurred, the status code and error message from the
+     *         HttpClientErrorException will be returned.
      */
     public ResponseEntity<?> create(User user) {
         log.info("Eventplaner UserService -> create() is called: {}", user.getID());
@@ -73,14 +92,23 @@ public class UserService {
             return restTemplate.exchange(url, HttpMethod.POST, request, String.class);
         } catch (HttpClientErrorException e) {
             return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
-       }
+        }
     }
 
     /**
-     * Deletes a user by their ID.
+     * Deletes a specific user from the repository.
      *
-     * @param userID The ID of the user to delete.
-     * @return The response from the server.
+     * This method sends a DELETE request to the repository to delete a user with
+     * the specified ID. The URL for the repository is constructed by appending
+     * "/users/" and the user ID to the base API URL. If the repository returns an
+     * error, the method catches the HttpClientErrorException and returns a
+     * ResponseEntity with the error message and status code from the exception.
+     *
+     * @param userID The ID of the user to be deleted.
+     * @return A ResponseEntity containing the response from the repository. If the
+     *         deletion was successful, the status code will be
+     *         HttpStatus.NO_CONTENT. If an error occurred, the status code and
+     *         error message from the HttpClientErrorException will be returned.
      */
     public ResponseEntity<?> delete(UUID userID) {
         log.info("Eventplaner UserService -> delete() is called: {}", userID);
@@ -95,14 +123,24 @@ public class UserService {
             return restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
         } catch (HttpClientErrorException e) {
             return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
-       }
+        }
     }
 
     /**
-     * Updates a user.
+     * Updates a specific user in the repository.
      *
-     * @param user The User object to update.
-     * @return The response from the server.
+     * This method sends a PUT request to the repository to update a user with the
+     * specified ID. The URL for the repository is constructed by appending
+     * "/users/" and the user ID to the base API URL. The user to be updated is
+     * included in the body of the request. If the repository returns an error, the
+     * method catches the HttpClientErrorException and returns a ResponseEntity with
+     * the error message and status code from the exception.
+     *
+     * @param user The user to be updated.
+     * @return A ResponseEntity containing the response from the repository. If the
+     *         update was successful, the status code will be HttpStatus.OK. If an
+     *         error occurred, the status code and error message from the
+     *         HttpClientErrorException will be returned.
      */
     public ResponseEntity<?> update(User user) {
         log.info("Eventplaner UserService -> update() is called: {}", user.getID());
@@ -122,9 +160,19 @@ public class UserService {
     }
 
     /**
-     * Retrieves all users as DTOs.
+     * Retrieves all users from the repository.
      *
-     * @return The response from the server.
+     * This method sends a GET request to the repository to retrieve all users. The
+     * URL for the repository is constructed by appending "/users" to the base API
+     * URL. If the repository returns an error, the method catches the
+     * HttpClientErrorException and returns a ResponseEntity with the error message
+     * and status code from the exception.
+     *
+     * @return A ResponseEntity containing the response from the repository. If the
+     *         retrieval was successful, the status code will be HttpStatus.OK and
+     *         the body will contain a list of all users. If an error occurred, the
+     *         status code and error message from the HttpClientErrorException will
+     *         be returned.
      */
     public ResponseEntity<?> getAllDTO() {
         log.info("Eventplaner UserService -> getAllDTO() is called");

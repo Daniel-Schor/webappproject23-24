@@ -34,10 +34,19 @@ public class EventService {
     private String apiUrl;
 
     /**
-     * Creates a new event.
+     * Creates a new event in the repository.
      *
-     * @param event The event to create.
-     * @return The response from the repository.
+     * This method sends a POST request to the repository with the new event as the
+     * body. The URL for the repository is constructed by appending "/events" to the
+     * base API URL. If the repository returns an error, the method catches the
+     * HttpClientErrorException and returns a ResponseEntity with the error message
+     * and status code from the exception.
+     *
+     * @param event The new event to be created.
+     * @return A ResponseEntity containing the response from the repository. If the
+     *         creation was successful, the status code will be HttpStatus.CREATED.
+     *         If an error occurred, the status code and error message from the
+     *         HttpClientErrorException will be returned.
      */
     public ResponseEntity<?> create(Event event) {
         log.info("Event Created: {}, {}", event.getName(), event.getID());
@@ -57,9 +66,16 @@ public class EventService {
     }
 
     /**
-     * Retrieves all events.
+     * Retrieves all events from the repository.
      *
-     * @return A string representation of all events.
+     * This method sends a GET request to the repository to retrieve all events. The
+     * URL for the repository is constructed by appending "/events" to the base API
+     * URL. If the repository returns an error, the method catches the
+     * HttpClientErrorException and returns the error message and status code from
+     * the exception.
+     *
+     * @return A string representation of the response body if the retrieval was
+     *         successful, or an error message if an error occurred.
      */
     public String getAll() {
         log.info("get all Events");
@@ -77,9 +93,18 @@ public class EventService {
     }
 
     /**
-     * Retrieves all events as DTOs.
+     * Retrieves all events from the repository, converts them to DTOs, and returns
+     * them.
      *
-     * @return The response from the repository.
+     * This method sends a GET request to the repository to retrieve all events. It
+     * then converts each event to a DTO and adds it to a collection. If the
+     * repository returns an error, the method catches the HttpClientErrorException
+     * and returns a ResponseEntity with the error message and status code from the
+     * exception.
+     *
+     * @return A ResponseEntity containing a collection of EventDTOs if the
+     *         retrieval was successful, or an error message and status code if an
+     *         error occurred.
      */
     public ResponseEntity<?> getAllDTO() {
         log.info("get all Events as DTO");
@@ -123,10 +148,17 @@ public class EventService {
     }
 
     /**
-     * Retrieves an event string by its ID.
+     * Retrieves a specific event from the repository and returns it as a string.
      *
-     * @param eventID The ID of the event to retrieve.
-     * @return A string representation of the event.
+     * This method sends a GET request to the repository to retrieve an event with
+     * the specified ID. The URL for the repository is constructed by appending
+     * "/events/" and the event ID to the base API URL. If the repository returns an
+     * error, the method catches the HttpClientErrorException and returns the error
+     * message as a string.
+     *
+     * @param eventID The ID of the event to be retrieved.
+     * @return A string representation of the event if the retrieval was successful,
+     *         or an error message if an error occurred.
      */
     public String getEventString(UUID eventID) {
         log.info("get event by eventID: {}", eventID);
@@ -145,10 +177,20 @@ public class EventService {
     }
 
     /**
-     * Retrieves an event by its ID.
+     * Retrieves a specific event from the repository.
      *
-     * @param eventID The ID of the event to retrieve.
-     * @return The response from the repository.
+     * This method sends a GET request to the repository to retrieve an event with
+     * the specified ID. The URL for the repository is constructed by appending
+     * "/events/" and the event ID to the base API URL. If the repository returns an
+     * error, the method catches the HttpClientErrorException and returns a
+     * ResponseEntity with the error message and status code from the exception.
+     *
+     * @param eventID The ID of the event to be retrieved.
+     * @return A ResponseEntity containing the response from the repository. If the
+     *         retrieval was successful, the status code will be HttpStatus.OK and
+     *         the body will contain the event. If an error occurred, the status
+     *         code and error message from the HttpClientErrorException will be
+     *         returned.
      */
     public ResponseEntity<?> getEvent(UUID eventID) {
         log.info("get event by eventID: {}", eventID);
@@ -167,10 +209,14 @@ public class EventService {
     }
 
     /**
-     * Updates an event.
+     * Updates an existing event in the repository.
      *
-     * @param event The event to update.
-     * @return The response from the repository.
+     * This method sends a PUT request to the repository with the event as the body.
+     * If the repository returns an error, the method catches the
+     * HttpClientErrorException and returns its response.
+     *
+     * @param event The event to be updated.
+     * @return A ResponseEntity containing the response from the repository.
      */
     public ResponseEntity<?> update(Event event) {
         log.info("update event: {}", event.getID());
@@ -190,10 +236,19 @@ public class EventService {
     }
 
     /**
-     * Deletes an event.
+     * Deletes a specific event from the repository.
      *
-     * @param eventID The ID of the event to delete.
-     * @return The response from the repository.
+     * This method sends a DELETE request to the repository to delete an event with
+     * the specified ID. The URL for the repository is constructed by appending
+     * "/events/" and the event ID to the base API URL. If the repository returns an
+     * error, the method catches the HttpClientErrorException and returns a
+     * ResponseEntity with the error message and status code from the exception.
+     *
+     * @param eventID The ID of the event to be deleted.
+     * @return A ResponseEntity containing the response from the repository. If the
+     *         deletion was successful, the status code will be
+     *         HttpStatus.NO_CONTENT. If an error occurred, the status code and
+     *         error message from the HttpClientErrorException will be returned.
      */
     public ResponseEntity<?> delete(UUID eventID) {
         log.info("delete eventID: {}", eventID);
@@ -213,11 +268,18 @@ public class EventService {
     }
 
     /**
-     * Adds a user to an event.
+     * Adds a user to a specific event.
      *
-     * @param eventID The ID of the event.
-     * @param userID  The ID of the user.
+     * This method retrieves an event with the specified ID, adds a user with the
+     * specified ID to the event's participants, and updates the event in the
+     * repository. If the event does not exist or the user cannot be added to the
+     * event's participants, the method throws an IllegalArgumentException.
+     *
+     * @param eventID The ID of the event to which the user will be added.
+     * @param userID  The ID of the user to be added to the event.
      * @return The updated event.
+     * @throws IllegalArgumentException If the event does not exist or the user
+     *                                  cannot be added to the event's participants.
      */
     public Event addUser(UUID eventID, UUID userID) throws IllegalArgumentException {
         log.info("addUser: eventID={}, userID={}", eventID, userID);
@@ -236,11 +298,17 @@ public class EventService {
     }
 
     /**
-     * Removes a user from an event.
+     * Removes a user from a specific event.
      *
-     * @param eventID The ID of the event.
-     * @param userID  The ID of the user.
-     * @return The updated event.
+     * This method retrieves an event with the specified ID, removes a user with the
+     * specified ID from the event's participants, and updates the event in the
+     * repository. If the event does not exist or the user cannot be removed from
+     * the event's participants, the method returns null.
+     *
+     * @param eventID The ID of the event from which the user will be removed.
+     * @param userID  The ID of the user to be removed from the event.
+     * @return The updated event if the user was successfully removed, or null if
+     *         the event does not exist or the user could not be removed.
      */
     public Event removeUser(UUID eventID, UUID userID) {
         log.info("removeUser: eventID={}, user={}", eventID, userID);
@@ -259,7 +327,12 @@ public class EventService {
     /**
      * Removes a user from all events.
      *
-     * @param userID The ID of the user.
+     * This method retrieves all events, and for each event, it removes a user with
+     * the specified ID from the event's participants and updates the event in the
+     * repository. If the user is not a participant of an event, that event is not
+     * updated.
+     *
+     * @param userID The ID of the user to be removed from all events.
      */
     public void removeUser(UUID userID) {
         log.info("removeUser: userId={}", userID);
@@ -271,13 +344,26 @@ public class EventService {
     }
 
     /**
-     * Adds a rating to an event.
+     * Adds a rating for a specific event from a specific user.
      *
+<<<<<<< HEAD
+     * This method retrieves an event with the specified ID, and if the event exists
+     * and contains the user with the specified ID, it adds the specified rating for
+     * the user and updates the event in the repository. If the event does not exist
+     * or does not contain the user, the method returns null.
+     *
+     * @param eventID The ID of the event to be rated.
+     * @param userID  The ID of the user who is rating the event.
+     * @param rating  The rating to be added.
+     * @return The updated event if the rating was successfully added, or null if
+     *         the event does not exist or does not contain the user.
+=======
      * @param eventID The ID of the event.
      * @param userID  The ID of the user.
      * @param rating  The rating to add.
      * @return A string representation of the updated event.
      * @throws NotFoundException
+>>>>>>> ecb2b325d8ca12bcd968b360bcca05bff0743b6d
      */
     public Event addRating(UUID eventID, UUID userID, int rating) throws NotFoundException, IllegalArgumentException {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);

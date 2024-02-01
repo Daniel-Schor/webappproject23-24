@@ -7,22 +7,19 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * This class represents the security configuration for the application.
- * It is annotated with @Configuration to indicate that it is a configuration
- * class.
- * It is also annotated with @EnableWebSecurity to enable Spring Security's web
- * security support.
+ * This class provides the security configuration for the application.
  */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     /**
-     * This method configures the SecurityFilterChain.
-     * It disables the Cross-Site Request Forgery (CSRF) protection.
+     * Configures the security filter chain.
      *
-     * @param http The HttpSecurity object to modify.
-     * @return The SecurityFilterChain object that has been built.
+     * This method configures the HttpSecurity object by disabling Cross-Site Request Forgery (CSRF) protection. After the configuration, it builds the HttpSecurity object into a SecurityFilterChain object and returns it.
+     *
+     * @param http The HttpSecurity object to be configured.
+     * @return The configured SecurityFilterChain object.
      * @throws Exception If an error occurs during the configuration.
      */
     @Bean
