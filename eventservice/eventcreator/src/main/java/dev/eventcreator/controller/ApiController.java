@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.eventcreator.model.Event;
 import dev.eventcreator.service.EventService;
-import io.micrometer.core.ipc.http.HttpSender.Response;
 
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -41,7 +40,6 @@ public class ApiController {
     @Autowired
     private EventService eventService;
 
-    // TODO add javadoc
     public ResponseEntity<?> checkProcessability(Event event) {
         String detail = Event.isValid(event);
         if (detail != null) {
@@ -94,17 +92,8 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
         log.info("Create new Event: {}", event.getName());
-<<<<<<< HEAD
-
-        ResponseEntity<?> response = checkProcessability(event);
-        if (response == null) {
-            return eventService.create(event);
-        }
-        return response;
-=======
         
         return eventService.create(event);
->>>>>>> c2f6757743f990f85505a8f097a152722f5d9046
     }
 
     /**
@@ -229,12 +218,12 @@ public class ApiController {
             return response;
         }
 
-        String event = eventService.addRating(eventID, userID, rating);
+        Event event = eventService.addRating(eventID, userID, rating);
         if (event == null) {
             return ResponseEntity.notFound().build();
         }
 
-        return new ResponseEntity<String>(event, HttpStatus.OK);
+        return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
 }

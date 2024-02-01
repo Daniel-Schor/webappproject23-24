@@ -1,6 +1,7 @@
 package dev.userplaner.model;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
@@ -16,8 +17,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
  * It includes fields for the user's ID, first name, last name, and organizer
  * status.
  */
-public class UserDTO {
+public class UserDTO implements Serializable{
 
+    private static final long serialVersionUID = 4L;
+    
     UUID userID;
     String firstName, lastName;
     boolean organizer;
@@ -73,11 +76,7 @@ public class UserDTO {
     public String getFirstName() {
         return firstName;
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> c2f6757743f990f85505a8f097a152722f5d9046
     public String getLastName() {
         return lastName;
     }
@@ -90,19 +89,11 @@ public class UserDTO {
         this.lastName = lastName;
     }
 
-<<<<<<< HEAD
     public boolean isOrganizer() {
         return organizer;
     }
 
     public void setOrganizer(boolean organizer) {
-=======
-    public boolean isOrganizer() { // Add this method
-        return organizer;
-    }
-
-    public void setOrganizer(boolean organizer) { // Add this method
->>>>>>> c2f6757743f990f85505a8f097a152722f5d9046
         this.organizer = organizer;
     }
 

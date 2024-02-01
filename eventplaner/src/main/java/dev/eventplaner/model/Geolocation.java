@@ -1,18 +1,16 @@
 package dev.eventplaner.model;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class Geolocation{
+public class Geolocation implements Serializable{
+
+    private static final long serialVersionUID = 5L;
 
     private double latitude;
     private double longitude;
 
-<<<<<<< HEAD
-=======
-    /**
-     * Constructs a new Geolocation object.
-     */
->>>>>>> c2f6757743f990f85505a8f097a152722f5d9046
     public Geolocation() {
         this.latitude = 0;
         this.longitude = 0;

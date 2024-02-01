@@ -1,12 +1,15 @@
 package dev.eventcreator.model;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
  * This class represents a Data Transfer Object (DTO) for an event.
  * It includes properties for the event's ID and name.
  */
-public class EventDTO {
+public class EventDTO  implements Serializable{
+
+    private static final long serialVersionUID = 2L;
 
     private final UUID eventID;
     private String name;

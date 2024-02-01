@@ -1,11 +1,15 @@
 package dev.repoplaner.model;
 
+import java.io.Serializable;
+
 /**
  * The Geolocation class represents a geographical location specified by
  * latitude and longitude coordinates.
  */
-public class Geolocation {
+public class Geolocation implements Serializable{
 
+    private static final long serialVersionUID = 5L;
+    
     private double latitude;
     private double longitude;
 

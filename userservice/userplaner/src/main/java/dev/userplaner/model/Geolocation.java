@@ -1,10 +1,14 @@
 package dev.userplaner.model;
 
+import java.io.Serializable;
+
 /**
  * Represents a geographical location with latitude and longitude coordinates.
  */
-public class Geolocation {
+public class Geolocation implements Serializable{
 
+    private static final long serialVersionUID = 5L;
+    
     private double latitude;
     private double longitude;
 

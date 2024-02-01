@@ -1,5 +1,6 @@
 package dev.repoplaner.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,8 +15,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-public class Event {
+public class Event implements Serializable{
 
+    private static final long serialVersionUID = 1L;
+    
     @JsonProperty("id")
     private UUID eventID;
     private String name;
@@ -188,7 +191,6 @@ public class Event {
         return event;
     }
 
-    // TODO add javadoc
     public static String isValid(Event event) {
         String detail = null;
         if (event.getDateTime() == null) {

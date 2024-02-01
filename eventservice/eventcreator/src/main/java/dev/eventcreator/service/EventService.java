@@ -17,9 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import dev.eventcreator.model.Event;
 import dev.eventcreator.model.EventDTO;
@@ -70,7 +67,6 @@ public class EventService {
      *
      * @return A string representation of all events.
      */
-    // FIXME use this instead of getAllDTO; test this
     public String getAll() {
         log.info("get all Events");
         RestTemplate restTemplate = new RestTemplate();
@@ -131,8 +127,8 @@ public class EventService {
                 eventDTO.add(newEvent);
             }
         }
-        response = new ResponseEntity<>(convertObjectToJson(eventDTO), HttpStatus.OK);
-        return response;
+        ResponseEntity<?> newResponse = new ResponseEntity<>(eventDTO, HttpStatus.OK);
+        return newResponse;
     }
 
     /**
@@ -313,7 +309,7 @@ public class EventService {
      * @param rating  The rating to add.
      * @return A string representation of the updated event.
      */
-    public String addRating(UUID eventID, UUID userID, int rating) {
+    public Event addRating(UUID eventID, UUID userID, int rating) {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
         String eventString = getEventString(eventID);
         Event event = Event.eventFromJson(eventString);
@@ -323,7 +319,7 @@ public class EventService {
 
         event.rate(userID, rating);
         update(event);
-        return convertObjectToJson(event);
+        return event;
     }
 
     public double getRating(UUID eventID) {
@@ -333,18 +329,4 @@ public class EventService {
         return event.rating();
     }
 
-    // TODO dateTime richtig converten
-    private String convertObjectToJson(Object object) {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        String jsonString = "";
-
-        try {
-            jsonString = mapper.writeValueAsString(object);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return jsonString;
-    }
 }

@@ -36,7 +36,6 @@ public class ApiController {
     @Autowired
     private UserService userService;
 
-    // TODO add javadoc
     public ResponseEntity<?> checkProcessability(User user) {
         String detail = User.isValid(user);
         if (detail != null) {

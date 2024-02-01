@@ -35,7 +35,6 @@ public class ApiController {
     @Autowired
     private RepositoryService repositoryService;
 
-    // TODO add validation
     /**
      * Creates a new event.
      *
@@ -109,7 +108,6 @@ public class ApiController {
         return ResponseEntity.noContent().build();
     }
 
-    // TODO add validation
     /**
      * Creates a new user.
      *

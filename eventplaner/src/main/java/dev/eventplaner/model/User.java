@@ -1,5 +1,6 @@
 package dev.eventplaner.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
@@ -16,7 +17,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
  * It contains information about the user such as their ID, name, email,
  * password, and whether they are an organizer.
  */
-public class User {
+public class User implements Serializable{
+
+    private static final long serialVersionUID = 3L;
+
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     @JsonProperty("id")
     private UUID userID;
@@ -139,7 +143,6 @@ public class User {
         return user;
     }
 
-    // TODO add javadoc
     public static String isValid(User user) {
         String detail = null;
         if (user.getFirstName() == null) {
