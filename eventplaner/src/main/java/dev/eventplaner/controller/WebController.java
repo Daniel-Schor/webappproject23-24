@@ -9,19 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
 import dev.eventplaner.model.Event;
 import dev.eventplaner.model.Geolocation;
 import dev.eventplaner.model.UserDTO;
-import dev.eventplaner.service.EventService;
-import dev.eventplaner.service.UserService;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -38,29 +30,18 @@ public class WebController {
     private static final Logger log = LoggerFactory.getLogger(WebController.class);
 
     @Autowired
-    private EventService eventService;
+    private ApiController apiController;
 
-    @Autowired
-    private UserService userService;
-
+    
     // TODO javadoc
     @GetMapping("/events")
     public String showAllEvents(Model model) {
         log.info("GET localhost:8080/web/events -> showAllEvents is called");
 
         try {
-            ResponseEntity<?> response = eventService.getAllDTO();
+            ResponseEntity<?> response = apiController.getAllEvents();
             String jsonResponse = (String) response.getBody(); // Assuming the response body is a JSON string
-            Collection<Event> events = collectionFromJson(jsonResponse);
-            model.addAttribute("events", events);
-        } catch (Exception e) {
-            log.error("Error retrieving events", e);
-        }
-
-        try {
-            ResponseEntity<?> response = eventService.getAllDTO();
-            String jsonResponse = (String) response.getBody(); // Assuming the response body is a JSON string
-            Collection<Event> events = collectionFromJson(jsonResponse);
+            Collection<Event> events = Event.collectionFromJson(jsonResponse);
             model.addAttribute("events", events);
         } catch (Exception e) {
             log.error("Error retrieving events", e);
@@ -70,30 +51,11 @@ public class WebController {
     }
 
     // TODO javadoc
-    public static Collection<Event> collectionFromJson(String s) {
-        log.info("collectionFromJson() is called");
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-
-        Collection<Event> values = new ArrayList<>();
-
-        try {
-            values = mapper.readValue(s, new TypeReference<Collection<Event>>() {
-            });
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        return values;
-    }
-
-    // TODO javadoc
     @GetMapping("events/{eventID}")
     public String showEventDetails(@PathVariable("eventID") UUID eventID, Model model) {
         log.info("GET localhost:8080/web/events/{} -> showEventDetails() is called: {}", eventID, eventID);
 
-        ResponseEntity<?> response = eventService.getEvent(eventID);
+        ResponseEntity<?> response = apiController.getEvent(eventID);
 
         if (response.getStatusCode() == HttpStatus.OK) {
             Object responseBody = response.getBody();
@@ -118,7 +80,7 @@ public class WebController {
     public String showEventDetailsById(@PathVariable("id") UUID id, Model model) {
         log.info("GET localhost:8080/web/event-details/{} -> showEventDetailsById() is called: {}", id, id);
 
-        ResponseEntity<?> event = eventService.getEvent(id);
+        ResponseEntity<?> event = apiController.getEvent(id);
         model.addAttribute("event", event);
 
         return "event-details";
@@ -135,7 +97,7 @@ public class WebController {
         log.info("GET localhost:8080/web/users -> showAllUsers() is called");
 
         try {
-            ResponseEntity<?> response = userService.getAllDTO();
+            ResponseEntity<?> response = apiController.getAllUsers();
             String jsonResponse = response.getBody().toString(); // Assuming the response body is a JSON string
 
             Collection<UserDTO> users = UserDTO.collectionFromJsonUserDTO(jsonResponse);
@@ -202,7 +164,7 @@ public class WebController {
     public String deleteEvent(@PathVariable("eventID") UUID eventID, Model model) {
         log.info("DELETE localhost:8080/web/manage/delete-event/{} -> deleteEvent() is called: {}", eventID, eventID);
 
-        ResponseEntity<?> response = eventService.delete(eventID);
+        ResponseEntity<?> response = apiController.deleteEvent(eventID);
 
         if (response.getStatusCode() == HttpStatus.OK) {
             log.info("WebController: Event ID: {} deleted", eventID);
@@ -219,7 +181,7 @@ public class WebController {
         log.info("GET localhost:8080/web/manage/check-event/{} -> checkEvent() is called: {}", eventID, eventID);
 
 
-        ResponseEntity<?> response = eventService.getEvent(eventID);
+        ResponseEntity<?> response = apiController.getEvent(eventID);
 
         if (response.getStatusCode() == HttpStatus.OK) {
             return ResponseEntity.ok("{\"exists\": true}");
@@ -258,10 +220,10 @@ public class WebController {
         event.setOrganizerUserID(organizerUserID);
 
         // Add the event to the event list
-        eventService.create(event);
+        apiController.createEvent(event);
 
         // Redirect the user to the event overview
-        model.addAttribute("events", eventService.getAllDTO());
+        model.addAttribute("events", apiController.getAllEvents());
 
         // Redirect the user to the event overview
         return "redirect:events";
@@ -271,7 +233,7 @@ public class WebController {
     public String showUserDetails(@PathVariable("userID") UUID userID, Model model) {
         log.info("GET localhost:8080/web/user-details/{} -> showUserDetails() is called: {}", userID, userID);
 
-        ResponseEntity<?> userResponse = userService.getUser(userID);
+        ResponseEntity<?> userResponse = apiController.getUser(userID);
 
         if (userResponse.getStatusCode() == HttpStatus.OK) {
             Object responseBody = userResponse.getBody();
