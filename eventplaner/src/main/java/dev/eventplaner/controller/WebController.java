@@ -46,7 +46,7 @@ public class WebController {
     // TODO javadoc
     @GetMapping("/events")
     public String showAllEvents(Model model) {
-        log.info("WebController: Showing all events");
+        log.info("GET localhost:8080/web/events -> showAllEvents is called");
 
         try {
             ResponseEntity<?> response = eventService.getAllDTO();
@@ -56,6 +56,7 @@ public class WebController {
         } catch (Exception e) {
             log.error("Error retrieving events", e);
         }
+
         try {
             ResponseEntity<?> response = eventService.getAllDTO();
             String jsonResponse = (String) response.getBody(); // Assuming the response body is a JSON string
@@ -70,9 +71,11 @@ public class WebController {
 
     // TODO javadoc
     public static Collection<Event> collectionFromJson(String s) {
+        log.info("collectionFromJson() is called");
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
         Collection<Event> values = new ArrayList<>();
 
         try {
@@ -81,13 +84,15 @@ public class WebController {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+
         return values;
     }
 
     // TODO javadoc
     @GetMapping("events/{eventID}")
     public String showEventDetails(@PathVariable("eventID") UUID eventID, Model model) {
-        log.info("WebController: Showing details for event ID: {}", eventID);
+        log.info("GET localhost:8080/web/events/{eventID} -> showEventDetails() is called: {}", eventID);
+
         ResponseEntity<?> response = eventService.getEvent(eventID);
 
         if (response.getStatusCode() == HttpStatus.OK) {
@@ -108,10 +113,14 @@ public class WebController {
     }
 
     // TODO javadoc
+    // TODO mapping ohne /web
     @GetMapping("/web/event-details/{id}")
     public String showEventDetailsById(@PathVariable("id") UUID id, Model model) {
+        log.info("GET localhost:8080/web/event-details/{id} -> showEventDetailsById() is called: {}", id);
+
         ResponseEntity<?> event = eventService.getEvent(id);
         model.addAttribute("event", event);
+
         return "event-details";
     }
 
@@ -123,6 +132,8 @@ public class WebController {
      */
     @GetMapping("users")
     public String showAllUsers(Model model) {
+        log.info("GET localhost:8080/web/users -> showAllUsers() is called");
+
         try {
             ResponseEntity<?> response = userService.getAllDTO();
             String jsonResponse = response.getBody().toString(); // Assuming the response body is a JSON string
@@ -133,6 +144,7 @@ public class WebController {
         } catch (Exception e) {
             log.error("Error retrieving events", e);
         }
+
         return "users";
     }
 
@@ -143,7 +155,8 @@ public class WebController {
      */
     @GetMapping("home")
     public String home() {
-        log.info("WebController: Home page requested");
+        log.info("GET localhost:8080/web/home -> home() is called");
+
         return "index";
     }
 
@@ -155,7 +168,8 @@ public class WebController {
      */
     @GetMapping("manage")
     public String showManageEvents(Model model) {
-        log.info("WebController: Showing manage events page");
+        log.info("GET localhost:8080/web/manage -> showManageEvents() is called");
+
         return "manage-events";
     }
 
@@ -167,14 +181,18 @@ public class WebController {
      */
     @GetMapping("manage/add-event")
     public String showAddEventForm(Model model) {
-        log.info("WebController: Showing add event form");
+        log.info("GET localhost:8080/web/manage/add-event -> showAddEventForm() is called");
+
         model.addAttribute("event", new Event());
+
         return "add-event";
     }
 
     // TODO javadoc
     @GetMapping("/web/manage/delete-event")
     public String showDeleteEventPage(Model model) {
+        log.info("GET localhost:8080/web/manage/delete-event -> showDeleteEventPage() is called");
+
         return "delete-event";
 
     }
@@ -182,7 +200,7 @@ public class WebController {
     // TODO javadoc
     @DeleteMapping("/manage/delete-event/{eventID}")
     public String deleteEvent(@PathVariable("eventID") UUID eventID, Model model) {
-        log.info("WebController: Deleting event ID: {}", eventID);
+        log.info("DELETE localhost:8080/web/manage/delete-event/{eventID} -> deleteEvent() is called: {}", eventID);
 
         ResponseEntity<?> response = eventService.delete(eventID);
 
@@ -198,6 +216,9 @@ public class WebController {
     // TODO javadoc
     @GetMapping("/manage/check-event/{eventID}")
     public ResponseEntity<?> checkEvent(@PathVariable("eventID") UUID eventID) {
+        log.info("GET localhost:8080/web/manage/check-event/{eventID} -> checkEvent() is called: {}", eventID);
+
+
         ResponseEntity<?> response = eventService.getEvent(eventID);
 
         if (response.getStatusCode() == HttpStatus.OK) {
@@ -208,6 +229,7 @@ public class WebController {
     }
 
     // TODO javadoc
+    // TODO add particapnts spalte löschen
     @PostMapping("manage/add-event")
     public String addEvent(@RequestParam("name") String name,
             @RequestParam("description") String description,
@@ -217,11 +239,12 @@ public class WebController {
             @RequestParam("maxParticipants") int maxParticipants,
             @RequestParam(value = "organizerUserID", required = false) UUID organizerUserID,
             Model model) {
-        log.info("WebController: Adding new event: {}", name);
 
         // Create new event instance
         Event event = new Event();
 
+        log.info("POST localhost:8080/web/manage/add-event -> addEvent() is called: {}", event.getID());
+        
         // Insert the parameters into the event instance
         event.setName(name);
         event.setDescription(description);
@@ -245,24 +268,26 @@ public class WebController {
     }
 
     @GetMapping("/user-details/{userID}")
-public String showUserDetails(@PathVariable("userID") UUID userID, Model model) {
-    ResponseEntity<?> userResponse = userService.getUser(userID);
+    public String showUserDetails(@PathVariable("userID") UUID userID, Model model) {
+        log.info("GET localhost:8080/web/user-details/{userID} -> showUserDetails() is called: {}", userID);
 
-    if (userResponse.getStatusCode() == HttpStatus.OK) {
-        Object responseBody = userResponse.getBody();
+        ResponseEntity<?> userResponse = userService.getUser(userID);
 
-        if (responseBody instanceof UserDTO) {
-            UserDTO user = (UserDTO) responseBody;
-            model.addAttribute("user", user);
+        if (userResponse.getStatusCode() == HttpStatus.OK) {
+            Object responseBody = userResponse.getBody();
+
+            if (responseBody instanceof UserDTO) {
+                UserDTO user = (UserDTO) responseBody;
+                model.addAttribute("user", user);
+            } else {
+                log.warn("WebController: Invalid response body type for user ID: {}", userID);
+            }
         } else {
-            log.warn("WebController: Invalid response body type for user ID: {}", userID);
+            log.warn("WebController: Error retrieving user ID: {}. Status code: {}", userID,
+                    userResponse.getStatusCode());
         }
-    } else {
-        log.warn("WebController: Error retrieving user ID: {}. Status code: {}", userID, userResponse.getStatusCode());
+
+        return "user-details";
     }
-
-    return "user-details";
-}
-
 
 }
