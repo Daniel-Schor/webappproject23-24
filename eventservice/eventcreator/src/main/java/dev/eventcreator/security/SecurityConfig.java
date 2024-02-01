@@ -15,12 +15,12 @@ public class SecurityConfig {
 
     /**
      * Configures the security filter chain.
-     * The Cross-Site Request Forgery (CSRF) protection is disabled in this
-     * configuration.
      *
-     * @param http The HttpSecurity object to configure.
-     * @return The configured SecurityFilterChain.
-     * @throws Exception If an error occurs during configuration.
+     * This method configures the HttpSecurity object by disabling Cross-Site Request Forgery (CSRF) protection. After the configuration, it builds the HttpSecurity object into a SecurityFilterChain object and returns it.
+     *
+     * @param http The HttpSecurity object to be configured.
+     * @return The configured SecurityFilterChain object.
+     * @throws Exception If an error occurs during the configuration.
      */
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
