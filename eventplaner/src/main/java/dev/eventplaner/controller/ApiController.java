@@ -2,6 +2,7 @@ package dev.eventplaner.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -167,7 +168,7 @@ public class ApiController {
     public ResponseEntity<?> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
         log.info("PUT localhost:8080/events/{} -> updateEvent({}, Name: {}) is called", eventID, event.getName());
 
-        ResponseEntity<?> response = eventService.update(event);
+        ResponseEntity<?> response = eventService.update(event.setID(eventID));
 
         return response;
     }
@@ -215,7 +216,7 @@ public class ApiController {
 
         ResponseEntity<?> response;
         if (userService.getUser(userID).getStatusCode() == HttpStatus.NOT_FOUND) {
-            response = ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            response = ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         } else {
             response = eventService.addUser(eventID, userID);
         }
@@ -304,9 +305,6 @@ public class ApiController {
     public ResponseEntity<?> getEventParticipants(@PathVariable("eventID") UUID eventID) {
         log.info("GET localhost:8080/events/{}/participants -> getEventParticipants({}) is called", eventID, eventID);
 
-        ResponseEntity<?> response;
-        Collection<UserDTO> participants = new ArrayList<>();
-
         ResponseEntity<?> eventResponse = eventService.getEvent(eventID);
         if (eventResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
             return eventResponse;
@@ -314,18 +312,20 @@ public class ApiController {
 
         Event event = Event.eventFromJson(eventResponse.getBody().toString());
 
-        for (UUID userID : event.getParticipants().keySet()) {
+        Set<UUID> participantIDs = event.getParticipants().keySet();
+        if (participantIDs.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        Collection<UserDTO> participants = new ArrayList<>();
+
+        for (UUID userID : participantIDs) {
             User user = User.userFromJson(userService.getUser(userID).getBody().toString());
             UserDTO userDTO = new UserDTO(user);
             participants.add(userDTO);
         }
-        if (participants.isEmpty()) {
-            response = ResponseEntity.noContent().build();
-        } else {
-            response = ResponseEntity.ok(participants);
-        }
 
-        return response;
+        return ResponseEntity.ok(participants);
     }
 
     /**

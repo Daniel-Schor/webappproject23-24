@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
@@ -39,17 +40,6 @@ public class ApiController {
     // instance into this class.
     @Autowired
     private EventService eventService;
-
-    public ResponseEntity<?> checkProcessability(Event event) {
-        String detail = Event.isValid(event);
-        if (detail != null) {
-            ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, detail);
-            pd.setInstance(URI.create("/events"));
-            pd.setTitle("JSON Object Error");
-            return ResponseEntity.unprocessableEntity().body(pd);
-        }
-        return null;
-    }
 
     /**
      * Retrieves a list of all events.
@@ -119,8 +109,12 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
         log.info("POST localhost:8081/events -> createEvent(Name: {}) is called", event.getName());
-
-        return eventService.create(event);
+        
+        ResponseEntity<?> response = checkProcessability(event);
+        if (response == null) {
+            return eventService.create(event);
+        }
+        return response;
     }
 
     /**
@@ -151,6 +145,17 @@ public class ApiController {
             return eventService.update(event.setID(eventID));
         }
         return response;
+    }
+
+    public ResponseEntity<?> checkProcessability(Event event) {
+        String detail = Event.isValid(event);
+        if (detail != null) {
+            ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, detail);
+            pd.setInstance(URI.create("/events"));
+            pd.setTitle("JSON Object Error");
+            return ResponseEntity.unprocessableEntity().body(pd);
+        }
+        return null;
     }
 
     /**
@@ -201,19 +206,17 @@ public class ApiController {
         log.info("PUT localhost:8081/events/{}/add/{} -> addParticipant({}, {}) is called", eventID, userID, eventID,
                 userID);
 
-        int maxParticipants = Event.eventFromJson(eventService.getEventString(eventID)).getMaxParticipants();
-        int participants = Event.eventFromJson(eventService.getEventString(eventID)).getParticipants().size();
-        if (maxParticipants <= participants + 1) {
-            return ResponseEntity.badRequest().build();
-        }
         ResponseEntity<?> response = eventService.getEvent(eventID);
         if (response.getStatusCode() != HttpStatus.OK) {
             return response;
         }
 
-        Event event = eventService.addUser(eventID, userID);
-
-        return new ResponseEntity<Event>(event, HttpStatus.OK);
+        try {
+            Event event = eventService.addUser(eventID, userID);
+            return new ResponseEntity<Event>(event, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     /**
@@ -239,8 +242,7 @@ public class ApiController {
     public ResponseEntity<?> removeParticipant(@PathVariable("eventID") UUID eventID,
             @PathVariable("userID") UUID userID) {
         log.info("PUT localhost:8081/events/{}/remove/{} -> removeParticipant({}, {}) is called", eventID, userID,
-                eventID,
-                userID);
+                eventID, userID);
 
         ResponseEntity<?> response = eventService.getEvent(eventID);
         if (response.getStatusCode() != HttpStatus.OK) {
@@ -249,7 +251,7 @@ public class ApiController {
 
         Event event = eventService.removeUser(eventID, userID);
         if (event == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not in Event.");
         }
         return new ResponseEntity<Event>(event, HttpStatus.OK);
     }
@@ -309,21 +311,19 @@ public class ApiController {
         log.info("PUT localhost:8081/events/{}/{}/{} -> rateEvent({}, {}, {}) is called", eventID, userID, rating,
                 eventID, userID, rating);
 
-        if (rating <= 0 || rating > 5) {
-            return ResponseEntity.badRequest().build();
-        }
-
         ResponseEntity<?> response = eventService.getEvent(eventID);
         if (response.getStatusCode() != HttpStatus.OK) {
             return response;
         }
 
-        Event event = eventService.addRating(eventID, userID, rating);
-        if (event == null) {
-            return ResponseEntity.notFound().build();
+        try {
+            Event event = eventService.addRating(eventID, userID, rating);
+            return new ResponseEntity<Event>(event, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not in Event.");
         }
-
-        return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
 }

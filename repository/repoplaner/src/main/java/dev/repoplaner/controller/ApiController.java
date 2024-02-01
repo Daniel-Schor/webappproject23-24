@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,9 +58,9 @@ public class ApiController {
      * @return The ResponseEntity containing the updated event object if successful, or a not found response if the event does not exist.
      */
     @PutMapping("/events/{eventID}")
-    public ResponseEntity<Event> updateEvent(@PathVariable UUID eventID, @RequestBody Event event) {
+    public ResponseEntity<?> updateEvent(@PathVariable UUID eventID, @RequestBody Event event) {
         if (repositoryService.getEvent(eventID) == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
         }
         return ResponseEntity.ok(repositoryService.putEvent(event.setID(eventID)));
     }
@@ -86,10 +87,10 @@ public class ApiController {
      * @return the ResponseEntity containing the event if found, or a not found response if the event does not exist
      */
     @GetMapping("/events/{eventID}")
-    public ResponseEntity<Event> getEvent(@PathVariable UUID eventID) {
+    public ResponseEntity<?> getEvent(@PathVariable UUID eventID) {
         Event event = repositoryService.getEvent(eventID);
         if (event == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
         }
         return ResponseEntity.ok(event);
     }
@@ -101,9 +102,9 @@ public class ApiController {
      * @return a ResponseEntity with no content if the event is successfully deleted, or a ResponseEntity with not found status if the event does not exist
      */
     @DeleteMapping("/events/{eventID}")
-    public ResponseEntity<Event> deleteEvent(@PathVariable UUID eventID) {
+    public ResponseEntity<?> deleteEvent(@PathVariable UUID eventID) {
         if (repositoryService.deleteEvent(eventID) == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
         }
         return ResponseEntity.noContent().build();
     }
@@ -130,9 +131,9 @@ public class ApiController {
         * @return ResponseEntity<User> The response entity containing the updated user.
         */
     @PutMapping("/users/{userID}")
-    public ResponseEntity<User> updateUser(@PathVariable UUID userID, @RequestBody User user) {
+    public ResponseEntity<?> updateUser(@PathVariable UUID userID, @RequestBody User user) {
         if (repositoryService.getUser(userID) == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
         return ResponseEntity.ok(repositoryService.putUser(user.setID(userID)));
     }
@@ -143,10 +144,10 @@ public class ApiController {
         * @return ResponseEntity containing a collection of User objects if users exist, or a no content response if no users are found.
         */
     @GetMapping("/users")
-    public ResponseEntity<Collection<User>> getAllUsers() {
+    public ResponseEntity<?> getAllUsers() {
         Collection<User> users = repositoryService.getAllUsers();
         if (users.isEmpty()) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return ResponseEntity.ok(users);
     }
@@ -158,10 +159,10 @@ public class ApiController {
      * @return the ResponseEntity containing the user if found, or a not found response if the user does not exist
      */
     @GetMapping("/users/{userID}")
-    public ResponseEntity<User> getUsers(@PathVariable UUID userID) {
+    public ResponseEntity<?> getUsers(@PathVariable UUID userID) {
         User user = repositoryService.getUser(userID);
         if (user == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
         return ResponseEntity.ok(user);
     }
@@ -174,9 +175,9 @@ public class ApiController {
      * @return ResponseEntity<User> representing the HTTP response
      */
     @DeleteMapping("/users/{userID}")
-    public ResponseEntity<User> deleteUsers(@PathVariable UUID userID) {
+    public ResponseEntity<?> deleteUsers(@PathVariable UUID userID) {
         if (repositoryService.deleteUser(userID) == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
         return ResponseEntity.noContent().build();
     }
