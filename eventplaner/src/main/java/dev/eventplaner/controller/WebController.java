@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import dev.eventplaner.model.Event;
 import dev.eventplaner.model.Geolocation;
+import dev.eventplaner.model.User;
 import dev.eventplaner.model.UserDTO;
 
 import java.time.LocalDateTime;
@@ -113,7 +114,7 @@ public class WebController {
      *         the event details.
      */
     // TODO mapping ohne /web
-    @GetMapping("/web/event-details/{id}")
+    @GetMapping("event-details/{id}")
     public String showEventDetailsById(@PathVariable("id") UUID id, Model model) {
         log.info("GET localhost:8080/web/event-details/{} -> showEventDetailsById() is called: {}", id, id);
 
@@ -312,7 +313,7 @@ public class WebController {
      * @param model           The Model object used to pass attributes to the view.
      * @return A redirect string to the event overview page.
      */
-    // TODO add particapnts spalte löschen
+    
     @PostMapping("manage/add-event")
     public String addEvent(@RequestParam("name") String name,
             @RequestParam("description") String description,
@@ -347,7 +348,7 @@ public class WebController {
         model.addAttribute("events", apiController.getAllEvents());
 
         // Redirect the user to the event overview
-        return "redirect:events";
+        return "redirect:/web/events";
     }
 
     @GetMapping("/user-details/{userID}")
@@ -357,14 +358,8 @@ public class WebController {
         ResponseEntity<?> userResponse = apiController.getUser(userID);
 
         if (userResponse.getStatusCode() == HttpStatus.OK) {
-            Object responseBody = userResponse.getBody();
-
-            if (responseBody instanceof UserDTO) {
-                UserDTO user = (UserDTO) responseBody;
-                model.addAttribute("user", user);
-            } else {
-                log.warn("WebController: Invalid response body type for user ID: {}", userID);
-            }
+            User user = User.userFromJson(userResponse.getBody().toString());
+            model.addAttribute("user", user);
         } else {
             log.warn("WebController: Error retrieving user ID: {}. Status code: {}", userID,
                     userResponse.getStatusCode());

@@ -69,28 +69,32 @@
 
 <body>
 
-    <h1>OUR USERS</h1>
+    <h1>USER</h1>
 
     <table>
-        <thead>
-            <tr>
-                <th>Users</th>
-            </tr>
-        </thead>
         <tbody>
-            <tr th:each="user : ${users}">
-                <td>
-                    <div class="flex-container">
-                        <div>
-                            <p th:text="${user.username}"></p>
-                        </div>
-                    </div>
-                </td>
+            <tr>
+                <td>User ID</td>
+                <td th:text="${user.ID}"></td>
+            </tr>
+            <tr>
+                <td>Firstname</td>
+                <td th:text="${user.firstName}"></td>
+            </tr>
+            <tr>
+                <td>Lastname</td>
+                <td th:text="${user.lastName}"></td>
+            </tr>
+            <tr>
+                <td>email</td>
+                <td th:text="${user.email}"></td>
+            </tr>
+            <tr>
+                <td>organizer</td>
+                <td th:text="${user.organizer}"></td>
             </tr>
         </tbody>
     </table>
-
-    
 
     <a href="/web/users">Back to Home</a>
 
