@@ -28,19 +28,25 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 public class ApiController {
 
-    // Logger instance for this class, used to log system messages, warnings, and errors.
+    // Logger instance for this class, used to log system messages, warnings, and
+    // errors.
     private static final Logger log = LoggerFactory.getLogger(ApiController.class);
 
-    // Autowired annotation is used to automatically inject the EventService and UserService instance into this class.
+    // Autowired annotation is used to automatically inject the EventService and
+    // UserService instance into this class.
     @Autowired
     private EventService eventService;
     @Autowired
     private UserService userService;
 
     /**
-     * Retrieves all users from the database.
+     * Retrieves all users.
      *
-     * @return ResponseEntity containing a collection of UserDTO objects.
+     * This method, mapped to the GET request at '/users', fetches a list of all
+     * registered users.
+     * The response is provided in JSON format and is handled by the userService.
+     *
+     * @return ResponseEntity containing a collection of all users in JSON format.
      */
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllUsers() {
@@ -52,10 +58,15 @@ public class ApiController {
     }
 
     /**
-     * Retrieves a user by their ID
+     * Retrieves a user's details based on their UUID.
      *
-     * @param userID the ID of the user to retrieve.
-     * @return the ResponseEntity containing the user if found, or no content if not found.
+     * This method is mapped to a GET request at '/users/{userID}'. It fetches the
+     * details of the user
+     * identified by the provided userID. The response is in JSON format.
+     *
+     * @param userID The UUID of the user whose details are to be retrieved.
+     * @return ResponseEntity containing the user's details. The response body
+     *         contains the user data in JSON format.
      */
     @GetMapping(value = "users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUser(@PathVariable("userID") UUID userID) {
@@ -69,8 +80,13 @@ public class ApiController {
     /**
      * Creates a new user.
      *
-     * @param user The user object containing the user details.
-     * @return ResponseEntity<?> The response entity containing the created user or an error message.
+     * Mapped to the POST request at '/users', this method creates a new user with
+     * the details
+     * provided in the request body. It consumes and produces JSON format.
+     *
+     * @param user The User object containing the information for the new user.
+     * @return ResponseEntity representing the outcome of the user creation
+     *         operation.
      */
     @PostMapping(value = "users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createUser(@RequestBody User user) {
@@ -81,11 +97,16 @@ public class ApiController {
     }
 
     /**
-     * Updates a user with the given user ID.
+     * Updates a user's information.
      *
-     * @param userID The ID of the user to be updated.
-     * @param user   The updated user object.
-     * @return The ResponseEntity containing the updated user object if successful, or a not found response if the user does not exist.
+     * Mapped to the PUT request at '/users/{userID}', this method updates the
+     * details of a user identified by userID.
+     * The updated user information is provided in JSON format in the request body.
+     * It consumes and produces JSON.
+     *
+     * @param userID The UUID of the user to be updated.
+     * @param user   The User object containing the updated information.
+     * @return ResponseEntity indicating the result of the update operation.
      */
     @PutMapping(value = "users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
@@ -99,19 +120,30 @@ public class ApiController {
     /**
      * Removes the User from a Event.
      *
-     * @param eventID The ID of the event from which the user will be removed.
-     * @param userID  The ID of the user to be removed from the event.
-     * @return ResponseEntity<?> Returns the response entity that includes the status of the operation.
+     * Mapped to the POST request at '/events', this method is responsible for
+     * creating a new event
+     * using the details provided in the request body. It consumes and produces
+     * JSON.
+     *
+     * @param event The Event object containing the details of the new event.
+     * @return ResponseEntity reflecting the result of the event creation operation.
      */
     @PutMapping(value = "events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeUser(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
-        log.info("PUT localhost:8080/events/{}/remove/{} -> removeUser({}, {}) is called", eventID, userID, eventID, userID);
+        log.info("PUT localhost:8080/events/{}/remove/{} -> removeUser({}, {}) is called", eventID, userID, eventID,
+                userID);
         ResponseEntity<?> response = eventService.removeUser(eventID, userID);
 
         return response;
     }
 
-    // TODO javadoc
+    /**
+     * Handles a POST request to create a new event.
+     * Consumes and produces JSON.
+     *
+     * @param event The event to create.
+     * @return A ResponseEntity containing the response from the EventService.
+     */
     @PostMapping(value = "events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
         log.info("POST localhost:8080/events -> createEvent(Name: {}) is called", event.getName());
@@ -120,11 +152,17 @@ public class ApiController {
     }
 
     /**
-     * Update an existing event.
+     * Updates the details of an existing event.
      *
-     * @param eventID The ID of the event to be updated.
-     * @param event   An object of type Event that contains the updated event details.
-     * @return ResponseEntity<Event> Returns the response entity that includes the updated event.
+     * This method, mapped to the PUT request at '/events/{eventID}', updates an
+     * event with new information.
+     * It consumes and produces JSON. The event to be updated is identified by
+     * eventID, and the new event details
+     * are provided in the request body.
+     *
+     * @param eventID The UUID of the event to be updated.
+     * @param event   The updated event object containing the new details.
+     * @return ResponseEntity reflecting the result of the update operation.
      */
     @PutMapping(value = "events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
@@ -136,10 +174,15 @@ public class ApiController {
     }
 
     /**
-     * Delete an existing event.
+     * Deletes an event identified by its UUID.
+     *
+     * Mapped to the DELETE request at '/events/{eventID}', this method is
+     * responsible for deleting
+     * the event corresponding to the given eventID. The deletion process is handled
+     * by the eventService.
      *
      * @param eventID The UUID of the event to be deleted.
-     * @return ResponseEntity<?> Returns the response entity that includes the status of the operation.
+     * @return ResponseEntity reflecting the result of the delete operation.
      */
     @DeleteMapping(value = "events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteEvent(@PathVariable("eventID") UUID eventID) {
@@ -151,16 +194,25 @@ public class ApiController {
     }
 
     /**
-     * Add a participant to an event.
+     * Adds a user as a participant to an event.
      *
-     * @param eventID The ID of the event to which the user will be added.
-     * @param userID  The ID of the user to be added to the event.
-     * @return ResponseEntity<?> Returns the response entity that includes the status of the operation.
+     * This method, mapped to the PUT request at '/events/{eventID}/add/{userID}',
+     * adds the specified user
+     * as a participant to the specified event. It checks if the user exists before
+     * adding to the event.
+     *
+     * @param eventID The UUID of the event to add the participant to.
+     * @param userID  The UUID of the user to be added as a participant.
+     * @return ResponseEntity indicating the outcome of the operation.
+     *         Returns 'User not found' with HttpStatus.NOT_FOUND if the user does
+     *         not exist,
+     *         otherwise reflects the outcome of the addUser operation.
      */
     @PutMapping(value = "events/{eventID}/add/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID,
             @PathVariable("userID") UUID userID) {
-        log.info("PUT localhost:8080/events/{}/add/{} -> addParticipant({}, {}) is called", eventID, userID, eventID, userID);
+        log.info("PUT localhost:8080/events/{}/add/{} -> addParticipant({}, {}) is called", eventID, userID, eventID,
+                userID);
 
         ResponseEntity<?> response;
         if (userService.getUser(userID).getStatusCode() == HttpStatus.NOT_FOUND) {
@@ -173,10 +225,14 @@ public class ApiController {
     }
 
     /**
-     * Delete a user.
+     * Deletes a user identified by UUID.
      *
-     * @param userID The ID of the user to be deleted.
-     * @return ResponseEntity<?> Returns the response entity that includes the status of the operation.
+     * Mapped to the DELETE request at '/users/{userID}', this method removes the
+     * specified user.
+     * It first removes the user from all events and then deletes the user record.
+     *
+     * @param userID The UUID of the user to be deleted.
+     * @return ResponseEntity reflecting the outcome of the delete operation.
      */
     @DeleteMapping(value = "users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteUser(@PathVariable("userID") UUID userID) {
@@ -189,9 +245,13 @@ public class ApiController {
     }
 
     /**
-     * Used to get all events.
+     * Retrieves all events.
      *
-     * @return ResponseEntity<?> Returns the response entity that includes all events.
+     * This method, mapped to the GET request at '/events', fetches all available
+     * events.
+     * It delegates the fetching process to the eventService.
+     *
+     * @return ResponseEntity containing a collection of all events in JSON format.
      */
     @GetMapping(value = "events", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllEvents() {
@@ -203,10 +263,19 @@ public class ApiController {
     }
 
     /**
-     * Get a specific event by its ID.
+     * Retrieves the details of a specific event identified by its UUID.
      *
-     * @param eventID The ID of the event to be retrieved.
-     * @return ResponseEntity<?> Returns the response entity that includes the requested event.
+     * This method is mapped to the GET request at '/events/{eventID}' and is
+     * responsible for fetching
+     * the details of a particular event. The event is identified using the eventID
+     * passed as a path variable.
+     *
+     * @param eventID The UUID of the event to be retrieved.
+     * @return A ResponseEntity containing the event details.
+     *         The response body contains the event data in JSON format if the event
+     *         is found.
+     *         If the event is not found, the ResponseEntity reflects the
+     *         appropriate HTTP status code.
      */
     @GetMapping(value = "events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getEvent(@PathVariable("eventID") UUID eventID) {
@@ -217,13 +286,27 @@ public class ApiController {
         return response;
     }
 
-    // TODO javadoc
+    /**
+     * Retrieves the list of participants for a specific event.
+     *
+     * Mapped to the GET request at '/events/{eventID}/participants', this method
+     * fetches the participants
+     * of an event identified by eventID. The participants are returned as a
+     * collection of UserDTO objects.
+     * If the event is not found, it returns the corresponding HTTP status.
+     *
+     * @param eventID The UUID of the event for which to retrieve participants.
+     * @return ResponseEntity containing a collection of UserDTOs if participants
+     *         are found,
+     *         or the appropriate HTTP status if the event is not found or has no
+     *         participants.
+     */
     @GetMapping(value = "events/{eventID}/participants", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getEventParticipants(@PathVariable("eventID") UUID eventID) {
         log.info("GET localhost:8080/events/{}/participants -> getEventParticipants({}) is called", eventID, eventID);
 
         ResponseEntity<?> eventResponse = eventService.getEvent(eventID);
-        if(eventResponse.getStatusCode()==HttpStatus.NOT_FOUND){
+        if (eventResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
             return eventResponse;
         }
 
@@ -246,17 +329,22 @@ public class ApiController {
     }
 
     /**
-     * Rating of an event by a user.
+     * Rates an event by a user with a specified rating.
      *
-     * @param eventID The ID of the event to be rated.
-     * @param userID  The ID of the user who rates the event.
-     * @param rating  The rating given by the user to the event.
-     * @return ResponseEntity<?> Returns the response entity that includes the status of the operation.
+     * Mapped to a PUT request at '/events/{eventID}/{userID}/{rating}', this method
+     * allows a user to rate an event.
+     * The method delegates to eventService to handle the rating process.
+     *
+     * @param eventID The UUID of the event.
+     * @param userID  The UUID of the user rating the event.
+     * @param rating  The integer rating value.
+     * @return ResponseEntity indicating the outcome of the operation.
      */
     @PutMapping(value = "events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID,
             @PathVariable("rating") int rating) {
-        log.info("PUT localhost:8080/events/{}/{}/{} -> rateEvent({}, {}, {}) is called", eventID, userID, rating, eventID, userID, rating);
+        log.info("PUT localhost:8080/events/{}/{}/{} -> rateEvent({}, {}, {}) is called", eventID, userID, rating,
+                eventID, userID, rating);
 
         ResponseEntity<?> response = eventService.addRating(eventID, userID, rating);
 

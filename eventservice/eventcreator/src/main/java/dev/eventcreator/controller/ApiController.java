@@ -42,10 +42,19 @@ public class ApiController {
     private EventService eventService;
 
     /**
-     * Removes a participant from all events.
+     * Retrieves a list of all events.
      *
-     * @param userID The ID of the user to be removed.
-     * @return A ResponseEntity indicating that the operation was successful.
+     * This method is mapped to the GET request at '/events' and returns all
+     * available events.
+     * It produces a response in JSON format. The actual retrieval of events is
+     * delegated to the
+     * eventService's 'getAllDTO' method.
+     *
+     * @return A ResponseEntity containing a list of all events in JSON format. The
+     *         response
+     *         includes the appropriate HTTP status code based on the success or
+     *         failure of the
+     *         event retrieval operation.
      */
     @GetMapping(value = "/events", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -56,11 +65,20 @@ public class ApiController {
     }
 
     /**
-     * Retrieves the event with the specified event ID.
+     * Retrieves the details of a specific event identified by its UUID.
      *
-     * @param eventID the ID of the event to retrieve
-     * @return a ResponseEntity containing the event if found, or no content if not
-     *         found
+     * This method is mapped to the GET request at '/events/{eventID}' and is
+     * responsible for fetching
+     * the details of an event specified by the provided eventID. The response is in
+     * JSON format.
+     * The actual retrieval process is handled by the eventService's 'getEvent'
+     * method.
+     *
+     * @param eventID The UUID of the event to be retrieved.
+     * @return A ResponseEntity containing the event details in JSON format.
+     *         The response includes the appropriate HTTP status code based on the
+     *         success or failure
+     *         of the event retrieval operation.
      */
     @GetMapping(value = "/events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -71,12 +89,21 @@ public class ApiController {
     }
 
     /**
-     * Creates a new event.
+     * Creates a new event based on the provided event details.
      *
-     * @param event The event object containing the details of the event to be
-     *              created.
-     * @return ResponseEntity representing the HTTP response with the created event
-     *         or an error message.
+     * This method is mapped to the POST request at '/events'. It is responsible for
+     * creating
+     * a new event using the details provided in the request body. The request and
+     * response are
+     * both in JSON format. The event creation process is handled by the
+     * eventService's 'create' method.
+     *
+     * @param event The Event object containing the information for the new event.
+     * @return A ResponseEntity indicating the outcome of the event creation
+     *         process.
+     *         The response includes the appropriate HTTP status code and any
+     *         relevant
+     *         event data in JSON format.
      */
     @PostMapping(value = "/events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -91,12 +118,22 @@ public class ApiController {
     }
 
     /**
-     * Updates an event with the given event ID.
+     * Updates an existing event with new information.
      *
-     * @param eventID The ID of the event to be updated.
-     * @param event   The updated event object.
-     * @return ResponseEntity containing the updated event if successful, or
-     *         ResponseEntity with status 404 if the event is not found.
+     * This method handles a PUT request at '/events/{eventID}' to update an event.
+     * It consumes and produces
+     * JSON format. The event to update is identified by eventID in the URL, and the
+     * new event details are
+     * provided in the request body. Before updating, it checks if the event is
+     * processable using the
+     * 'checkProcessability' method. If processable, it updates the event using the
+     * eventService's 'update' method.
+     *
+     * @param eventID The UUID of the event to be updated.
+     * @param event   The Event object containing the new details for the update.
+     * @return A ResponseEntity indicating the result of the update operation,
+     *         including the appropriate
+     *         HTTP status code and updated event data in JSON format if successful.
      */
     @PutMapping(value = "/events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -122,11 +159,19 @@ public class ApiController {
     }
 
     /**
-     * Deletes an event with the specified event ID.
+     * Deletes an event identified by its UUID.
      *
-     * @param eventID The ID of the event to be deleted.
-     * @return A ResponseEntity containing the deleted event if successful, or a not
-     *         found response if the event does not exist.
+     * This method responds to a DELETE request at '/events/{eventID}'. It is
+     * responsible for deleting
+     * the event corresponding to the given eventID. The deletion process is
+     * delegated to the eventService's
+     * 'delete' method. The method produces a response in JSON format.
+     *
+     * @param eventID The UUID of the event to be deleted.
+     * @return A ResponseEntity indicating the result of the delete operation,
+     *         including the appropriate
+     *         HTTP status code. The response may also include additional
+     *         information about the deletion process.
      */
     @DeleteMapping(value = "/events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -139,9 +184,20 @@ public class ApiController {
     /**
      * Adds a participant to an event.
      *
-     * @param eventID The ID of the event.
-     * @param userID  The ID of the user to be added as a participant.
-     * @return The ResponseEntity containing the updated event information.
+     * This method is mapped to a PUT request at '/events/{eventID}/add/{userID}'
+     * and handles adding a user
+     * as a participant to an event. It first checks if the event can accommodate
+     * more participants based on the
+     * maximum allowed participants. If the event is at capacity or the event
+     * doesn't exist, the method returns
+     * an appropriate error response. Otherwise, it adds the user to the event.
+     *
+     * @param eventID The UUID of the event to which the participant is to be added.
+     * @param userID  The UUID of the user to be added as a participant.
+     * @return A ResponseEntity object. If successful, it includes the updated Event
+     *         object in the response with an OK status.
+     *         Otherwise, it returns a bad request or the status from the event
+     *         retrieval attempt.
      */
     @PutMapping(value = "/events/{eventID}/add/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -166,10 +222,20 @@ public class ApiController {
     /**
      * Removes a participant from an event.
      *
-     * @param eventID The ID of the event.
-     * @param userID  The ID of the user to be removed.
-     * @return A ResponseEntity containing the updated event if successful, or a not
-     *         found response if the event ID is invalid.
+     * This method handles a PUT request at '/events/{eventID}/remove/{userID}' and
+     * is responsible for removing a user
+     * as a participant from a specified event. It first checks if the event exists.
+     * If the event is not found or other
+     * errors occur, it returns an appropriate response. If the event exists, it
+     * proceeds to remove the specified user.
+     *
+     * @param eventID The UUID of the event from which the participant is to be
+     *                removed.
+     * @param userID  The UUID of the user to be removed as a participant.
+     * @return A ResponseEntity object. If the user is successfully removed, it
+     *         includes the updated Event object in the response with an OK status.
+     *         If the event is not found, it returns a not found status. Other
+     *         errors result in the corresponding error response.
      */
     @PutMapping(value = "/events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -190,6 +256,22 @@ public class ApiController {
         return new ResponseEntity<Event>(event, HttpStatus.OK);
     }
 
+    /**
+     * Removes a participant from all events.
+     *
+     * This method, mapped to a PUT request at '/events/remove/{userID}', is
+     * responsible for removing a user,
+     * identified by userID, from all events they are participating in. The
+     * operation is executed by the
+     * eventService's 'removeUser' method. After successfully removing the user from
+     * all events, it returns a
+     * no content status as confirmation.
+     *
+     * @param userID The UUID of the user to be removed from all events.
+     * @return A ResponseEntity with HttpStatus.NO_CONTENT, indicating that the user
+     *         has been successfully
+     *         removed from all events.
+     */
     @PutMapping(value = "/events/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> removeParticipantFromAllEvents(@PathVariable("userID") UUID userID) {
@@ -200,13 +282,27 @@ public class ApiController {
     }
 
     /**
-     * Updates the rating of an event by a user.
+     * Rates an event by a user with a specified rating value.
      *
-     * @param eventID The ID of the event.
-     * @param userID  The ID of the user.
-     * @param rating  The new rating for the event.
-     * @return ResponseEntity containing the updated Event object if successful, or
-     *         a not found response if the event ID is invalid.
+     * This method, mapped to a PUT request at
+     * '/events/{eventID}/{userID}/{rating}', allows a user
+     * to rate an event. It first validates that the rating is within an acceptable
+     * range (e.g., 1 to 5).
+     * If the rating is not valid, it returns a bad request response. It then checks
+     * if the event exists.
+     * If the event exists and the rating is valid, it proceeds to add the rating to
+     * the event. If the
+     * event is not found or other errors occur, it returns an appropriate response.
+     *
+     * @param eventID The UUID of the event to be rated.
+     * @param userID  The UUID of the user giving the rating.
+     * @param rating  The rating value, expected to be within a specific range.
+     * @return A ResponseEntity object. If the rating is successfully added, it
+     *         includes the updated Event object
+     *         in the response with an OK status. Invalid ratings return a bad
+     *         request status, and errors
+     *         in finding the event return a not found status or the corresponding
+     *         error response.
      */
     @PutMapping(value = "/events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

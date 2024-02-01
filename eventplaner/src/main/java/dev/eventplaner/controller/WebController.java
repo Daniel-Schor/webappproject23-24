@@ -32,8 +32,19 @@ public class WebController {
     @Autowired
     private ApiController apiController;
 
-    
-    // TODO javadoc
+    /**
+     * Displays all events on the webpage.
+     *
+     * Mapped to the GET request at '/events', this method retrieves all events
+     * using the apiController
+     * and adds them to the model for rendering. It handles any exceptions during
+     * the retrieval process.
+     * The events are expected to be in JSON format and are converted to a
+     * collection of Event objects.
+     *
+     * @param model The Model object used to add attributes to the view.
+     * @return The name of the view template (e.g., 'events') to render the events.
+     */
     @GetMapping("/events")
     public String showAllEvents(Model model) {
         log.info("GET localhost:8080/web/events -> showAllEvents is called");
@@ -50,7 +61,21 @@ public class WebController {
         return "events";
     }
 
-    // TODO javadoc
+    /**
+     * Displays the details of a specific event on the webpage.
+     *
+     * Mapped to the GET request at 'events/{eventID}', this method retrieves the
+     * details of an event
+     * identified by eventID using the apiController. It adds the event details to
+     * the model if the retrieval
+     * is successful. It also handles cases where the event is not found or the
+     * response is of an unexpected type.
+     *
+     * @param eventID The UUID of the event whose details are to be displayed.
+     * @param model   The Model object used to add attributes to the view.
+     * @return The name of the view template (e.g., 'event-details') to render the
+     *         event details.
+     */
     @GetMapping("events/{eventID}")
     public String showEventDetails(@PathVariable("eventID") UUID eventID, Model model) {
         log.info("GET localhost:8080/web/events/{} -> showEventDetails() is called: {}", eventID, eventID);
@@ -74,7 +99,19 @@ public class WebController {
         return "event-details";
     }
 
-    // TODO javadoc
+    /**
+     * Displays the details of an event identified by its ID on the webpage.
+     *
+     * This method is mapped to the GET request at '/web/event-details/{id}'. It
+     * retrieves the details
+     * of an event identified by the provided UUID 'id' using the apiController. The
+     * event details are then added to the model for rendering on the view.
+     *
+     * @param id    The UUID of the event whose details are to be displayed.
+     * @param model The Model object used to pass attributes to the view.
+     * @return The name of the view template (e.g., 'event-details') used to render
+     *         the event details.
+     */
     // TODO mapping ohne /web
     @GetMapping("/web/event-details/{id}")
     public String showEventDetailsById(@PathVariable("id") UUID id, Model model) {
@@ -87,10 +124,18 @@ public class WebController {
     }
 
     /**
-     * Show all users.
+     * Displays all users on the webpage.
      *
-     * @param model The Model object to be populated with user data.
-     * @return String Returns the name of the view to be rendered.
+     * Mapped to the GET request at 'users', this method retrieves all users using
+     * the apiController
+     * and adds them to the model for rendering on the view. The method handles
+     * exceptions that may occur
+     * during the retrieval process. Users are expected to be in JSON format and are
+     * converted to a collection of UserDTO objects.
+     *
+     * @param model The Model object used to add attributes to the view.
+     * @return The name of the view template (e.g., 'users') used to render the user
+     *         list.
      */
     @GetMapping("users")
     public String showAllUsers(Model model) {
@@ -111,9 +156,13 @@ public class WebController {
     }
 
     /**
-     * Show the home page.
+     * Displays the home page.
      *
-     * @return String Returns the name of the view to be rendered.
+     * Mapped to the GET request at 'home', this method returns the view template
+     * for the home page.
+     * It is responsible for rendering the main landing page of the website.
+     *
+     * @return The name of the view template used for the home page.
      */
     @GetMapping("home")
     public String home() {
@@ -123,10 +172,17 @@ public class WebController {
     }
 
     /**
-     * Show the manage events page.
+     * Displays the event management page.
      *
-     * @param model The Model object to be populated with event data.
-     * @return String Returns the name of the view to be rendered.
+     * Mapped to the GET request at 'manage', this method is responsible for
+     * rendering the event management
+     * view. It simply returns the name of the view template responsible for
+     * displaying the event management interface.
+     *
+     * @param model The Model object used to pass attributes to the view. It may not
+     *              be used explicitly in this method.
+     * @return The name of the view template (e.g., 'manage-events') used to render
+     *         the event management page.
      */
     @GetMapping("manage")
     public String showManageEvents(Model model) {
@@ -136,10 +192,16 @@ public class WebController {
     }
 
     /**
-     * Show the add event form.
+     * Displays the form for adding a new event.
      *
-     * @param model The Model object to be populated with event data.
-     * @return String Returns the name of the view to be rendered.
+     * This method is mapped to the GET request at 'manage/add-event'. It
+     * preparesthe model
+     * with a new Event object to be used in a form for adding an event. The form is
+     * rendered using the 'add-event' view template.
+     *
+     * @param model The Model object used to pass attributes to the view.
+     * @return The name of the view template (e.g., 'add-event') used for rendering
+     *         the form to add a new event.
      */
     @GetMapping("manage/add-event")
     public String showAddEventForm(Model model) {
@@ -150,7 +212,20 @@ public class WebController {
         return "add-event";
     }
 
-    // TODO javadoc
+    /**
+     * Displays the page for deleting an event.
+     *
+     * This method, mapped to the GET request at '/web/manage/delete-event', is
+     * responsible for showing
+     * the delete event page. The method prepares the view for deletion operations,
+     * but does not populate
+     * the model with data as the deletion process is typically handled
+     * interactively on the page.
+     *
+     * @param model The Model object used to pass attributes to the view.
+     * @return The name of the view template (e.g., 'delete-event') used for
+     *         rendering the event deletion page.
+     */
     @GetMapping("/web/manage/delete-event")
     public String showDeleteEventPage(Model model) {
         log.info("GET localhost:8080/web/manage/delete-event -> showDeleteEventPage() is called");
@@ -159,7 +234,22 @@ public class WebController {
 
     }
 
-    // TODO javadoc
+    /**
+     * Deletes an event identified by its UUID and redirects to an appropriate view.
+     *
+     * Mapped to the DELETE request at '/manage/delete-event/{eventID}', this method
+     * handles
+     * the deletion of an event. It calls the apiController to perform the deletion.
+     * Depending on the outcome, it redirects to either the management page or back
+     * to the
+     * events page.
+     *
+     * @param eventID The UUID of the event to be deleted.
+     * @param model   The Model object, not utilized in this method but required for
+     *                the API.
+     * @return A redirect string to either the management page or the events page
+     *         based on deletion success.
+     */
     @DeleteMapping("/manage/delete-event/{eventID}")
     public String deleteEvent(@PathVariable("eventID") UUID eventID, Model model) {
         log.info("DELETE localhost:8080/web/manage/delete-event/{} -> deleteEvent() is called: {}", eventID, eventID);
@@ -175,11 +265,22 @@ public class WebController {
         }
     }
 
-    // TODO javadoc
+    /**
+     * Checks the existence of an event by its UUID and returns a JSON response.
+     *
+     * This method, mapped to the GET request at '/manage/check-event/{eventID}',
+     * queries the existence of an event identified by eventID. It uses the
+     * apiController to fetch the event. The response indicates
+     * whether the event exists with a JSON object containing a boolean 'exists'
+     * key.
+     *
+     * @param eventID The UUID of the event to check for existence.
+     * @return ResponseEntity with a JSON object indicating whether the event exists
+     *         ({"exists": true} or {"exists": false}).
+     */
     @GetMapping("/manage/check-event/{eventID}")
     public ResponseEntity<?> checkEvent(@PathVariable("eventID") UUID eventID) {
         log.info("GET localhost:8080/web/manage/check-event/{} -> checkEvent() is called: {}", eventID, eventID);
-
 
         ResponseEntity<?> response = apiController.getEvent(eventID);
 
@@ -190,7 +291,27 @@ public class WebController {
         }
     }
 
-    // TODO javadoc
+    /**
+     * Adds a new event based on the provided form parameters and redirects to the
+     * event overview.
+     *
+     * Mapped to the POST request at 'manage/add-event', this method handles the
+     * creation of a new event using the parameters provided through the form.
+     * It constructs a new Event object, sets its properties based on the form
+     * inputs,
+     * and adds it to the event list using the apiController.
+     * After adding the event, it redirects to the event overview page.
+     *
+     * @param name            The name of the event.
+     * @param description     The description of the event.
+     * @param dateTime        The date and time of the event.
+     * @param latitude        The latitude of the event's location.
+     * @param longitude       The longitude of the event's location.
+     * @param maxParticipants The maximum number of participants for the event.
+     * @param organizerUserID The UUID of the event organizer (optional).
+     * @param model           The Model object used to pass attributes to the view.
+     * @return A redirect string to the event overview page.
+     */
     // TODO add particapnts spalte löschen
     @PostMapping("manage/add-event")
     public String addEvent(@RequestParam("name") String name,
@@ -206,7 +327,7 @@ public class WebController {
         Event event = new Event();
 
         log.info("POST localhost:8080/web/manage/add-event -> addEvent() is called: {}", event.getID());
-        
+
         // Insert the parameters into the event instance
         event.setName(name);
         event.setDescription(description);
