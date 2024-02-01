@@ -65,29 +65,12 @@ public class User {
         this(firstName, lastName, email, password, false);
     }
 
-    /**
-     * Sets the user's password.
-     * If the provided password is not null, it is encrypted and stored in the user
-     * object's password field.
-     * If the provided password is null, the password field remains unchanged.
-     *
-     * @param password The password to be set
-     */
-
     public User setPassword(String password) {
         if (password != null) {
             this.password = encoder.encode(password);
         }
         return this;
     }
-
-    /**
-     * Checks if the provided password matches the user's password.
-     *
-     * @param password The password to be checked
-     * @return True if the provided password matches the user's password, false
-     *         otherwise
-     */
 
     public boolean checkPassword(String password) {
         return encoder.matches(password, this.password);

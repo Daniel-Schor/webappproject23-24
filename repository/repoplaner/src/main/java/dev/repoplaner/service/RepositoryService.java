@@ -13,6 +13,10 @@ import dev.repoplaner.repository.EventRepository;
 import dev.repoplaner.repository.UserRepository;
 
 
+/**
+ * This class represents a service for managing repositories.
+ * It provides methods for creating, retrieving, updating, and deleting events and users.
+ */
 @Service
 public class RepositoryService {
     

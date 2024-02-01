@@ -25,38 +25,18 @@ public class Geolocation {
         this.longitude = longitude;
     }
 
-    /**
-     * Returns the latitude coordinate of the location.
-     *
-     * @return the latitude coordinate
-     */
     public double getLatitude() {
         return this.latitude;
     }
 
-    /**
-     * Returns the longitude coordinate of the location.
-     *
-     * @return the longitude coordinate
-     */
     public double getLongitude() {
         return this.longitude;
     }
 
-    /**
-     * Sets the latitude coordinate of the location.
-     *
-     * @param latitude the latitude coordinate to set
-     */
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    /**
-     * Sets the longitude coordinate of the location.
-     *
-     * @param longitude the longitude coordinate to set
-     */
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }

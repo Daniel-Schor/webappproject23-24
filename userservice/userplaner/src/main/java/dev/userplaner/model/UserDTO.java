@@ -39,66 +39,34 @@ public class UserDTO {
         this.organizer = organizer; // Add this line
     }
 
-    /**
-     * Returns the ID of the user.
-     * @return The ID of the user.
-     */
     public UUID getUserID() {
         return userID;
     }
 
-    /**
-     * Sets the ID of the user.
-     * @param userID The ID of the user.
-     */
     public void setUserID(UUID userID) {
         this.userID = userID;
     }
 
-    /**
-     * Returns the first name of the user.
-     * @return The first name of the user.
-     */
     public String getFirstName() {
         return firstName;
     }
     
-    /**
-     * Returns the last name of the user.
-     * @return The last name of the user.
-     */
     public String getLastName() {
         return lastName;
     }
 
-    /**
-     * Sets the first name of the user.
-     * @param firstName The first name of the user.
-     */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    /**
-     * Sets the last name of the user.
-     * @param lastName The last name of the user.
-     */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    /**
-     * Returns the organizer status of the user.
-     * @return The organizer status of the user.
-     */
     public boolean isOrganizer() { // Add this method
         return organizer;
     }
 
-    /**
-     * Sets the organizer status of the user.
-     * @param organizer The organizer status of the user.
-     */
     public void setOrganizer(boolean organizer) { // Add this method
         this.organizer = organizer;
     }
