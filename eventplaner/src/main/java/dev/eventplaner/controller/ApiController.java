@@ -27,13 +27,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 public class ApiController {
 
-    // Logger instance for this class, used to log system messages, warnings, and
-    // errors.
+    // Logger instance for this class, used to log system messages, warnings, and errors.
     private static final Logger log = LoggerFactory.getLogger(ApiController.class);
 
-    // Autowired annotation is used to automatically inject the EventService and
-    // UserService
-    // instance into this class.
+    // Autowired annotation is used to automatically inject the EventService and UserService instance into this class.
     @Autowired
     private EventService eventService;
     @Autowired
@@ -57,8 +54,7 @@ public class ApiController {
      * Retrieves a user by their ID
      *
      * @param userID the ID of the user to retrieve.
-     * @return the ResponseEntity containing the user if found, or no content if not
-     *         found.
+     * @return the ResponseEntity containing the user if found, or no content if not found.
      */
     @GetMapping(value = "users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUser(@PathVariable("userID") UUID userID) {
@@ -73,8 +69,7 @@ public class ApiController {
      * Creates a new user.
      *
      * @param user The user object containing the user details.
-     * @return ResponseEntity<?> The response entity containing the created user or
-     *         an error message.
+     * @return ResponseEntity<?> The response entity containing the created user or an error message.
      */
     @PostMapping(value = "users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createUser(@RequestBody User user) {
@@ -89,8 +84,7 @@ public class ApiController {
      *
      * @param userID The ID of the user to be updated.
      * @param user   The updated user object.
-     * @return The ResponseEntity containing the updated user object if successful,
-     *         or a not found response if the user does not exist.
+     * @return The ResponseEntity containing the updated user object if successful, or a not found response if the user does not exist.
      */
     @PutMapping(value = "users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
@@ -106,8 +100,7 @@ public class ApiController {
      *
      * @param eventID The ID of the event from which the user will be removed.
      * @param userID  The ID of the user to be removed from the event.
-     * @return ResponseEntity<?> Returns the response entity that includes the
-     *         status of the operation.
+     * @return ResponseEntity<?> Returns the response entity that includes the status of the operation.
      */
     @PutMapping(value = "events/{eventID}/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeUser(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID) {
@@ -117,6 +110,7 @@ public class ApiController {
         return response;
     }
 
+    // TODO javadoc
     @PostMapping(value = "events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
         log.info("POST localhost:8080/events -> createEvent(Name: {}) is called", event.getName());
@@ -128,10 +122,8 @@ public class ApiController {
      * Update an existing event.
      *
      * @param eventID The ID of the event to be updated.
-     * @param event   An object of type Event that contains the updated event
-     *                details.
-     * @return ResponseEntity<Event> Returns the response entity that includes the
-     *         updated event.
+     * @param event   An object of type Event that contains the updated event details.
+     * @return ResponseEntity<Event> Returns the response entity that includes the updated event.
      */
     @PutMapping(value = "events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
@@ -146,8 +138,7 @@ public class ApiController {
      * Delete an existing event.
      *
      * @param eventID The UUID of the event to be deleted.
-     * @return ResponseEntity<?> Returns the response entity that includes the
-     *         status of the operation.
+     * @return ResponseEntity<?> Returns the response entity that includes the status of the operation.
      */
     @DeleteMapping(value = "events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteEvent(@PathVariable("eventID") UUID eventID) {
@@ -163,8 +154,7 @@ public class ApiController {
      *
      * @param eventID The ID of the event to which the user will be added.
      * @param userID  The ID of the user to be added to the event.
-     * @return ResponseEntity<?> Returns the response entity that includes the
-     *         status of the operation.
+     * @return ResponseEntity<?> Returns the response entity that includes the status of the operation.
      */
     @PutMapping(value = "events/{eventID}/add/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID,
@@ -185,8 +175,7 @@ public class ApiController {
      * Delete a user.
      *
      * @param userID The ID of the user to be deleted.
-     * @return ResponseEntity<?> Returns the response entity that includes the
-     *         status of the operation.
+     * @return ResponseEntity<?> Returns the response entity that includes the status of the operation.
      */
     @DeleteMapping(value = "users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteUser(@PathVariable("userID") UUID userID) {
@@ -201,8 +190,7 @@ public class ApiController {
     /**
      * Used to get all events.
      *
-     * @return ResponseEntity<?> Returns the response entity that includes all
-     *         events.
+     * @return ResponseEntity<?> Returns the response entity that includes all events.
      */
     @GetMapping(value = "events", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllEvents() {
@@ -217,8 +205,7 @@ public class ApiController {
      * Get a specific event by its ID.
      *
      * @param eventID The ID of the event to be retrieved.
-     * @return ResponseEntity<?> Returns the response entity that includes the
-     *         requested event.
+     * @return ResponseEntity<?> Returns the response entity that includes the requested event.
      */
     @GetMapping(value = "events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getEvent(@PathVariable("eventID") UUID eventID) {
@@ -229,6 +216,7 @@ public class ApiController {
         return response;
     }
 
+    // TODO javadoc
     @GetMapping(value = "events/{eventID}/participants", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getEventParticipants(@PathVariable("eventID") UUID eventID) {
         log.info("GET localhost:8080/events/{}/participants -> getEventParticipants({}) is called", eventID, eventID);
@@ -263,8 +251,7 @@ public class ApiController {
      * @param eventID The ID of the event to be rated.
      * @param userID  The ID of the user who rates the event.
      * @param rating  The rating given by the user to the event.
-     * @return ResponseEntity<?> Returns the response entity that includes the
-     *         status of the operation.
+     * @return ResponseEntity<?> Returns the response entity that includes the status of the operation.
      */
     @PutMapping(value = "events/{eventID}/{userID}/{rating}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID,
