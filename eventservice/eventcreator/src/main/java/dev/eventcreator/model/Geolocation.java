@@ -1,16 +1,12 @@
 package dev.eventcreator.model;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * The Geolocation class represents a geographical location specified by
  * latitude and longitude coordinates.
  */
-public class Geolocation  implements Serializable{
-
-    private static final long serialVersionUID = 5L;
+public class Geolocation {
 
     private double latitude;
     private double longitude;

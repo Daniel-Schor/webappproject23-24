@@ -1,10 +1,13 @@
 package dev.eventplaner.controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.eventplaner.model.User;
+import dev.eventplaner.model.UserDTO;
 import dev.eventplaner.model.Event;
 import dev.eventplaner.service.EventService;
 import dev.eventplaner.service.UserService;
@@ -163,7 +167,12 @@ public class ApiController {
     public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID,
             @PathVariable("userID") UUID userID) {
         log.debug("addParticipant() is called");
-        ResponseEntity<?> response = eventService.addUser(eventID, userID);
+        ResponseEntity<?> response;
+        if (userService.getUser(userID).getStatusCode() == HttpStatus.NOT_FOUND) {
+            response = ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } else {
+            response = eventService.addUser(eventID, userID);
+        }
 
         return response;
     }
@@ -178,6 +187,7 @@ public class ApiController {
     @DeleteMapping(value = "user/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteUser(@PathVariable("userID") UUID userID) {
         log.debug("deleteUser() is called");
+        eventService.removeUserFromAllEvents(userID);
         ResponseEntity<?> response = userService.delete(userID);
 
         return response;
@@ -210,6 +220,34 @@ public class ApiController {
         log.info("Get event by eventID: {}", eventID);
 
         ResponseEntity<?> response = eventService.getEvent(eventID);
+
+        return response;
+    }
+
+    @GetMapping(value = "events/{eventID}/participants", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getEventParticipants(@PathVariable("eventID") UUID eventID) {
+        log.info("Get event Participants by eventID: {}", eventID);
+
+        ResponseEntity<?> response;
+        Collection<UserDTO> participants = new ArrayList<>();
+
+        ResponseEntity<?> eventResponse = eventService.getEvent(eventID);
+        if(eventResponse.getStatusCode()==HttpStatus.NOT_FOUND){
+            return eventResponse;
+        }
+
+        Event event = Event.eventFromJson(eventResponse.getBody().toString());
+        
+        for (UUID userID : event.getParticipants().keySet()) {
+            User user = User.userFromJson(userService.getUser(userID).getBody().toString());
+            UserDTO userDTO = new UserDTO(user);
+            participants.add(userDTO);
+        }
+        if (participants.isEmpty()) {
+            response = ResponseEntity.noContent().build();
+        }else{
+            response = ResponseEntity.ok(participants);
+        }
 
         return response;
     }

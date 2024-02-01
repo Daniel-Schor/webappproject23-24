@@ -1,6 +1,5 @@
 package dev.eventplaner.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
@@ -16,9 +15,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
  * It includes fields for the user's ID, first name, last name, and organizer
  * status.
  */
-public class UserDTO  implements Serializable{
-
-    private static final long serialVersionUID = 4L;
+public class UserDTO {
 
     UUID userID;
     String firstName, lastName;

@@ -1,5 +1,5 @@
 package dev.eventplaner.model;
-import java.io.Serializable;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,9 +14,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-public class Event implements Serializable{
-
-    private static final long serialVersionUID = 1L;
+public class Event {
 
     @JsonProperty("id")
     private UUID eventID;
@@ -26,7 +24,7 @@ public class Event implements Serializable{
     @JsonProperty("location")
     private Geolocation geolocation;
     private int maxParticipants;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    // @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Map<UUID, Integer> participants;
     private UUID organizerUserID;
 

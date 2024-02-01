@@ -1,6 +1,5 @@
 package dev.eventcreator.model;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,10 +20,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
  * geolocation, maximum number of participants, participants, and organizer's
  * user ID.
  */
-public class Event  implements Serializable{
+public class Event {
 
-    private static final long serialVersionUID = 1L;
-    
     @JsonProperty("id")
     private UUID eventID;
     private String name;

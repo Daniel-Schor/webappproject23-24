@@ -1,6 +1,5 @@
 package dev.userplaner.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
@@ -17,10 +16,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
  * It contains information about the user such as their ID, name, email,
  * password, and whether they are an organizer.
  */
-public class User implements Serializable{
+public class User {
 
-    private static final long serialVersionUID = 3L;
-    
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     @JsonProperty("id")
     private UUID userID;
