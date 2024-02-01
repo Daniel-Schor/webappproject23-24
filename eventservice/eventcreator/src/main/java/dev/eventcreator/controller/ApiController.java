@@ -60,7 +60,7 @@ public class ApiController {
     @GetMapping(value = "/events", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> getAllEvents() {
-        log.info("Get all events");
+        log.info("GET localhost:8081/events -> getAllEvents() is called");
 
         return eventService.getAllDTO();
     }
@@ -75,7 +75,7 @@ public class ApiController {
     @GetMapping(value = "/events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> getEvent(@PathVariable("eventID") UUID eventID) {
-        log.info("Get all users");
+        log.info("GET localhost:8081/events/{} -> getEvent({}) is called", eventID, eventID);
 
         return eventService.getEvent(eventID);
     }
@@ -91,8 +91,8 @@ public class ApiController {
     @PostMapping(value = "/events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
-        log.info("Create new Event: {}", event.getName());
-        
+        log.info("POST localhost:8081/events -> createEvent(Name: {}) is called", event.getName());
+
         return eventService.create(event);
     }
 
@@ -107,7 +107,7 @@ public class ApiController {
     @PutMapping(value = "/events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
-        log.info("Update event: {}", eventID);
+        log.info("PUT localhost:8081/events/{} -> updateEvent({}, Name: {}) is called", eventID, event.getName());
 
         ResponseEntity<?> response = checkProcessability(event);
         if (response == null) {
@@ -126,7 +126,7 @@ public class ApiController {
     @DeleteMapping(value = "/events/{eventID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> deleteEvent(@PathVariable("eventID") UUID eventID) {
-        log.debug("deleteEvent() is called");
+        log.info("DELETE localhost:8081/events/{} -> deleteEvent({}) is called", eventID, eventID);
 
         return eventService.delete(eventID);
     }
@@ -142,7 +142,8 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<?> addParticipant(@PathVariable("eventID") UUID eventID,
             @PathVariable("userID") UUID userID) {
-        log.debug("addParticipant() is called");
+        log.info("PUT localhost:8081/events/{}/add/{} -> addParticipant({}, {}) is called", eventID, userID, eventID,
+                userID);
 
         int maxParticipants = Event.eventFromJson(eventService.getEventString(eventID)).getMaxParticipants();
         int participants = Event.eventFromJson(eventService.getEventString(eventID)).getParticipants().size();
@@ -171,7 +172,9 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<?> removeParticipant(@PathVariable("eventID") UUID eventID,
             @PathVariable("userID") UUID userID) {
-        log.debug("removeParticipant() is called");
+        log.info("PUT localhost:8081/events/{}/remove/{} -> removeParticipant({}, {}) is called", eventID, userID,
+                eventID,
+                userID);
 
         ResponseEntity<?> response = eventService.getEvent(eventID);
         if (response.getStatusCode() != HttpStatus.OK) {
@@ -188,7 +191,7 @@ public class ApiController {
     @PutMapping(value = "/events/remove/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> removeParticipantFromAllEvents(@PathVariable("userID") UUID userID) {
-        log.debug("removeParticipant() is called");
+        log.info("PUT localhost:8081/events/remove/{} -> removeParticipant({}) is called", userID, userID);
 
         eventService.removeUser(userID);
         return ResponseEntity.noContent().build();
@@ -207,7 +210,8 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<?> rateEvent(@PathVariable("eventID") UUID eventID, @PathVariable("userID") UUID userID,
             @PathVariable("rating") int rating) {
-        log.debug("rateEvent() is called");
+        log.info("PUT localhost:8081/events/{}/{}/{} -> rateEvent({}, {}, {}) is called", eventID, userID, rating,
+                eventID, userID, rating);
 
         if (rating <= 0 || rating > 5) {
             return ResponseEntity.badRequest().build();
