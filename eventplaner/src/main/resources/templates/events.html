@@ -8,31 +8,40 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            background: linear-gradient(to bottom, #ff6f61, #1e3c72); /* Lebhafte Farbkombination */
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
 
         nav {
-            background-color: #333;
+            background-color: rgba(0, 0, 0, 0.7);
             overflow: hidden;
+            width: 100%;
+            position: fixed;
+            top: 0;
         }
 
         nav a {
-            float: left;
-            display: block;
-            color: #f4f4f4; /* Hellere Schriftfarbe auf dunklem Hintergrund */
+            display: inline-block; /* Änderung: Inline-Block anstelle von Float */
+            color: #fff; /* Weiß für den Text im Container */
             text-align: center;
             padding: 14px 16px;
             text-decoration: none;
+            transition: color 0.3s ease-in-out;
         }
 
         nav a:hover {
-            background-color: #555; /* Dunklere Hintergrundfarbe beim Überfahren */
+            background-color: #e07a02; /* Dunkleres Gelb beim Überfahren */
         }
 
         h1 {
-            color: #333; /* Dunkle Überschrift */
+            color: #ffc947; /* Gelb-Orange für den Titel */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
             text-align: center;
         }
 
@@ -40,9 +49,10 @@
             width: 80%;
             margin: 20px auto;
             border-collapse: collapse;
-            background-color: #fff; /* Helle Hintergrundfarbe für die Tabelle */
+            background-color: rgba(0, 0, 0, 0.7); /* Dunkler transparenter Hintergrund */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            color: #fff; /* Weiß für den Text in der Tabelle */
         }
 
         th, td {
@@ -58,11 +68,14 @@
 
         a {
             text-decoration: none;
-            color: #007BFF; /* Akzentfarbe für Links */
+            color: #f5a623; /* Goldgelb für die Links */
+            font-weight: bold;
+            transition: color 0.3s ease-in-out;
         }
 
         a:hover {
             text-decoration: underline;
+            color: #e07a02; /* Dunkleres Gelb beim Überfahren */
         }
     </style>
 </head>
@@ -70,7 +83,8 @@
 
 <nav>
     <a href="/web/home">Home</a>
-    <li><a href="/web/manage">Manage Events</a></li>
+    <a href="/web/events">Event List</a>
+    <a href="/web/manage">Event Manager</a>
 </nav>
 
 <h1>Event List</h1>
@@ -86,12 +100,10 @@
         <tr th:each="event : ${events}">
             <td th:text="${event.ID}"></td>
             <td th:text="${event.name}"></td>
-            
         </tr>
     </tbody>
     
 </table>
-
 
 </body>
 </html>
