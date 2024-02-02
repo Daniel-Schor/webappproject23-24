@@ -10,8 +10,8 @@
 <body>
     <h1>Delete User</h1>
     <form id="deleteForm">
-        <label for="userId">User ID:</label>
-        <input type="text" id="userId" name="userId" required>
+        <label for="userID">User ID:</label>
+        <input type="text" id="userID" name="userID" required>
         <br>
         <button type="button" onclick="checkUser()">Next</button>
     </form>
@@ -25,9 +25,10 @@
 
     <script>
         function checkUser() {
-            var userId = document.getElementById("userId").value;
+            var userID = document.getElementById("userID").value;
+            console.log("userID: " + userID);
 
-            fetch('web/manage/check-user/' + userId, {
+            fetch('/web/manage/check-user/' + userID, {
                 method: 'GET',
             })
                 .then(response => {
@@ -38,24 +39,26 @@
                 })
                 .then(data => {
                     if (data.exists) {
+                        console.log("User exists. Displaying confirmation dialog.");
                         document.getElementById("deleteForm").style.display = "none";
                         document.getElementById("confirmation").style.display = "block";
                     } else {
-                        alert("Event doesn't exist!");
+                        alert("User doesn't exist!");
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    console.log('Error:', error);
                     alert("Something went wrong! " + error.toString());
                 });
         }
 
         function deleteUser() {
-            var userId = document.getElementById("userId").value;
+            var userID = document.getElementById("userID").value;
 
-            fetch('manage/delete-user/' + userId, {
+            fetch('/web/manage/delete-user/' + userID, {
                 method: 'DELETE',
             })
+
                 .then(response => {
                     if (!response.ok) {
                         if (response.status === 405) {

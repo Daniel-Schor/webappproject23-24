@@ -194,7 +194,7 @@ public class WebController {
 
     @GetMapping("view-users")
     public String showManageUsers(Model model) {
-        log.info("GET localhost:8080/web/view-users -> showManageUrses() is called");
+        log.info("GET localhost:8080/web/view-users -> showManageUsres() is called");
 
         return "manage-users";
     }
