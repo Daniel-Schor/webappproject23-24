@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add User</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px 0;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Add User</h1>
+    <form action="/web/manage/add-user" method="post" onsubmit="return validateForm()">
+        <label for="firstName">First Name:</label><br>
+        <input type="text" id="firstName" name="firstName" required><br>
+        <label for="lastName">Last Name:</label><br>
+        <input type="text" id="lastName" name="lastName" required><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required><br>
+        
+        <label>Organizer:</label><br>
+        <input type="radio" id="organizerTrue" name="organizer" value="true"> True<br>
+        <input type="radio" id="organizerFalse" name="organizer" value="false"> False<br>
+
+        <button type="submit">Add User</button>
+    </form>
+
+    <script>
+        function validateForm() {
+            // Check if exactly one radio button is checked
+            var organizerTrueRadio = document.getElementById('organizerTrue');
+            var organizerFalseRadio = document.getElementById('organizerFalse');
+            
+            if ((organizerTrueRadio.checked && !organizerFalseRadio.checked) || 
+                (!organizerTrueRadio.checked && organizerFalseRadio.checked)) {
+                // Exactly one radio button is checked, allow form submission
+                return true;
+            } else {
+                // Neither or both radio buttons are checked, prevent form submission
+                alert('Please select either True or False for Organizer');
+                return false;
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -8,14 +8,35 @@
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(to bottom, #ff6f61, #1e3c72);
-            /* Lebhafte Farbkombination */
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: top;
             height: 100vh;
+        }
+
+        nav {
+            display: flex;
+            float: left;
+            
+            width: 100%;
+            background-color: #1e3c72;
+            padding: 10px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #f5a623;
+            font-weight: bold;
+            font-size: 20px;
+            margin-right: 20px;
+            transition: color 0.3s ease-in-out;
+        }
+
+        nav a:hover {
+            color: #e07a02;
         }
 
         table {
@@ -23,7 +44,6 @@
             margin: 20px auto;
             border-collapse: collapse;
             background-color: rgba(0, 0, 0, 0.7);
-            /* Dunkler transparenter Hintergrund */
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
         }
 
@@ -45,15 +65,15 @@
             font-size: 3em;
             margin-bottom: 20px;
             color: #ffc947;
-            /* Gelb-Orange für den Titel */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
             margin-top: 0;
+            text-align: center;
+            
         }
 
         a {
             text-decoration: none;
             color: #f5a623;
-            /* Goldgelb für die Links */
             font-weight: bold;
             font-size: 20px;
             transition: color 0.3s ease-in-out;
@@ -61,7 +81,6 @@
 
         a:hover {
             color: #e07a02;
-            /* Dunkleres Gelb beim Hover */
         }
 
         .flex-container {
@@ -73,6 +92,11 @@
 </head>
 
 <body>
+
+    <nav>
+        <a href="/web/home">Home</a>
+        <a href="/web/view-users">Manage User</a>
+    </nav>
 
     <h1>OUR USERS</h1>
 
@@ -91,14 +115,12 @@
                             th:text="${user.firstName + ' ' + user.lastName}"></a>
 
                         <a class="right-align" th:if="${user.organizer}"
-                             th:text="' Organizer'"></a>
+                            th:text="' Organizer'"></a>
                     </div>
                 </td>
             </tr>
         </tbody>
     </table>
-
-    <a href="/web/home">Back to Home</a>
 
     <script>
         function getUser(userID) {
@@ -110,7 +132,6 @@
                 .catch(error => console.error('Error:', error));
         }
     </script>
-
 
 </body>
 

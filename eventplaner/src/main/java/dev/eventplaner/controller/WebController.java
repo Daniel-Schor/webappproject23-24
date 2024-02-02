@@ -192,6 +192,13 @@ public class WebController {
         return "manage-events";
     }
 
+    @GetMapping("view-users")
+    public String showManageUsers(Model model) {
+        log.info("GET localhost:8080/web/view-users -> showManageUrses() is called");
+
+        return "manage-users";
+    }
+
     /**
      * Displays the form for adding a new event.
      *
@@ -227,7 +234,7 @@ public class WebController {
      * @return The name of the view template (e.g., 'delete-event') used for
      *         rendering the event deletion page.
      */
-    @GetMapping("/web/manage/delete-event")
+    @GetMapping("manage/delete-event")
     public String showDeleteEventPage(Model model) {
         log.info("GET localhost:8080/web/manage/delete-event -> showDeleteEventPage() is called");
 
@@ -251,7 +258,7 @@ public class WebController {
      * @return A redirect string to either the management page or the events page
      *         based on deletion success.
      */
-    @DeleteMapping("/manage/delete-event/{eventID}")
+    @DeleteMapping("manage/delete-event/{eventID}")
     public String deleteEvent(@PathVariable("eventID") UUID eventID, Model model) {
         log.info("DELETE localhost:8080/web/manage/delete-event/{} -> deleteEvent() is called: {}", eventID, eventID);
 
@@ -279,7 +286,7 @@ public class WebController {
      * @return ResponseEntity with a JSON object indicating whether the event exists
      *         ({"exists": true} or {"exists": false}).
      */
-    @GetMapping("/manage/check-event/{eventID}")
+    @GetMapping("manage/check-event/{eventID}")
     public ResponseEntity<?> checkEvent(@PathVariable("eventID") UUID eventID) {
         log.info("GET localhost:8080/web/manage/check-event/{} -> checkEvent() is called: {}", eventID, eventID);
 
@@ -313,7 +320,7 @@ public class WebController {
      * @param model           The Model object used to pass attributes to the view.
      * @return A redirect string to the event overview page.
      */
-    
+
     @PostMapping("manage/add-event")
     public String addEvent(@RequestParam("name") String name,
             @RequestParam("description") String description,
@@ -351,7 +358,7 @@ public class WebController {
         return "redirect:/web/events";
     }
 
-    @GetMapping("/user-details/{userID}")
+    @GetMapping("user-details/{userID}")
     public String showUserDetails(@PathVariable("userID") UUID userID, Model model) {
         log.info("GET localhost:8080/web/user-details/{} -> showUserDetails() is called: {}", userID, userID);
 
@@ -366,6 +373,81 @@ public class WebController {
         }
 
         return "user-details";
+    }
+
+    @GetMapping("manage/delete-user")
+    public String showDeleteUserPage(Model model) {
+        log.info("GET localhost:8080/web/manage/delete-user -> showDeleteUserPage() is called");
+
+        return "delete-user";
+
+    }
+
+    @GetMapping("manage/add-user")
+    public String showAddUserForm(Model model) {
+        log.info("GET localhost:8080/web/manage/add-user -> showAddUserForm() is called");
+
+        model.addAttribute("user", new User());
+
+        return "add-user";
+    }
+
+    @PostMapping("manage/add-user")
+    public String addUser(@RequestParam("firstName") String firstName,
+            @RequestParam("lastName") String lastName,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password,
+            @RequestParam("organizer") boolean organizer,
+            Model model) {
+
+        // Create new user instance
+        User user = new User();
+
+        log.info("POST localhost:8080/web/manage/add-user -> addUser() is called: {}", user.getID());
+
+        // Insert the parameters into the user instance
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setOrganizer(organizer);
+
+        // Add the user to the user list
+        apiController.createUser(user);
+
+        // Redirect the user to the user overview
+        model.addAttribute("users", apiController.getAllUsers());
+
+        // Redirect the user to the user overview
+        return "redirect:/web/users";
+    }
+
+    @GetMapping("manage/check-user/{userID}")
+    public ResponseEntity<?> checkUser(@PathVariable("userID") UUID userID) {
+        log.info("GET localhost:8080/web/manage/check-user/{} -> checkUser() is called: {}", userID, userID);
+
+        ResponseEntity<?> response = apiController.getUser(userID);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return ResponseEntity.ok("{\"exists\": true}");
+        } else {
+            return ResponseEntity.ok("{\"exists\": false}");
+        }
+    }
+
+    @DeleteMapping("manage/delete-user/{userID}")
+    public String deleteUser(@PathVariable("userID") UUID userID, Model model) {
+        log.info("DELETE localhost:8080/web/manage/delete-user/{} -> deleteUser() is called: {}", userID, userID);
+
+        ResponseEntity<?> response = apiController.deleteUser(userID);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            log.info("WebController: User ID: {} deleted", userID);
+            return "redirect:/web/manage";
+        } else {
+            log.warn("WebController: Error deleting user ID: {}. Status code: {}", userID, response.getStatusCode());
+            return "redirect:/web/users";
+        }
     }
 
 }
