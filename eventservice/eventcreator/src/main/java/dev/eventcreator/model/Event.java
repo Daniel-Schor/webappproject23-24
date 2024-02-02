@@ -35,10 +35,10 @@ public class Event {
      */
     public Event() {
         this.eventID = UUID.randomUUID();
-        this.name = "Default Event";
-        this.description = "Default Description";
-        this.dateTime = LocalDateTime.now();
-        this.geolocation = new Geolocation(50.130444, 8.692556);
+        this.name = null;
+        this.description = null;
+        this.dateTime = null;
+        this.geolocation = null;
         this.maxParticipants = 10;
         this.participants = new HashMap<>();
         this.organizerUserID = null;

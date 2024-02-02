@@ -12,6 +12,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -96,6 +97,7 @@ public class ApiController {
 
     // neu Methode
 
+    // TODO check javadoc
     /**
      * Updates a user with the given user ID.
      *
@@ -106,16 +108,24 @@ public class ApiController {
      */
     @PutMapping(value = "/users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<?> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
+    public ResponseEntity<?> replaceUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
         log.info("Update user: {}", userID);
 
         ResponseEntity<?> response = checkProcessability(user);
         if (response == null) {
-            return userService.update(user.setID(userID));
+            return userService.replace(user.setID(userID));
         }
         return response;
     }
 
+    // TODO javadoc
+    @PutMapping(value = "/users/update/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
+        log.info("Update user: {}", userID);
+
+        return userService.updateUser(user.setID(userID));
+    }
     /**
      * Deletes a user event based on the provided userID.
      *

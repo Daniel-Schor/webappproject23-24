@@ -13,6 +13,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -117,6 +118,7 @@ public class ApiController {
         return response;
     }
 
+    // TODO check javadoc
     /**
      * Updates an existing event with new information.
      *
@@ -137,14 +139,23 @@ public class ApiController {
      */
     @PutMapping(value = "/events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<?> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
+    public ResponseEntity<?> replaceEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
         log.info("PUT localhost:8081/events/{} -> updateEvent({}, Name: {}) is called", eventID, event.getName());
 
         ResponseEntity<?> response = checkProcessability(event);
         if (response == null) {
-            return eventService.update(event.setID(eventID));
+            return eventService.replace(event.setID(eventID));
         }
         return response;
+    }
+
+    // TODO javadoc
+    @PutMapping(value = "/events/update/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<?> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
+        log.info("PUT localhost:8081/events/{} -> updateEvent({}, Name: {}) is called", eventID, event.getName());
+
+        return eventService.updateEvent(event.setID(eventID));
     }
 
     public ResponseEntity<?> checkProcessability(Event event) {

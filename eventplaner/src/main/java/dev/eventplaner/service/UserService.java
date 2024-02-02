@@ -126,6 +126,7 @@ public class UserService {
         }
     }
 
+    // TODO check javadoc
     /**
      * Updates a specific user in the repository.
      *
@@ -142,8 +143,8 @@ public class UserService {
      *         error occurred, the status code and error message from the
      *         HttpClientErrorException will be returned.
      */
-    public ResponseEntity<?> update(User user) {
-        log.info("Eventplaner UserService -> update() is called: {}", user.getID());
+    public ResponseEntity<?> replace(User user) {
+        log.info("Eventplaner UserService -> replace() is called: {}", user.getID());
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users/" + user.getID();
@@ -152,6 +153,24 @@ public class UserService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<User> request = new HttpEntity<User>(user, headers);
 
+        try {
+            return restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
+        } catch (HttpClientErrorException e) {
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+        }
+    }
+
+    // TODO javadoc
+    public ResponseEntity<?> update(User user) {
+        log.info("Eventplaner UserService -> update() is called: {}", user.getID());
+
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/users/update/" + user.getID();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<User> request = new HttpEntity<User>(user, headers);
+        
         try {
             return restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {

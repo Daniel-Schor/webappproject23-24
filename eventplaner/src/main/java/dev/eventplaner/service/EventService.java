@@ -125,6 +125,7 @@ public class EventService {
         }
     }
 
+    // TODO check javadoc
     /**
      * Updates an existing event in the repository.
      * The method sends a PUT request to the repository with the updated event.
@@ -134,11 +135,29 @@ public class EventService {
      * @param event The updated event to send to the repository.
      * @return A ResponseEntity containing the response from the repository.
      */
-    public ResponseEntity<?> update(Event event) {
+    public ResponseEntity<?> replace(Event event) {
         log.info("Eventplaner EventService -> update() is called: {}", event.getID());
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/" + event.getID();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Event> request = new HttpEntity<>(event, headers);
+
+        try {
+            return restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
+        } catch (HttpClientErrorException e) {
+            return new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+        }
+    }
+
+    // TODO javadoc
+    public ResponseEntity<?> update(Event event) {
+        log.info("Eventplaner EventService -> update() is called: {}", event.getID());
+
+        RestTemplate restTemplate = new RestTemplate();
+        String url = apiUrl + "/events/update/" + event.getID();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

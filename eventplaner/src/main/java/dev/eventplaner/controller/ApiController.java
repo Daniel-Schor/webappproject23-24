@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -96,6 +97,7 @@ public class ApiController {
         return userService.create(user);
     }
 
+    // TODO check javadoc
     /**
      * Updates a user's information.
      *
@@ -109,9 +111,19 @@ public class ApiController {
      * @return ResponseEntity indicating the result of the update operation.
      */
     @PutMapping(value = "users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> replaceUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
+        String fullname = user.getFirstName() + " " + user.getLastName();
+        log.info("PUT localhost:8080/users/{} -> replaceUser({}, Name: {}) is called", userID, userID, fullname);
+        ResponseEntity<?> response = userService.replace(user.setID(userID));
+
+        return response;
+    }
+
+    // TODO javadoc
+    @PatchMapping(value = "users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
         String fullname = user.getFirstName() + " " + user.getLastName();
-        log.info("PUT localhost:8080/users/{} -> updateUser({}, Name: {}) is called", userID, userID, fullname);
+        log.info("PATCH localhost:8080/users/{} -> updateUser({}, Name: {}) is called", userID, userID, fullname);
         ResponseEntity<?> response = userService.update(user.setID(userID));
 
         return response;
@@ -151,6 +163,7 @@ public class ApiController {
         return eventService.create(event);
     }
 
+    // TODO check javadoc
     /**
      * Updates the details of an existing event.
      *
@@ -165,8 +178,18 @@ public class ApiController {
      * @return ResponseEntity reflecting the result of the update operation.
      */
     @PutMapping(value = "events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> replaceEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
+        log.info("PUT localhost:8080/events/{} -> replaceEvent({}, Name: {}) is called", eventID, event.getName());
+
+        ResponseEntity<?> response = eventService.replace(event.setID(eventID));
+
+        return response;
+    }
+
+    // TODO javadoc
+    @PatchMapping(value = "events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
-        log.info("PUT localhost:8080/events/{} -> updateEvent({}, Name: {}) is called", eventID, event.getName());
+        log.info("PATCH localhost:8080/events/{} -> updateEvent({}, Name: {}) is called", eventID, event.getName());
 
         ResponseEntity<?> response = eventService.update(event.setID(eventID));
 
