@@ -33,8 +33,8 @@ public class User {
      */
     public User() {
         this.userID = UUID.randomUUID();
-        this.firstName = "John";
-        this.lastName = "Doe";
+        this.firstName = null;
+        this.lastName = null;
         this.email = null;
         this.password = null;
         this.organizer = false;

@@ -208,6 +208,7 @@ public class EventService {
         }
     }
 
+    // TODO check javadoc
     /**
      * Updates an existing event in the repository.
      *
@@ -218,7 +219,7 @@ public class EventService {
      * @param event The event to be updated.
      * @return A ResponseEntity containing the response from the repository.
      */
-    public ResponseEntity<?> update(Event event) {
+    public ResponseEntity<?> replace(Event event) {
         log.info("update event: {}", event.getID());
         log.info("event Participants: {}", event.getParticipants());
         RestTemplate restTemplate = new RestTemplate();
@@ -293,7 +294,7 @@ public class EventService {
             throw new IllegalArgumentException("Participant limit reached.");
         }
         log.info("addUser, participants: {}", event.getParticipants());
-        update(event);
+        replace(event);
         return event;
     }
 
@@ -320,7 +321,7 @@ public class EventService {
         }
 
         log.info("removeUser: participants{}", event.getParticipants());
-        update(event);
+        replace(event);
         return event;
     }
 
@@ -338,7 +339,7 @@ public class EventService {
         log.info("removeUser: userId={}", userID);
         for (Event event : Event.collectionFromJson(getAll())) {
             if (event.removeParticipant(userID)) {
-                update(event);
+                replace(event);
             }
         }
     }
@@ -376,8 +377,39 @@ public class EventService {
         if (!event.rate(userID, rating)) {
             throw new IllegalArgumentException("Rating not valid.");
         }
-        update(event);
+        replace(event);
         return event;
     }
 
+    // TODO javadoc
+    public ResponseEntity<?> updateEvent(Event newEvent){
+        log.info("update Event: {}", newEvent.getID());
+
+        Event event = Event.eventFromJson(getEvent(newEvent.getID()).getBody().toString());
+
+        if (event == null) {
+            return replace(newEvent);
+        }
+
+        if (newEvent.getName() != null) {
+            event.setName(newEvent.getName());
+        }
+        if (newEvent.getDescription() != null) {
+            event.setDescription(newEvent.getDescription());
+        }
+        if (newEvent.getDateTime() != null) {
+            event.setDateTime(newEvent.getDateTime());
+        }
+        if (newEvent.getLocation() != null) {
+            event.setLocation(newEvent.getLocation());
+        }
+        if (newEvent.getMaxParticipants() != 10) {
+            event.setMaxParticipants(newEvent.getMaxParticipants());
+        }
+        if (newEvent.getOrganizerUserID() != null) {
+            event.setOrganizerUserID(newEvent.getOrganizerUserID());
+        }
+        
+        return replace(event);
+    }
 }

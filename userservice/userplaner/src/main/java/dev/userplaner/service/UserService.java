@@ -101,12 +101,13 @@ public class UserService {
         }
     }
 
+    // TODO check javadoc
     /**
      * Updates a user.
      *
      * @param user The User object to update.
      */
-    public ResponseEntity<?> update(User user) {
+    public ResponseEntity<?> replace(User user) {
         log.info("User Updated: {}", user.getID());
 
         RestTemplate restTemplate = new RestTemplate();
@@ -209,4 +210,29 @@ public class UserService {
         return jsonString;
     }
 
+    // TODO javadoc
+    public ResponseEntity<?> updateUser(User newUser){
+        log.info("update User: {}", newUser.getID());
+
+        User user = User.userFromJson(getUser(newUser.getID()).getBody().toString());
+
+        if (user == null) {
+            return replace(newUser);
+        }
+
+        if (newUser.getFirstName() != null) {
+            user.setFirstName(newUser.getFirstName());
+        } 
+        if (newUser.getLastName() != null) {
+            user.setLastName(newUser.getLastName());
+        }
+        if (newUser.getEmail() != null) {
+            user.setEmail(newUser.getEmail());
+        }
+        if (newUser.getEmail() != null) {
+            user.setEmail(newUser.getEmail());
+        }
+
+        return replace(user);
+    }
 }
