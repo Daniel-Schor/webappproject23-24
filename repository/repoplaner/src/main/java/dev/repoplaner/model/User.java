@@ -93,7 +93,6 @@ public class User {
     public static Collection<User> collectionFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         Collection<User> values = new ArrayList<>();
 
         try {
@@ -111,7 +110,6 @@ public class User {
     public static User userFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         User user = new User();
 
         try {

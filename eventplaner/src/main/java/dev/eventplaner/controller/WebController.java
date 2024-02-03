@@ -20,12 +20,6 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/web/")
-/*
- * public SomeData requestMethodName(@RequestParam("param") String param) {
- * return new SomeData();
- * }
- */
-
 public class WebController {
 
     private static final Logger log = LoggerFactory.getLogger(WebController.class);
@@ -113,7 +107,6 @@ public class WebController {
      * @return The name of the view template (e.g., 'event-details') used to render
      *         the event details.
      */
-    // TODO mapping ohne /web
     @GetMapping("event-details/{id}")
     public String showEventDetailsById(@PathVariable("id") UUID id, Model model) {
         log.info("GET localhost:8080/web/event-details/{} -> showEventDetailsById() is called: {}", id, id);

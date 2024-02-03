@@ -46,6 +46,7 @@ public class ApiController {
     @PostMapping(value = "/events")
     public ResponseEntity<?> createEvent(@RequestBody Event event) throws URISyntaxException {
         Event createdEvent = repositoryService.putEvent(event);
+        log.info("POST localhost:8082/events -> createEvent() is called: {}", event.getID());
         URI url = new URI("/events/" + createdEvent.getID());
         return ResponseEntity.created(url).body(createdEvent);
     }
@@ -59,6 +60,7 @@ public class ApiController {
      */
     @PutMapping("/events/{eventID}")
     public ResponseEntity<?> updateEvent(@PathVariable UUID eventID, @RequestBody Event event) {
+        log.info("PUT localhost:8082/events/{} -> updateEvent() is called: {}", eventID, eventID);
         if (repositoryService.getEvent(eventID) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
         }
@@ -73,6 +75,7 @@ public class ApiController {
         */
     @GetMapping("/events")
     public ResponseEntity<Collection<Event>> getAllEvents() {
+        log.info("GET localhost:8082/events -> getAllEvents() is called");
         Collection<Event> events = repositoryService.getAllEvents();
         if (events.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -88,6 +91,7 @@ public class ApiController {
      */
     @GetMapping("/events/{eventID}")
     public ResponseEntity<?> getEvent(@PathVariable UUID eventID) {
+        log.info("GET localhost:8082/events/{} -> getEvent() is called: {}"+eventID, eventID);
         Event event = repositoryService.getEvent(eventID);
         if (event == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
@@ -103,6 +107,7 @@ public class ApiController {
      */
     @DeleteMapping("/events/{eventID}")
     public ResponseEntity<?> deleteEvent(@PathVariable UUID eventID) {
+        log.info("DELETE localhost:8082/events/{} -> deleteEvent() is called: {}", eventID, eventID);
         if (repositoryService.deleteEvent(eventID) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
         }
@@ -118,6 +123,7 @@ public class ApiController {
      */
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User user) throws URISyntaxException {
+        log.info("POST localhost:8082/users -> createUser() is called: {}", user.getID());
         User createdUser = repositoryService.putUser(user);
         URI url = new URI("/users/" + createdUser.getID());
         return ResponseEntity.created(url).body(createdUser);
@@ -132,6 +138,7 @@ public class ApiController {
         */
     @PutMapping("/users/{userID}")
     public ResponseEntity<?> updateUser(@PathVariable UUID userID, @RequestBody User user) {
+        log.info("PUT localhost:8082/users/{} -> updateUser() is called: {}", userID, userID);
         if (repositoryService.getUser(userID) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
@@ -145,6 +152,7 @@ public class ApiController {
         */
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers() {
+        log.info("GET localhost:8082/users -> getAllUsers() is called");
         Collection<User> users = repositoryService.getAllUsers();
         if (users.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -160,6 +168,7 @@ public class ApiController {
      */
     @GetMapping("/users/{userID}")
     public ResponseEntity<?> getUsers(@PathVariable UUID userID) {
+        log.info("GET localhost:8082/users/{} -> getUsers() is called: {}", userID, userID);
         User user = repositoryService.getUser(userID);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
@@ -176,6 +185,7 @@ public class ApiController {
      */
     @DeleteMapping("/users/{userID}")
     public ResponseEntity<?> deleteUsers(@PathVariable UUID userID) {
+        log.info("DELETE localhost:8082/users/{} -> deleteUsers() is called: {}", userID, userID);
         if (repositoryService.deleteUser(userID) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }

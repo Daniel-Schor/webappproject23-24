@@ -38,6 +38,7 @@ public class ApiController {
     private UserService userService;
 
     public ResponseEntity<?> checkProcessability(User user) {
+        log.info("Check processability of user");
         String detail = User.isValid(user);
         if (detail != null) {
             ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, detail);
@@ -56,7 +57,7 @@ public class ApiController {
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> getAllUsers() {
-        log.info("Get all users");
+        log.info("POST localhost:8083/users -> getAllUsers() is called: {}");
 
         return userService.getAllDTO();
     }
@@ -71,7 +72,7 @@ public class ApiController {
     @GetMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> getUser(@PathVariable("userID") UUID userID) {
-        log.info("Get all users");
+        log.info("GET localhost:8083/users/{} -> getUser() is called: {}", userID);
 
         return userService.getUser(userID);
     }
@@ -86,7 +87,7 @@ public class ApiController {
     @PostMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> createUser(@RequestBody User user) {
-        log.info("Create new user");
+        log.info("POST localhost:8083/users -> createUser() is called: {}", user.getID());
 
         ResponseEntity<?> response = checkProcessability(user);
         if (response == null) {
@@ -95,9 +96,6 @@ public class ApiController {
         return response;
     }
 
-    // neu Methode
-
-    // TODO check javadoc
     /**
      * Updates a user with the given user ID.
      *
@@ -109,7 +107,7 @@ public class ApiController {
     @PutMapping(value = "/users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> replaceUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
-        log.info("Update user: {}", userID);
+        log.info("PUT localhost:8083/users/{} -> replaceUser() is called: {}", userID);
 
         ResponseEntity<?> response = checkProcessability(user);
         if (response == null) {
@@ -122,10 +120,11 @@ public class ApiController {
     @PutMapping(value = "/users/update/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
-        log.info("Update user: {}", userID);
+        log.info("PUT localhost:8083/users/update/{} -> updateUser() is called: {}", userID);
 
         return userService.updateUser(user.setID(userID));
     }
+
     /**
      * Deletes a user event based on the provided userID.
      *
@@ -135,7 +134,7 @@ public class ApiController {
     @DeleteMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> deleteEvent(@PathVariable("userID") UUID userID) {
-        log.debug("deleteEvent() is called");
+        log.info("DELETE localhost:8083/users/{} -> deleteEvent() is called: {}", userID);
 
         return userService.delete(userID);
     }
