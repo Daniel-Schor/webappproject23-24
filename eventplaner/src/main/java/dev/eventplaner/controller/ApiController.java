@@ -43,9 +43,9 @@ public class ApiController {
     /**
      * Retrieves all users.
      *
-     * This method, mapped to the GET request at '/users', fetches a list of all
-     * registered users.
-     * The response is provided in JSON format and is handled by the userService.
+     * Mapped to the GET request at '/users', this method fetches a list of all
+     * registered users. The response is provided in JSON format and is handled by
+     * the userService.
      *
      * @return ResponseEntity containing a collection of all users in JSON format.
      */
@@ -61,13 +61,12 @@ public class ApiController {
     /**
      * Retrieves a user's details based on their UUID.
      *
-     * This method is mapped to a GET request at '/users/{userID}'. It fetches the
-     * details of the user
-     * identified by the provided userID. The response is in JSON format.
+     * Mapped to a GET request at '/users/{userID}', this method fetches the
+     * details of the user identified by the provided userID. The response is in
+     * JSON format.
      *
      * @param userID The UUID of the user whose details are to be retrieved.
-     * @return ResponseEntity containing the user's details. The response body
-     *         contains the user data in JSON format.
+     * @return ResponseEntity containing the user's details in JSON format.
      */
     @GetMapping(value = "users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUser(@PathVariable("userID") UUID userID) {
@@ -82,8 +81,7 @@ public class ApiController {
      * Creates a new user.
      *
      * Mapped to the POST request at '/users', this method creates a new user with
-     * the details
-     * provided in the request body. It consumes and produces JSON format.
+     * the details provided in the request body. It consumes and produces JSON.
      *
      * @param user The User object containing the information for the new user.
      * @return ResponseEntity representing the outcome of the user creation
@@ -97,18 +95,16 @@ public class ApiController {
         return userService.create(user);
     }
 
-    // TODO check javadoc
     /**
-     * Updates a user's information.
+     * Replaces a user with updated information.
      *
      * Mapped to the PUT request at '/users/{userID}', this method updates the
-     * details of a user identified by userID.
-     * The updated user information is provided in JSON format in the request body.
-     * It consumes and produces JSON.
+     * details of a user identified by userID. The updated user information is
+     * provided in JSON format in the request body. It consumes and produces JSON.
      *
-     * @param userID The UUID of the user to be updated.
-     * @param user   The User object containing the updated information.
-     * @return ResponseEntity indicating the result of the update operation.
+     * @param userID The UUID of the user to be replaced, obtained from the URL.
+     * @param user   The updated user data provided in the request body.
+     * @return ResponseEntity containing the result of the update operation.
      */
     @PutMapping(value = "users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> replaceUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
@@ -119,7 +115,21 @@ public class ApiController {
         return response;
     }
 
-    // TODO javadoc
+    /**
+     * Partially updates the details of an existing user.
+     *
+     * This method, mapped to the PATCH request at '/users/{userID}', allows for the
+     * partial
+     * updating of a user's details. It consumes and produces JSON. The user to be
+     * updated is
+     * identified by the userID provided in the path, and the new details for the
+     * user are
+     * contained in the request body.
+     *
+     * @param userID The UUID of the user to be partially updated.
+     * @param user   The User object containing the updated details.
+     * @return ResponseEntity reflecting the result of the partial update operation.
+     */
     @PatchMapping(value = "users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
         String fullname = user.getFirstName() + " " + user.getLastName();
@@ -163,9 +173,8 @@ public class ApiController {
         return eventService.create(event);
     }
 
-    // TODO check javadoc
     /**
-     * Updates the details of an existing event.
+     * Updates an existing event identified by its UUID.
      *
      * This method, mapped to the PUT request at '/events/{eventID}', updates an
      * event with new information.
@@ -174,8 +183,8 @@ public class ApiController {
      * are provided in the request body.
      *
      * @param eventID The UUID of the event to be updated.
-     * @param event   The updated event object containing the new details.
-     * @return ResponseEntity reflecting the result of the update operation.
+     * @param event   The updated event data.
+     * @return ResponseEntity indicating the result of the update operation.
      */
     @PutMapping(value = "events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> replaceEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
@@ -186,7 +195,21 @@ public class ApiController {
         return response;
     }
 
-    // TODO javadoc
+    /**
+     * Partially updates the details of an existing event.
+     *
+     * This method, mapped to the PATCH request at '/events/{eventID}', partially
+     * updates an
+     * event with new information provided in the request body. It is designed to
+     * consume
+     * and produce JSON. The target event is identified by eventID, and the new
+     * details
+     * for the event are passed in the request body.
+     *
+     * @param eventID The UUID of the event to be partially updated.
+     * @param event   The event object containing the updated details.
+     * @return ResponseEntity reflecting the result of the partial update operation.
+     */
     @PatchMapping(value = "events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
         log.info("PATCH localhost:8080/events/{} -> updateEvent({}, Name: {}) is called", eventID, event.getName());
