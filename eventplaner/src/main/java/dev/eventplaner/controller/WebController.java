@@ -159,10 +159,6 @@ public class WebController {
     /**
      * Displays the home page.
      *
-     * Mapped to the GET request at 'home', this method returns the view template
-     * for the home page.
-     * It is responsible for rendering the main landing page of the website.
-     *
      * @return The name of the view template used for the home page.
      */
     @GetMapping("home")
@@ -174,11 +170,6 @@ public class WebController {
 
     /**
      * Displays the event management page.
-     *
-     * Mapped to the GET request at 'manage', this method is responsible for
-     * rendering the event management
-     * view. It simply returns the name of the view template responsible for
-     * displaying the event management interface.
      *
      * @param model The Model object used to pass attributes to the view. It may not
      *              be used explicitly in this method.
@@ -192,6 +183,13 @@ public class WebController {
         return "manage-events";
     }
 
+    /**
+     * Handles GET requests for "/view-users" endpoint.
+     *
+     * @param model The Model object for passing data to the view.
+     * @return The view name ("manage-users") for rendering the user management
+     *         page.
+     */
     @GetMapping("view-users")
     public String showManageUsers(Model model) {
         log.info("GET localhost:8080/web/view-users -> showManageUsres() is called");
@@ -222,13 +220,6 @@ public class WebController {
 
     /**
      * Displays the page for deleting an event.
-     *
-     * This method, mapped to the GET request at '/web/manage/delete-event', is
-     * responsible for showing
-     * the delete event page. The method prepares the view for deletion operations,
-     * but does not populate
-     * the model with data as the deletion process is typically handled
-     * interactively on the page.
      *
      * @param model The Model object used to pass attributes to the view.
      * @return The name of the view template (e.g., 'delete-event') used for
@@ -320,7 +311,6 @@ public class WebController {
      * @param model           The Model object used to pass attributes to the view.
      * @return A redirect string to the event overview page.
      */
-
     @PostMapping("manage/add-event")
     public String addEvent(@RequestParam("name") String name,
             @RequestParam("description") String description,
@@ -358,6 +348,22 @@ public class WebController {
         return "redirect:/web/events";
     }
 
+    /**
+     * Handles GET requests for the "user-details/{userID}" endpoint.
+     *
+     * This method is responsible for displaying the details of a specific user
+     * identified by
+     * their userID. It fetches user data using an API call, processes the response,
+     * and then
+     * populates the model with the user's information if the retrieval is
+     * successful. In case
+     * of an error in fetching user data, a warning is logged.
+     *
+     * @param userID The unique identifier (UUID) of the user whose details are to
+     *               be displayed.
+     * @param model  The Model object used to pass data to the view.
+     * @return The name of the view ("user-details") to render the user's details.
+     */
     @GetMapping("user-details/{userID}")
     public String showUserDetails(@PathVariable("userID") UUID userID, Model model) {
         log.info("GET localhost:8080/web/user-details/{} -> showUserDetails() is called: {}", userID, userID);
@@ -375,6 +381,12 @@ public class WebController {
         return "user-details";
     }
 
+    /**
+     * Handles GET requests for the "manage/delete-user" endpoint.
+     *
+     * @param model The Model object for passing data to the view.
+     * @return The view name ("delete-user") for rendering the delete user page.
+     */
     @GetMapping("manage/delete-user")
     public String showDeleteUserPage(Model model) {
         log.info("GET localhost:8080/web/manage/delete-user -> showDeleteUserPage() is called");
@@ -383,6 +395,14 @@ public class WebController {
 
     }
 
+    /**
+     * Handles GET requests for the "manage/add-user" endpoint.
+     *
+     * @param model The Model object used to pass data to the view, including the
+     *              new User object.
+     * @return The name of the view ("add-user") to render the form for adding a new
+     *         user.
+     */
     @GetMapping("manage/add-user")
     public String showAddUserForm(Model model) {
         log.info("GET localhost:8080/web/manage/add-user -> showAddUserForm() is called");
@@ -392,6 +412,24 @@ public class WebController {
         return "add-user";
     }
 
+    /**
+     * Handles POST requests for the "manage/add-user" endpoint.
+     * 
+     * This method adds a new user with the provided details. It receives the user's
+     * information as request parameters, creates a new User instance, sets its
+     * properties,
+     * and then calls the API controller to create the user. Finally, it populates
+     * the model
+     * with all users and redirects to the user overview page.
+     *
+     * @param firstName The first name of the user to be added.
+     * @param lastName  The last name of the user.
+     * @param email     The email address of the user.
+     * @param password  The password for the user's account.
+     * @param organizer A boolean indicating if the user is an organizer.
+     * @param model     The Model object for passing data to the view.
+     * @return A redirection string to the "users" overview page.
+     */
     @PostMapping("manage/add-user")
     public String addUser(@RequestParam("firstName") String firstName,
             @RequestParam("lastName") String lastName,
@@ -422,6 +460,21 @@ public class WebController {
         return "redirect:/web/users";
     }
 
+    /**
+     * Handles GET requests for checking if a user exists, based on their userID.
+     *
+     * This method is mapped to the "manage/check-user/{userID}" endpoint and is
+     * responsible
+     * for verifying the existence of a user with the given userID. It queries the
+     * user
+     * details through the API controller and returns a JSON response indicating
+     * whether
+     * the user exists or not.
+     *
+     * @param userID The unique identifier (UUID) of the user to check.
+     * @return A {@link ResponseEntity} containing a JSON object with a key "exists"
+     *         and a boolean value indicating whether the user exists or not.
+     */
     @GetMapping("manage/check-user/{userID}")
     public ResponseEntity<?> checkUser(@PathVariable("userID") UUID userID) {
         log.info("GET localhost:8080/web/manage/check-user/{} -> checkUser() is called: {}", userID, userID);
@@ -435,6 +488,21 @@ public class WebController {
         }
     }
 
+    /**
+     * Handles DELETE requests for the "manage/delete-user/{userID}" endpoint.
+     * 
+     * This method is responsible for deleting a user identified by their userID. It
+     * makes a
+     * call to the API controller to delete the user and logs the outcome. Depending
+     * on the
+     * result of the deletion process, it redirects to different views.
+     *
+     * @param userID The unique identifier (UUID) of the user to be deleted.
+     * @param model  The Model object used to pass data to the view.
+     * @return A redirection string: to the manage page if deletion is successful,
+     *         or
+     *         to the user overview page if deletion fails.
+     */
     @DeleteMapping("manage/delete-user/{userID}")
     public String deleteUser(@PathVariable("userID") UUID userID, Model model) {
         log.info("DELETE localhost:8080/web/manage/delete-user/{} -> deleteUser() is called: {}", userID, userID);
