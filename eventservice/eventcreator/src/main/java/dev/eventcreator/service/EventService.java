@@ -347,7 +347,6 @@ public class EventService {
     /**
      * Adds a rating for a specific event from a specific user.
      *
-<<<<<<< HEAD
      * This method retrieves an event with the specified ID, and if the event exists
      * and contains the user with the specified ID, it adds the specified rating for
      * the user and updates the event in the repository. If the event does not exist
@@ -358,13 +357,6 @@ public class EventService {
      * @param rating  The rating to be added.
      * @return The updated event if the rating was successfully added, or null if
      *         the event does not exist or does not contain the user.
-=======
-     * @param eventID The ID of the event.
-     * @param userID  The ID of the user.
-     * @param rating  The rating to add.
-     * @return A string representation of the updated event.
-     * @throws NotFoundException
->>>>>>> ecb2b325d8ca12bcd968b360bcca05bff0743b6d
      */
     public Event addRating(UUID eventID, UUID userID, int rating) throws NotFoundException, IllegalArgumentException {
         log.info("addRating: eventID={}, userID={}, rating={}", eventID, userID, rating);
