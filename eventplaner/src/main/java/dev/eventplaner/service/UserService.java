@@ -46,7 +46,7 @@ public class UserService {
      *         and error message from the HttpClientErrorException will be returned.
      */
     public ResponseEntity<?> getUser(UUID userID) {
-        log.info("Eventplaner UserService -> getUser() is called: {}", userID);
+        log.info("getUser() is called: {}", userID);
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users/" + userID;
@@ -79,7 +79,7 @@ public class UserService {
      *         HttpClientErrorException will be returned.
      */
     public ResponseEntity<?> create(User user) {
-        log.info("Eventplaner UserService -> create() is called: {}", user.getID());
+        log.info("create() is called: {}", user.getID());
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users";
@@ -111,7 +111,7 @@ public class UserService {
      *         error message from the HttpClientErrorException will be returned.
      */
     public ResponseEntity<?> delete(UUID userID) {
-        log.info("Eventplaner UserService -> delete() is called: {}", userID);
+        log.info("delete() is called: {}", userID);
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users/" + userID;
