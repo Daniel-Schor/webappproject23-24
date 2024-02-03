@@ -125,7 +125,6 @@ public class EventService {
         }
     }
 
-    // TODO check javadoc
     /**
      * Updates an existing event in the repository.
      * The method sends a PUT request to the repository with the updated event.

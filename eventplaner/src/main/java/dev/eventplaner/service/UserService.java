@@ -126,7 +126,6 @@ public class UserService {
         }
     }
 
-    // TODO check javadoc
     /**
      * Updates a specific user in the repository.
      *

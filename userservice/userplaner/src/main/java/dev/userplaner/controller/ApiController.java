@@ -96,9 +96,6 @@ public class ApiController {
         return response;
     }
 
-    // neu Methode
-
-    // TODO check javadoc
     /**
      * Updates a user with the given user ID.
      *
@@ -127,6 +124,7 @@ public class ApiController {
 
         return userService.updateUser(user.setID(userID));
     }
+
     /**
      * Deletes a user event based on the provided userID.
      *
