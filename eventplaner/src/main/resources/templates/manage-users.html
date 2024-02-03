@@ -1,81 +1,83 @@
 <!DOCTYPE html>
 <html lang="en-de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Manage the Users</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #ffffff;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            flex-direction: column;
-        }
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #ffffff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        flex-direction: column;
+      }
 
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+      h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+      }
 
-        .button-container {
-            display: flex;
-            width: 80%;
-            margin-bottom: 20px;
-        }
+      .button-container {
+        display: flex;
+        width: 80%;
+        margin-bottom: 20px;
+      }
 
-        button {
-            flex: 1;
-            padding: 10px;
-            font-size: 16px;
-            background-color: #000000;
-            color: #ffffff;
-            border: none;
-            cursor: pointer;
-        }
+      button {
+        flex: 1;
+        padding: 10px;
+        font-size: 16px;
+        background-color: #000000;
+        color: #ffffff;
+        border: none;
+        cursor: pointer;
+      }
 
-        button:first-child {
-            margin-right: 10px;
-        }
+      button:first-child {
+        margin-right: 10px;
+      }
 
-        button:last-child {
-            margin-left: 10px;
-        }
+      button:last-child {
+        margin-left: 10px;
+      }
 
-        button:hover {
-            background-color: #0056b3;
-            color: white;
-        }
+      button:hover {
+        background-color: #0056b3;
+        color: white;
+      }
 
-        .description-container {
-            width: 80%;
-            display: flex;
-            justify-content: space-between;
-        }
+      .description-container {
+        width: 80%;
+        display: flex;
+        justify-content: space-between;
+      }
 
-        p {
-            color: #000000;
-            text-align: center;
-            margin-bottom: 40px;
-            flex: 1;
-        }
+      p {
+        color: #000000;
+        text-align: center;
+        margin-bottom: 40px;
+        flex: 1;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>User manager</h1>
     <div class="button-container">
-        <button onclick="window.location.href='manage/add-user'">Add User</button>
-        <button onclick="window.location.href='manage/delete-user'">Delete User</button>
+      <button onclick="window.location.href='manage/add-user'">Add User</button>
+      <button onclick="window.location.href='manage/delete-user'">
+        Delete User
+      </button>
     </div>
     <div class="description-container">
-        <p>Add a new User</p>
-        <p>Delete an already existing User</p>
+      <p>Add a new User</p>
+      <p>Delete an already existing User</p>
     </div>
     <a href="users">Go Back</a>
-</body>
+  </body>
 </html>

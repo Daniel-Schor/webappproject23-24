@@ -51,7 +51,6 @@ public class InitData {
                                 .setPassword("789")
                                 .setOrganizer(true);
 
-
                 repositoryService.putUser(daniel);
 
                 log.debug("create event \"Statistik Vorlesung\"");
@@ -67,7 +66,6 @@ public class InitData {
                 statistik.rate(tristan.getID(), 3);
 
                 repositoryService.putEvent(statistik);
-
 
                 log.debug("create event \"Webanwendung Vorlesung\"");
                 Event webanwendung = new Event()

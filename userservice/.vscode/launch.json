@@ -1,21 +1,21 @@
 {
-    "configurations": [
-        {
-            "type": "java",
-            "name": "userplanerApplication",
-            "request": "launch",
-            "mainClass": "dev.userplaner.userplanerApplication",
-            "projectName": "UserService",
-        },
-        {
-            "type": "java",
-            "name": "Spring Boot-userplanerApplication<userplaner>",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "mainClass": "dev.userplaner.userplanerApplication",
-            "projectName": "UserService",
-            "args": "",
-            "envFile": "${workspaceFolder}/.env"
-        }
-    ]
+  "configurations": [
+    {
+      "type": "java",
+      "name": "userplanerApplication",
+      "request": "launch",
+      "mainClass": "dev.userplaner.userplanerApplication",
+      "projectName": "UserService"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-userplanerApplication<userplaner>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "dev.userplaner.userplanerApplication",
+      "projectName": "UserService",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
 }

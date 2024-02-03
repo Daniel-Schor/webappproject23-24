@@ -1,28 +1,28 @@
 .star-rating {
-    font-size: 0; /* Entfernt den Zwischenraum zwischen Inline-Blocks */
-    line-height: 0; /* Verhindert zusätzlichen vertikalen Abstand */
-    display: inline-block; /* Richtet alle Sterne in einer Zeile aus */
+  font-size: 0; /* Removes the space between inline-blocks */
+  line-height: 0; /* Prevents additional vertical space */
+  display: inline-block; /* Aligns all stars in one line */
 }
 
 .star-container {
-    font-size: 24px; /* Größe der Sterne */
-    display: inline-block; /* Stellt sicher, dass die Sterne nebeneinander stehen */
-    position: relative;
-    overflow: hidden; /* Verhindert Überlauf bei teilweiser Füllung */
+  font-size: 24px; /* Size of the stars */
+  display: inline-block; /* Ensures stars are side by side */
+  position: relative;
+  overflow: hidden; /* Prevents overflow for partial filling */
 }
 
 .star-container i {
-    color: gold; /* Farbe der gefüllten Sterne */
-    line-height: 1; /* Standardzeilenhöhe für die Sterne */
+  color: gold; /* Color of the filled stars */
+  line-height: 1; /* Default line height for the stars */
 }
 
 .star-container::before {
-    content: '\f005'; /* FontAwesome Stern-Code */
-    font-family: 'FontAwesome';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 0; /* Anfangsfüllung, wird durch JS gesteuert */
-    color: lightgray; /* Farbe der leeren Sterne */
-    overflow: hidden;
+  content: "\f005"; /* FontAwesome star code */
+  font-family: "FontAwesome";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0; /* Initial filling, controlled by JS */
+  color: lightgray; /* Color of the empty stars */
+  overflow: hidden;
 }

@@ -1,57 +1,57 @@
 {
-    "configurations": [
-        {
-            "type": "java",
-            "name": "userplanerApplication",
-            "request": "launch",
-            "mainClass": "dev.userplaner.userplanerApplication",
-            "projectName": "dev-userplaner"
-        },
-        {
-            "type": "java",
-            "name": "eventcreatorApplication",
-            "request": "launch",
-            "mainClass": "dev.eventcreator.eventcreatorApplication",
-            "projectName": "eventcreator",
-            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1983 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=eventcreator"
-        },
-        {
-            "type": "java",
-            "name": "EventplanerApplication",
-            "request": "launch",
-            "mainClass": "dev.eventplaner.EventplanerApplication",
-            "projectName": "dev-eventplaner"
-        },
-        {
-            "type": "java",
-            "name": "Spring Boot-repoplanerApplication<repoplaner>",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "mainClass": "dev.repoplaner.repoplanerApplication",
-            "projectName": "repoplaner",
-            "args": "",
-            "envFile": "${workspaceFolder}/.env",
-            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1991 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=repoplaner"
-        },
-        {
-            "type": "java",
-            "name": "Spring Boot-userplanerApplication<userplaner>",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "mainClass": "dev.userplaner.userplanerApplication",
-            "projectName": "userplaner",
-            "args": "",
-            "envFile": "${workspaceFolder}/.env"
-        },
-        {
-            "type": "java",
-            "name": "Spring Boot-EventplanerApplication<eventplaner>",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "mainClass": "dev.eventplaner.EventplanerApplication",
-            "projectName": "eventplaner",
-            "args": "",
-            "envFile": "${workspaceFolder}/.env"
-        }
-    ]
+  "configurations": [
+    {
+      "type": "java",
+      "name": "userplanerApplication",
+      "request": "launch",
+      "mainClass": "dev.userplaner.userplanerApplication",
+      "projectName": "dev-userplaner"
+    },
+    {
+      "type": "java",
+      "name": "eventcreatorApplication",
+      "request": "launch",
+      "mainClass": "dev.eventcreator.eventcreatorApplication",
+      "projectName": "eventcreator",
+      "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1983 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=eventcreator"
+    },
+    {
+      "type": "java",
+      "name": "EventplanerApplication",
+      "request": "launch",
+      "mainClass": "dev.eventplaner.EventplanerApplication",
+      "projectName": "dev-eventplaner"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-repoplanerApplication<repoplaner>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "dev.repoplaner.repoplanerApplication",
+      "projectName": "repoplaner",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1991 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=repoplaner"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-userplanerApplication<userplaner>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "dev.userplaner.userplanerApplication",
+      "projectName": "userplaner",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-EventplanerApplication<eventplaner>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "dev.eventplaner.EventplanerApplication",
+      "projectName": "eventplaner",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
 }

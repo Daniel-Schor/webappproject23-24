@@ -1,19 +1,19 @@
 {
-	"folders": [
-		{
-			"path": "../eventplaner"
-		},
-		{
-			"path": "../eventservice"
-		},
-        {
-            "path": "../repository"
-        },
-        {
-            "path": "../userservice"
-        }
-	],
-	"settings": {
-		"java.configuration.updateBuildConfiguration": "interactive"
-	}
+  "folders": [
+    {
+      "path": "../eventplaner"
+    },
+    {
+      "path": "../eventservice"
+    },
+    {
+      "path": "../repository"
+    },
+    {
+      "path": "../userservice"
+    }
+  ],
+  "settings": {
+    "java.configuration.updateBuildConfiguration": "interactive"
+  }
 }

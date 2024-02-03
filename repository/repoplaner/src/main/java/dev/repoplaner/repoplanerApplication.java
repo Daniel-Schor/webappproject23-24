@@ -11,7 +11,8 @@ public class repoplanerApplication {
 
 	/**
 	 * The main method is the entry point of the application.
-	 * It starts the Spring Boot application by calling the SpringApplication.run() method.
+	 * It starts the Spring Boot application by calling the SpringApplication.run()
+	 * method.
 	 *
 	 * @param args the command line arguments
 	 */

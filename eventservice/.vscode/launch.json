@@ -1,21 +1,21 @@
 {
-    "configurations": [
-        {
-            "type": "java",
-            "name": "eventcreatorApplication",
-            "request": "launch",
-            "mainClass": "dev.eventcreator.eventcreatorApplication",
-            "projectName": ""
-        },
-        {
-            "type": "java",
-            "name": "Spring Boot-eventcreatorApplication<eventcreator>",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "mainClass": "dev.eventcreator.eventcreatorApplication",
-            "projectName": "eventcreator",
-            "args": "",
-            "envFile": "${workspaceFolder}/.env"
-        }
-    ]
+  "configurations": [
+    {
+      "type": "java",
+      "name": "eventcreatorApplication",
+      "request": "launch",
+      "mainClass": "dev.eventcreator.eventcreatorApplication",
+      "projectName": ""
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-eventcreatorApplication<eventcreator>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "dev.eventcreator.eventcreatorApplication",
+      "projectName": "eventcreator",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
 }

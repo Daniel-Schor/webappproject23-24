@@ -7,7 +7,7 @@
     <title>Event Details</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" th:href="@{/style.css}" />
-    <link rel="stylesheet" href="styles.css"> <!-- Fügen Sie Ihre eigenen CSS-Stile hinzu -->
+    <link rel="stylesheet" href="styles.css"> <!-- Add your own CSS styles -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdOSQ-BZeoYcvf2Z6fyGuAWhZ7SpdV3eQ"></script>
     <style>
         body {
@@ -19,8 +19,8 @@
         }
 
         header {
-            background-color: #333; /* Dunklere Hintergrundfarbe für Header */
-            color: #f4f4f4; /* Hellere Schriftfarbe auf dunklem Hintergrund */
+            background-color: #333; /* Darker background color for the header */
+            color: #f4f4f4; /* Lighter font color on dark background */
             text-align: center;
             padding: 15px 0;
         }
@@ -28,9 +28,9 @@
         .container {
             max-width: 800px;
             margin: 20px auto;
-            background-color: #fff; /* Helle Hintergrundfarbe für Container */
+            background-color: #fff; /* Light background color for the container */
             padding: 20px;
-            border-radius: 8px; /* Gleiche Abrundung wie bei der Tabelle */
+            border-radius: 8px; /* Same rounding as the table */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
@@ -58,11 +58,11 @@
             display: inline-block;
             position: relative;
             overflow: hidden;
-            flex: 1; /* Gleicher Platz für alle Sterne im Container */
+            flex: 1; /* Equal space for all stars in the container */
         }
 
         .star-container i {
-            color: gold; /* Goldene Farbe für die Sterne beibehalten */
+            color: gold; /* Retain the golden color for the stars */
         }
 
         .star-container::before {
@@ -72,7 +72,7 @@
             left: 0;
             top: 0;
             width: 0;
-            color: #ccc; /* Hellere Hintergrundfarbe für nicht ausgefüllte Sterne */
+            color: #ccc; /* Lighter background color for unfilled stars */
             overflow: hidden;
         }
 
@@ -136,10 +136,6 @@
 
         <a href="/web/events">Back to Event List</a>
     </div>
-
-    <script th:inline="javascript">
-        
-    </script>
 
     <script th:inline="javascript">
         /*<![CDATA[*/

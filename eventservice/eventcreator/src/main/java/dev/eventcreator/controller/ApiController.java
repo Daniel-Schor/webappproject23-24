@@ -110,7 +110,7 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
         log.info("POST localhost:8081/events -> createEvent(Name: {}) is called", event.getName());
-        
+
         ResponseEntity<?> response = checkProcessability(event);
         if (response == null) {
             return eventService.create(event);

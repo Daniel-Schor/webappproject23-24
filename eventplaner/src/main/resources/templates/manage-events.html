@@ -1,132 +1,131 @@
 <!DOCTYPE html>
 <html lang="en-de">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Event Manager</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(to bottom, #ff6f61, #1e3c72);
-            margin: 0;
-            /* Remove default margin */
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
+      body {
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(to bottom, #ff6f61, #1e3c72);
+        margin: 0;
+        /* Remove default margin */
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
 
-        nav {
-            background-color: rgba(0, 0, 0, 0.7);
-            overflow: hidden;
-            width: 100%;
-            position: fixed;
-            top: 0;
-        }
+      nav {
+        background-color: rgba(0, 0, 0, 0.7);
+        overflow: hidden;
+        width: 100%;
+        position: fixed;
+        top: 0;
+      }
 
+      nav a {
+        display: inline-block;
+        color: #fff;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        transition: color 0.3s ease-in-out;
+      }
 
-        nav a {
-            display: inline-block;
-            color: #fff;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-            transition: color 0.3s ease-in-out;
-        }
+      nav a:hover {
+        background-color: #e07a02;
+      }
 
-        nav a:hover {
-            background-color: #e07a02;
-        }
+      h1 {
+        color: #ffc947;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        margin-bottom: 20px;
+      }
 
-        h1 {
-            color: #ffc947;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            margin-bottom: 20px;
-        }
+      .description-container {
+        width: 80%;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
 
-        .description-container {
-            width: 80%;
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
+      p {
+        color: #fff;
+        text-align: center;
+        flex: 1;
+      }
 
-        p {
-            color: #fff;
-            text-align: center;
-            flex: 1;
-        }
+      .button-container {
+        display: flex;
+        width: 80%;
+        margin-bottom: 40px;
+      }
 
-        .button-container {
-            display: flex;
-            width: 80%;
-            margin-bottom: 40px;
-        }
+      button {
+        flex: 1;
+        padding: 10px;
+        font-size: 16px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+      }
 
-        button {
-            flex: 1;
-            padding: 10px;
-            font-size: 16px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-        }
+      button:first-child {
+        margin-right: 10px;
+      }
 
-        button:first-child {
-            margin-right: 10px;
-        }
+      button:last-child {
+        margin-left: 10px;
+      }
 
-        button:last-child {
-            margin-left: 10px;
-        }
+      button:hover {
+        background-color: #e07a02;
+        color: white;
+      }
 
-        button:hover {
-            background-color: #e07a02;
-            color: white;
-        }
+      a {
+        color: #f5a623;
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s ease-in-out;
+      }
 
-        a {
-            color: #f5a623;
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s ease-in-out;
-        }
-
-        a:hover {
-            text-decoration: underline;
-            color: #e07a02;
-        }
+      a:hover {
+        text-decoration: underline;
+        color: #e07a02;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-
+  <body>
     <nav>
-        <a href="/web/home">Home</a>
-        <a href="/web/events">Event List</a>
-        <a href="/web/manage">Event Manager</a>
+      <a href="/web/home">Home</a>
+      <a href="/web/events">Event List</a>
+      <a href="/web/manage">Event Manager</a>
     </nav>
 
     <h1>Event Manager</h1>
 
     <div class="description-container">
-        <p>Add a new Event:</p>
-        <p>Delete an already existing Event:</p>
+      <p>Add a new Event:</p>
+      <p>Delete an already existing Event:</p>
     </div>
 
     <div class="button-container">
-        <button onclick="window.location.href='manage/add-event'">Add Event</button>
-        <button onclick="window.location.href='manage/delete-event'">Delete Event</button>
+      <button onclick="window.location.href='manage/add-event'">
+        Add Event
+      </button>
+      <button onclick="window.location.href='manage/delete-event'">
+        Delete Event
+      </button>
     </div>
 
     <a href="events">Go Back</a>
-
-</body>
-
+  </body>
 </html>

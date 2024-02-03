@@ -10,5 +10,4 @@ import dev.repoplaner.model.Event;
 @Repository
 public class EventRepository extends HashMap<UUID, Event> {
 
-
 }

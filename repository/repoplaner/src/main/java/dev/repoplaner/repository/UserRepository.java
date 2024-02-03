@@ -10,5 +10,4 @@ import dev.repoplaner.model.User;
 @Repository
 public class UserRepository extends HashMap<UUID, User> {
 
-
 }

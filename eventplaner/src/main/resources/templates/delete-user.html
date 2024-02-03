@@ -1,86 +1,84 @@
 <!DOCTYPE html>
 <html lang="en-de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Delete User</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <h1>Delete User</h1>
     <form id="deleteForm">
-        <label for="userID">User ID:</label>
-        <input type="text" id="userID" name="userID" required>
-        <br>
-        <button type="button" onclick="checkUser()">Next</button>
+      <label for="userID">User ID:</label>
+      <input type="text" id="userID" name="userID" required />
+      <br />
+      <button type="button" onclick="checkUser()">Next</button>
     </form>
-    <div id="confirmation" style="display: none;">
-        <p>Do you really want to delete this user?</p>
-        <button type="button" onclick="deleteUser()">Yes</button>
-        <button type="button" onclick="cancelUser()">No</button>
+    <div id="confirmation" style="display: none">
+      <p>Do you really want to delete this user?</p>
+      <button type="button" onclick="deleteUser()">Yes</button>
+      <button type="button" onclick="cancelUser()">No</button>
     </div>
-    <br>
+    <br />
     <a href="/web/users">Go Back</a>
 
     <script>
-        function checkUser() {
-            var userID = document.getElementById("userID").value;
-            console.log("userID: " + userID);
+      function checkUser() {
+        var userID = document.getElementById("userID").value;
+        console.log("userID: " + userID);
 
-            fetch('/web/manage/check-user/' + userID, {
-                method: 'GET',
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.exists) {
-                        console.log("User exists. Displaying confirmation dialog.");
-                        document.getElementById("deleteForm").style.display = "none";
-                        document.getElementById("confirmation").style.display = "block";
-                    } else {
-                        alert("User doesn't exist!");
-                    }
-                })
-                .catch(error => {
-                    console.log('Error:', error);
-                    alert("Something went wrong! " + error.toString());
-                });
-        }
+        fetch("/web/manage/check-user/" + userID, {
+          method: "GET",
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (data.exists) {
+              console.log("User exists. Displaying confirmation dialog.");
+              document.getElementById("deleteForm").style.display = "none";
+              document.getElementById("confirmation").style.display = "block";
+            } else {
+              alert("User doesn't exist!");
+            }
+          })
+          .catch((error) => {
+            console.log("Error:", error);
+            alert("Something went wrong! " + error.toString());
+          });
+      }
 
-        function deleteUser() {
-            var userID = document.getElementById("userID").value;
+      function deleteUser() {
+        var userID = document.getElementById("userID").value;
 
-            fetch('/web/manage/delete-user/' + userID, {
-                method: 'DELETE',
-            })
-
-                .then(response => {
-                    if (!response.ok) {
-                        if (response.status === 405) {
-                            alert("The user has been deleted!");
-                            window.location.href = '/web/users';
-                        } else {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                    } else {
-                        alert("The user has been deleted!");
-                        window.location.href = 'users';
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    alert("Something went wrong! " + error.toString());
-                });
-        }
-        function cancelDelete() {
-            document.getElementById("deleteForm").style.display = "block";
-            document.getElementById("confirmation").style.display = "none";
-        }
+        fetch("/web/manage/delete-user/" + userID, {
+          method: "DELETE",
+        })
+          .then((response) => {
+            if (!response.ok) {
+              if (response.status === 405) {
+                alert("The user has been deleted!");
+                window.location.href = "/web/users";
+              } else {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+            } else {
+              alert("The user has been deleted!");
+              window.location.href = "users";
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Something went wrong! " + error.toString());
+          });
+      }
+      function cancelDelete() {
+        document.getElementById("deleteForm").style.display = "block";
+        document.getElementById("confirmation").style.display = "none";
+      }
     </script>
-</body>
-
+  </body>
 </html>
