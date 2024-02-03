@@ -144,7 +144,7 @@ public class UserService {
      *         HttpClientErrorException will be returned.
      */
     public ResponseEntity<?> replace(User user) {
-        log.info("Eventplaner UserService -> replace() is called: {}", user.getID());
+        log.info("replace() is called: {}", user.getID());
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users/" + user.getID();
@@ -162,7 +162,7 @@ public class UserService {
 
     // TODO javadoc
     public ResponseEntity<?> update(User user) {
-        log.info("Eventplaner UserService -> update() is called: {}", user.getID());
+        log.info("update() is called: {}", user.getID());
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users/update/" + user.getID();
@@ -194,7 +194,7 @@ public class UserService {
      *         be returned.
      */
     public ResponseEntity<?> getAllDTO() {
-        log.info("Eventplaner UserService -> getAllDTO() is called");
+        log.info("getAllDTO() is called");
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/users";

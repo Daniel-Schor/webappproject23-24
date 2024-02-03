@@ -47,7 +47,7 @@ public class EventService {
      *         HttpClientErrorException will be returned.
      */
     public ResponseEntity<?> create(Event event) {
-        log.info("Eventplaner EventService -> create() is called: {}", event.getID());
+        log.info("create() is called: {}", event.getID());
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events";
@@ -78,7 +78,7 @@ public class EventService {
      *         be returned.
      */
     public ResponseEntity<?> getAllDTO() {
-        log.info("Eventplaner EventService -> getAllDTO() is called");
+        log.info("getAllDTO() is called");
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events";
@@ -110,7 +110,7 @@ public class EventService {
      *         returned.
      */
     public ResponseEntity<?> getEvent(UUID eventID) {
-        log.info("Eventplaner EventService -> getEvent() is called: {}", eventID);
+        log.info("getEvent() is called: {}", eventID);
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/" + eventID;
@@ -136,7 +136,7 @@ public class EventService {
      * @return A ResponseEntity containing the response from the repository.
      */
     public ResponseEntity<?> replace(Event event) {
-        log.info("Eventplaner EventService -> update() is called: {}", event.getID());
+        log.info("replace() is called: {}", event.getID());
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/" + event.getID();
@@ -154,7 +154,7 @@ public class EventService {
 
     // TODO javadoc
     public ResponseEntity<?> update(Event event) {
-        log.info("Eventplaner EventService -> update() is called: {}", event.getID());
+        log.info("update() is called: {}", event.getID());
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/update/" + event.getID();
@@ -186,7 +186,7 @@ public class EventService {
      *         error message from the HttpClientErrorException will be returned.
      */
     public ResponseEntity<?> delete(UUID eventID) {
-        log.info("Eventplaner EventService -> delete() is called: {}", eventID);
+        log.info("delete() is called: {}", eventID);
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/" + eventID;
@@ -219,7 +219,7 @@ public class EventService {
      *         HttpClientErrorException will be returned.
      */
     public ResponseEntity<?> addUser(UUID eventID, UUID userID) {
-        log.info("Eventplaner EventService -> addUser() is called: {} and {}", eventID, userID);
+        log.info("addUser() is called: {} and {}", eventID, userID);
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/" + eventID + "/add/" + userID;
@@ -252,7 +252,7 @@ public class EventService {
      *         HttpClientErrorException will be returned.
      */
     public ResponseEntity<?> removeUser(UUID eventID, UUID userID) {
-        log.info("Eventplaner EventService -> removeUser() is called: {} and {}", eventID, userID);
+        log.info("removeUser() is called: {} and {}", eventID, userID);
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/" + eventID + "/remove/" + userID;
@@ -283,7 +283,7 @@ public class EventService {
      *         HttpClientErrorException will be returned.
      */
     public ResponseEntity<?> removeUserFromAllEvents(UUID userID) {
-        log.info("Eventplaner EventService -> removeUserFromAllEvents() is called: {}", userID);
+        log.info("removeUserFromAllEvents() is called: {}", userID);
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/remove/" + userID;
@@ -317,7 +317,7 @@ public class EventService {
      *         HttpClientErrorException will be returned.
      */
     public ResponseEntity<?> addRating(UUID eventID, UUID userID, int rating) {
-        log.info("Eventplaner EventService -> addRating() is called: {} and {} and {}", eventID, userID, rating);
+        log.info("addRating() is called: {} and {} and {}", eventID, userID, rating);
 
         RestTemplate restTemplate = new RestTemplate();
         String url = apiUrl + "/events/" + eventID + "/" + userID + "/" + rating;
