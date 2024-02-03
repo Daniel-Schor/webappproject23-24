@@ -164,7 +164,6 @@ public class Event {
     public static Collection<Event> collectionFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         Collection<Event> values = new ArrayList<>();
 
         try {
@@ -179,7 +178,6 @@ public class Event {
     public static Event eventFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         Event event = new Event();
 
         try {
