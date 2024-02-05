@@ -1,83 +1,123 @@
 <!DOCTYPE html>
 <html lang="en-de">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Manage the Users</title>
-    <style>
-      body {
-        font-family: "Arial", sans-serif;
-        background-color: #ffffff;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        flex-direction: column;
-      }
 
-      h1 {
-        color: #333;
-        text-align: center;
-        margin-bottom: 20px;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage the Users</title>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background: linear-gradient(to bottom, #ff6f61, #1e3c72);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      flex-direction: column;
+    }
 
-      .button-container {
-        display: flex;
-        width: 80%;
-        margin-bottom: 20px;
-      }
+    nav {
+      background-color: rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+      width: 100%;
+      position: fixed;
+      top: 0;
+    }
 
-      button {
-        flex: 1;
-        padding: 10px;
-        font-size: 16px;
-        background-color: #000000;
-        color: #ffffff;
-        border: none;
-        cursor: pointer;
-      }
+    nav a {
+      display: inline-block;
+      color: #fff;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      transition: color 0.3s ease-in-out;
+    }
 
-      button:first-child {
-        margin-right: 10px;
-      }
+    h1 {
+      color: #ffc947;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-      button:last-child {
-        margin-left: 10px;
-      }
+    .button-container {
+      display: flex;
+      width: 80%;
+      margin-bottom: 20px;
+    }
 
-      button:hover {
-        background-color: #0056b3;
-        color: white;
-      }
+    button {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
 
-      .description-container {
-        width: 80%;
-        display: flex;
-        justify-content: space-between;
-      }
+    button:first-child {
+      margin-right: 10px;
+    }
 
-      p {
-        color: #000000;
-        text-align: center;
-        margin-bottom: 40px;
-        flex: 1;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>User manager</h1>
-    <div class="button-container">
-      <button onclick="window.location.href='manage/add-user'">Add User</button>
-      <button onclick="window.location.href='manage/delete-user'">
-        Delete User
-      </button>
-    </div>
-    <div class="description-container">
-      <p>Add a new User</p>
-      <p>Delete an already existing User</p>
-    </div>
-    <a href="users">Go Back</a>
-  </body>
+    button:last-child {
+      margin-left: 10px;
+    }
+
+    button:hover {
+      background-color: #e07a02;
+      color: white;
+    }
+
+    .description-container {
+      width: 80%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    p {
+      color: #fff;
+      text-align: center;
+      margin-bottom: 40px;
+      flex: 1;
+    }
+
+    a {
+      color: #f5a623;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease-in-out;
+    }
+
+    a:hover {
+      text-decoration: underline;
+      color: #e07a02;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <a href="/web/home">Home</a>
+    <a href="/web/users">User List</a>
+    <a href="/web/view-users">Manage User</a>
+  </nav>
+
+  <h1>User Manager</h1>
+
+  <div class="description-container">
+    <p>Add a new User:</p>
+    <p>Delete an already existing User:</p>
+  </div>
+
+  <div class="button-container">
+    <button onclick="window.location.href='manage/add-user'">Add User</button>
+    <button onclick="window.location.href='manage/delete-user'">Delete User</button>
+  </div>
+
+  <a href="users">Go Back</a>
+</body>
+
 </html>
