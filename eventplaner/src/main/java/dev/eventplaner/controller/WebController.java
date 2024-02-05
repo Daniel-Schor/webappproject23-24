@@ -72,52 +72,24 @@ public class WebController {
      * @return The name of the view template (e.g., 'event-details') to render the
      *         event details.
      */
-    @GetMapping("events/{eventID}")
+    @GetMapping("event-details/{eventID}")
     public String showEventDetails(@PathVariable("eventID") UUID eventID, Model model) {
-        log.info("GET localhost:8080/web/events/{} -> showEventDetails() is called: {}", eventID, eventID);
+        log.info("GET localhost:8080/web/event-details/{} -> showEventDetails() is called: {}", eventID, eventID);
 
-        ResponseEntity<?> response = apiController.getEvent(eventID);
+        ResponseEntity<?> eventResponse = apiController.getEvent(eventID);
 
-        if (response.getStatusCode() == HttpStatus.OK) {
-            Object responseBody = response.getBody();
-
-            if (responseBody instanceof Event) {
-                Event event = (Event) responseBody;
-                model.addAttribute("event", event);
-            } else {
-                log.warn("WebController: Invalid response body type for event ID: {}", eventID);
-            }
+        if (eventResponse.getStatusCode() == HttpStatus.OK) {
+            Event event = Event.eventFromJson(eventResponse.toString());
+            model.addAttribute("event", event);
         } else {
             log.warn("WebController: Error retrieving event ID: {}. Status code: {}", eventID,
-                    response.getStatusCode());
+                    eventResponse.getStatusCode());
+
         }
 
         return "event-details";
     }
 
-    /**
-     * Displays the details of an event identified by its ID on the webpage.
-     *
-     * Mapped to the GET request at '/web/event-details/{id}'. It
-     * retrieves the details
-     * of an event identified by the provided UUID 'id' using the apiController. The
-     * event details are then added to the model for rendering on the view.
-     *
-     * @param id    The UUID of the event whose details are to be displayed.
-     * @param model The Model object used to pass attributes to the view.
-     * @return The name of the view template (e.g., 'event-details') used to render
-     *         the event details.
-     */
-    // TODO mapping ohne /web
-    @GetMapping("event-details/{id}")
-    public String showEventDetailsById(@PathVariable("id") UUID id, Model model) {
-        log.info("GET localhost:8080/web/event-details/{} -> showEventDetailsById() is called: {}", id, id);
-
-        ResponseEntity<?> event = apiController.getEvent(id);
-        model.addAttribute("event", event);
-
-        return "event-details";
-    }
 
     /**
      * Displays all users on the webpage.
@@ -516,5 +488,4 @@ public class WebController {
             return "redirect:/web/users";
         }
     }
-
 }
