@@ -118,24 +118,23 @@ public class ApiController {
         return response;
     }
 
-    // TODO check javadoc
     /**
-     * Updates an existing event with new information.
+     * Replaces an existing event with a new event data provided in
+     * the request body by making a PUT request.
      *
-     * This method handles a PUT request at '/events/{eventID}' to update an event.
-     * It consumes and produces
-     * JSON format. The event to update is identified by eventID in the URL, and the
-     * new event details are
-     * provided in the request body. Before updating, it checks if the event is
-     * processable using the
-     * 'checkProcessability' method. If processable, it updates the event using the
-     * eventService's 'update' method.
+     * This method is mapped to the PUT request at '/events/{eventID}' and is
+     * responsible for updating
+     * an event identified by the provided eventID with the new event data provided
+     * in the request body.
+     * The response is in JSON format.
+     * The actual replacement process is handled by the eventService's 'replace'
+     * method.
      *
-     * @param eventID The UUID of the event to be updated.
-     * @param event   The Event object containing the new details for the update.
-     * @return A ResponseEntity indicating the result of the update operation,
-     *         including the appropriate
-     *         HTTP status code and updated event data in JSON format if successful.
+     * @param eventID The UUID of the event to be replaced.
+     * @param event   The Event object containing the updated event data.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include updated event data
+     *         or an error message in case of failure.
      */
     @PutMapping(value = "/events/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -149,7 +148,24 @@ public class ApiController {
         return response;
     }
 
-    // TODO javadoc
+    /**
+     * Updates an existing event with a new event data provided in the
+     * request body by making a PUT request.
+     *
+     * This method is mapped to the PUT request at '/events/update/{eventID}' and is
+     * responsible for updating
+     * an event identified by the provided eventID with the new event data provided
+     * in the request body.
+     * The response is in JSON format.
+     * The actual update process is handled by the eventService's 'updateEvent'
+     * method.
+     *
+     * @param eventID The UUID of the event to be updated.
+     * @param event   The Event object containing the updated event data.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include updated event data
+     *         or an error message in case of failure.
+     */
     @PutMapping(value = "/events/update/{eventID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> updateEvent(@PathVariable("eventID") UUID eventID, @RequestBody Event event) {
