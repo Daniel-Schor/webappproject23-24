@@ -7,50 +7,85 @@
     <style>
       body {
         font-family: "Arial", sans-serif;
-        background-color: #f4f4f4;
+        background: linear-gradient(to bottom, #ff6f61, #1e3c72);
         margin: 0;
         padding: 0;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         height: 100vh;
       }
 
-      h1 {
-        color: #333;
+      nav {
+        background-color: rgba(0, 0, 0, 0.7);
+        overflow: hidden;
+        width: 100%;
+        position: fixed;
+        top: 0;
+      }
+
+      nav a {
+        display: inline-block;
+        color: #fff;
         text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        transition: color 0.3s ease-in-out;
+      }
+
+      nav a:hover {
+        background-color: #e07a02;
+      }
+
+      h1 {
+        color: #ffc947;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        margin-bottom: 20px;
       }
 
       form {
         text-align: center;
+        width: 80%;
       }
 
       label {
         display: block;
         margin: 10px 0;
+        color: #333;
       }
 
       input {
         padding: 8px;
         margin: 5px 0;
+        box-sizing: border-box;
       }
 
       button {
         padding: 10px;
         font-size: 16px;
-        background-color: #007bff;
-        color: white;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: #fff;
         border: none;
         cursor: pointer;
+        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
       }
 
       button:hover {
-        background-color: #0056b3;
+        background-color: #e07a02;
+        color: white;
       }
     </style>
   </head>
 
   <body>
+    <nav>
+      <a href="/web/home">Home</a>
+      <a href="/web/users">User List</a>
+      <a href="/web/view-users">Manage User</a>
+    </nav>
+
     <h1>Add User</h1>
     <form
       action="/web/manage/add-user"
