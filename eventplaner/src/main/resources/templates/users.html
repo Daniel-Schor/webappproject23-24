@@ -12,30 +12,29 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: top;
+        justify-content: center;
         height: 100vh;
       }
 
       nav {
-        display: flex;
-        float: left;
-
+        background-color: rgba(0, 0, 0, 0.7);
+        overflow: hidden;
         width: 100%;
-        background-color: #1e3c72;
-        padding: 10px;
+        position: fixed;
+        top: 0;
       }
 
       nav a {
+        display: inline-block;
+        color: #fff;
+        text-align: center;
+        padding: 14px 16px;
         text-decoration: none;
-        color: #f5a623;
-        font-weight: bold;
-        font-size: 20px;
-        margin-right: 20px;
         transition: color 0.3s ease-in-out;
       }
 
       nav a:hover {
-        color: #e07a02;
+        background-color: #e07a02;
       }
 
       table {
@@ -43,20 +42,22 @@
         margin: 20px auto;
         border-collapse: collapse;
         background-color: rgba(0, 0, 0, 0.7);
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        color: #fff;
       }
 
       th,
       td {
         border: 1px solid #ddd;
-        padding: 8px;
+        padding: 12px;
         text-align: left;
         color: white;
       }
 
       th {
-        background-color: #1e3c72;
-        color: #ffc947;
+        background-color: #555;
+        color: #f4f4f4;
         text-align: center;
       }
 
@@ -78,6 +79,7 @@
       }
 
       a:hover {
+        text-decoration: underline;
         color: #e07a02;
       }
 
@@ -92,6 +94,7 @@
   <body>
     <nav>
       <a href="/web/home">Home</a>
+      <a href="/web/users">User List</a>
       <a href="/web/view-users">Manage User</a>
     </nav>
 
