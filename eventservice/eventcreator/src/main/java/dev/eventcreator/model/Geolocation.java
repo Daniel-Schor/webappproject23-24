@@ -2,10 +2,6 @@ package dev.eventcreator.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-/**
- * The Geolocation class represents a geographical location specified by
- * latitude and longitude coordinates.
- */
 public class Geolocation {
 
     private double latitude;

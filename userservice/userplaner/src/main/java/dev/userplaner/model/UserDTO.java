@@ -9,12 +9,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-/**
- * This class represents a Data Transfer Object (DTO) for a user.
- * It is used to transfer data between processes or components.
- * It includes fields for the user's ID, first name, last name, and organizer
- * status.
- */
 public class UserDTO {
 
     UUID userID;

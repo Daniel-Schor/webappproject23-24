@@ -29,9 +29,7 @@ public class Event {
     private double rating;
 
     /**
-     * Default constructor for the Event class. New Address("Nibelungenplatz", "1",
-     * "60318", "Frankfurt am Main", "Deutschland");
-     * Initializes the event with default values.
+     * Creates a new Event object with default values.
      */
     public Event() {
         this.eventID = UUID.randomUUID();
@@ -46,9 +44,10 @@ public class Event {
     }
 
     /**
-     * Default constructor for the Event class. New Address("Nibelungenplatz", "1",
-     * "60318", "Frankfurt am Main", "Deutschland");
-     * Initializes the event with default values.
+     * Creates a new Event object with specified eventID and default values for
+     * other properties.
+     *
+     * @param eventID The UUID to be assigned to the event.
      */
     public Event(UUID eventID) {
         this.eventID = eventID;
@@ -85,11 +84,12 @@ public class Event {
     }
 
     /**
-     * Adds a participant to the event.
-     * 
-     * @param participant the participant to be added
-     * @return true if the participant was added successfully, false if the
-     *         participant limit is reached or participant is already in the event
+     * Adds a participant with the specified UUID to the list of participants in
+     * this event.
+     *
+     * @param participantID The UUID of the participant to be added.
+     * @return true if the participant was successfully added, false otherwise.
+     * @throws NullPointerException if participantID is null.
      */
     public synchronized boolean addParticipant(UUID participantID) {
         if (participantID != null && participants.size() < maxParticipants
@@ -101,7 +101,8 @@ public class Event {
     }
 
     /**
-     * Removes a participant from the event.
+     * Removes a participant with the specified UUID from the list of participants
+     * in this event.
      * 
      * @param participantID the ID of the participant to be removed
      * @return true if the participant was removed successfully, false if the ID is

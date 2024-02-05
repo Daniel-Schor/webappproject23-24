@@ -2,10 +2,6 @@ package dev.eventplaner.model;
 
 import java.util.UUID;
 
-/**
- * This class represents a Data Transfer Object (DTO) for an event.
- * It is used to transfer data between processes or components.
- */
 public class EventDTO {
 
     private final UUID eventID;

@@ -15,10 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-/**
- * This class provides services for managing users.
- * It includes methods for creating, retrieving, updating, and deleting users.
- */
 @Service
 public class UserService {
 
@@ -31,19 +27,15 @@ public class UserService {
     String apiUrl;
 
     /**
-     * Retrieves a specific user from the repository.
+     * Retrieves user information by making a GET request to
+     * the specified API endpoint.
      *
-     * This method sends a GET request to the repository to retrieve a user with the
-     * specified ID. The URL for the repository is constructed by appending
-     * "/users/" and the user ID to the base API URL. If the repository returns an
-     * error, the method catches the HttpClientErrorException and returns a
-     * ResponseEntity with the error message and status code from the exception.
-     *
-     * @param userID The ID of the user to be retrieved.
-     * @return A ResponseEntity containing the response from the repository. If the
-     *         retrieval was successful, the status code will be HttpStatus.OK and
-     *         the body will contain the user. If an error occurred, the status code
-     *         and error message from the HttpClientErrorException will be returned.
+     * @param userID The UUID of the user whose information is to be retrieved.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include user data
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> getUser(UUID userID) {
         log.info("getUser() is called: {}", userID);
@@ -62,21 +54,15 @@ public class UserService {
     }
 
     /**
-     * Creates a new user in the repository.
+     * Creates a new user by making a POST request to the
+     * specified API endpoint.
      *
-     * This method sends a POST request to the repository to create a new user. The
-     * URL for the repository is constructed by appending "/users" to the base API
-     * URL. The user to be created is included in the body of the request. If the
-     * repository returns an error, the method catches the HttpClientErrorException
-     * and returns a ResponseEntity with the error message and status code from the
-     * exception.
-     *
-     * @param user The user to be created.
-     * @return A ResponseEntity containing the response from the repository. If the
-     *         creation was successful, the status code will be HttpStatus.CREATED
-     *         and the body will contain the ID of the created user. If an error
-     *         occurred, the status code and error message from the
-     *         HttpClientErrorException will be returned.
+     * @param user The User object representing the user to be created.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include user data
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> create(User user) {
         log.info("create() is called: {}", user.getID());
@@ -96,19 +82,15 @@ public class UserService {
     }
 
     /**
-     * Deletes a specific user from the repository.
+     * Deletes a user by making a DELETE request to the specified
+     * API endpoint.
      *
-     * This method sends a DELETE request to the repository to delete a user with
-     * the specified ID. The URL for the repository is constructed by appending
-     * "/users/" and the user ID to the base API URL. If the repository returns an
-     * error, the method catches the HttpClientErrorException and returns a
-     * ResponseEntity with the error message and status code from the exception.
-     *
-     * @param userID The ID of the user to be deleted.
-     * @return A ResponseEntity containing the response from the repository. If the
-     *         deletion was successful, the status code will be
-     *         HttpStatus.NO_CONTENT. If an error occurred, the status code and
-     *         error message from the HttpClientErrorException will be returned.
+     * @param userID The UUID of the user to be deleted.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include success information
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> delete(UUID userID) {
         log.info("delete() is called: {}", userID);
@@ -127,20 +109,16 @@ public class UserService {
     }
 
     /**
-     * Updates a specific user in the repository.
+     * Replaces an existing user with a new user representation
+     * by making a PUT request
+     * to the specified API endpoint.
      *
-     * This method sends a PUT request to the repository to update a user with the
-     * specified ID. The URL for the repository is constructed by appending
-     * "/users/" and the user ID to the base API URL. The user to be updated is
-     * included in the body of the request. If the repository returns an error, the
-     * method catches the HttpClientErrorException and returns a ResponseEntity with
-     * the error message and status code from the exception.
-     *
-     * @param user The user to be updated.
-     * @return A ResponseEntity containing the response from the repository. If the
-     *         update was successful, the status code will be HttpStatus.OK. If an
-     *         error occurred, the status code and error message from the
-     *         HttpClientErrorException will be returned.
+     * @param user The User object representing the new user data.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include updated user data
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> replace(User user) {
         log.info("replace() is called: {}", user.getID());
@@ -159,7 +137,17 @@ public class UserService {
         }
     }
 
-    // TODO javadoc
+    /**
+     * Updates user information by making a PUT request to the
+     * specified API endpoint.
+     *
+     * @param user The User object representing the updated user data.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include updated user data
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
+     */
     public ResponseEntity<?> update(User user) {
         log.info("update() is called: {}", user.getID());
 
@@ -169,7 +157,7 @@ public class UserService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<User> request = new HttpEntity<User>(user, headers);
-        
+
         try {
             return restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
         } catch (HttpClientErrorException e) {
@@ -178,19 +166,15 @@ public class UserService {
     }
 
     /**
-     * Retrieves all users from the repository.
+     * Retrieves a list of user Data Transfer Objects by
+     * making a GET request to the
+     * specified API endpoint.
      *
-     * This method sends a GET request to the repository to retrieve all users. The
-     * URL for the repository is constructed by appending "/users" to the base API
-     * URL. If the repository returns an error, the method catches the
-     * HttpClientErrorException and returns a ResponseEntity with the error message
-     * and status code from the exception.
-     *
-     * @return A ResponseEntity containing the response from the repository. If the
-     *         retrieval was successful, the status code will be HttpStatus.OK and
-     *         the body will contain a list of all users. If an error occurred, the
-     *         status code and error message from the HttpClientErrorException will
-     *         be returned.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include a list of user DTOs
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> getAllDTO() {
         log.info("getAllDTO() is called");

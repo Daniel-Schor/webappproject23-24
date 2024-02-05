@@ -20,6 +20,7 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/web/")
+
 public class WebController {
 
     private static final Logger log = LoggerFactory.getLogger(WebController.class);
@@ -97,7 +98,7 @@ public class WebController {
     /**
      * Displays the details of an event identified by its ID on the webpage.
      *
-     * This method is mapped to the GET request at '/web/event-details/{id}'. It
+     * Mapped to the GET request at '/web/event-details/{id}'. It
      * retrieves the details
      * of an event identified by the provided UUID 'id' using the apiController. The
      * event details are then added to the model for rendering on the view.
@@ -107,6 +108,7 @@ public class WebController {
      * @return The name of the view template (e.g., 'event-details') used to render
      *         the event details.
      */
+    // TODO mapping ohne /web
     @GetMapping("event-details/{id}")
     public String showEventDetailsById(@PathVariable("id") UUID id, Model model) {
         log.info("GET localhost:8080/web/event-details/{} -> showEventDetailsById() is called: {}", id, id);
@@ -152,7 +154,11 @@ public class WebController {
     /**
      * Displays the home page.
      *
-     * @return The name of the view template used for the home page.
+     * This method handles a GET request to display the home page of the web
+     * application.
+     * It returns the name of the view template used for rendering the home page.
+     *
+     * @return The name of the view template for the home page.
      */
     @GetMapping("home")
     public String home() {

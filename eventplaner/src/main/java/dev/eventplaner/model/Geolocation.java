@@ -7,11 +7,21 @@ public class Geolocation {
     private double latitude;
     private double longitude;
 
+    /**
+     * Default constructor for Geolocation.
+     * Initializes the latitude and longitude to 0.
+     */
     public Geolocation() {
         this.latitude = 0;
         this.longitude = 0;
     }
 
+    /**
+     * Constructs a Geolocation with the specified latitude and longitude.
+     *
+     * @param latitude  The latitude of the geolocation.
+     * @param longitude The longitude of the geolocation.
+     */
     public Geolocation(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;

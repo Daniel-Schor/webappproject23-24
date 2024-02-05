@@ -121,9 +121,6 @@ public class User {
         return values;
     }
 
-    /**
-     * Represents a user.
-     */
     public static User userFromJson(String s) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());

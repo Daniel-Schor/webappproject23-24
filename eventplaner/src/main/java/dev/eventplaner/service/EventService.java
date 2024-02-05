@@ -16,12 +16,6 @@ import org.springframework.web.client.RestTemplate;
 
 import dev.eventplaner.model.Event;
 
-/**
- * This class provides services for managing events.
- * It includes methods for creating, retrieving, updating, and deleting events.
- * It also includes methods for adding and removing users from events, and for
- * adding ratings to events.
- */
 @Service
 public class EventService {
 
@@ -32,19 +26,15 @@ public class EventService {
     String apiUrl;
 
     /**
-     * Creates a new event in the repository.
+     * Creates a new event by making a POST request to the
+     * specified API endpoint.
      *
-     * This method sends a POST request to the repository with the new event as the
-     * body. The URL for the repository is constructed by appending "/events" to the
-     * base API URL. If the repository returns an error, the method catches the
-     * HttpClientErrorException and returns a ResponseEntity with the error message
-     * and status code from the exception.
-     *
-     * @param event The new event to be created.
-     * @return A ResponseEntity containing the response from the repository. If the
-     *         creation was successful, the status code will be HttpStatus.CREATED.
-     *         If an error occurred, the status code and error message from the
-     *         HttpClientErrorException will be returned.
+     * @param event The Event object representing the event to be created.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include created event data
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> create(Event event) {
         log.info("create() is called: {}", event.getID());
@@ -64,18 +54,15 @@ public class EventService {
     }
 
     /**
-     * Retrieves all events from the repository as DTOs.
+     * Retrieves a list of event Data Transfer Objects
+     * by making a GET request to the
+     * specified API endpoint.
      *
-     * This method sends a GET request to the repository. The URL for the repository
-     * is constructed by appending "/events" to the base API URL. If the repository
-     * returns an error, the method catches the HttpClientErrorException and returns
-     * a ResponseEntity with the error message and status code from the exception.
-     *
-     * @return A ResponseEntity containing the response from the repository. If the
-     *         retrieval was successful, the status code will be HttpStatus.OK and
-     *         the body will contain a list of event DTOs. If an error occurred, the
-     *         status code and error message from the HttpClientErrorException will
-     *         be returned.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include a list of event DTOs
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> getAllDTO() {
         log.info("getAllDTO() is called");
@@ -94,20 +81,16 @@ public class EventService {
     }
 
     /**
-     * Retrieves a specific event from the repository.
+     * Retrieves event information by making a GET request to
+     * the specified API endpoint,
+     * using the provided eventID.
      *
-     * This method sends a GET request to the repository to retrieve an event with
-     * the specified ID. The URL for the repository is constructed by appending
-     * "/events/" and the event ID to the base API URL. If the repository returns an
-     * error, the method catches the HttpClientErrorException and returns a
-     * ResponseEntity with the error message and status code from the exception.
-     *
-     * @param eventID The ID of the event to be retrieved.
-     * @return A ResponseEntity containing the response from the repository. If the
-     *         retrieval was successful, the status code will be HttpStatus.OK and
-     *         the body will contain the event. If an error occurred, the status
-     *         code and error message from the HttpClientErrorException will be
-     *         returned.
+     * @param eventID The UUID of the event to be retrieved.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include event data
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> getEvent(UUID eventID) {
         log.info("getEvent() is called: {}", eventID);
@@ -126,13 +109,15 @@ public class EventService {
     }
 
     /**
-     * Updates an existing event in the repository.
-     * The method sends a PUT request to the repository with the updated event.
-     * If the repository returns an error, the method catches the
-     * HttpClientErrorException and returns its response.
+     * Replaces an existing event with updated event data by
+     * making a PUT request to the specified API endpoint.
      *
-     * @param event The updated event to send to the repository.
-     * @return A ResponseEntity containing the response from the repository.
+     * @param event The Event object representing the updated event data.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include updated event data
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> replace(Event event) {
         log.info("replace() is called: {}", event.getID());
@@ -151,7 +136,17 @@ public class EventService {
         }
     }
 
-    // TODO javadoc
+    /**
+     * Updates an event by making a PUT request to the specified
+     * API endpoint.
+     *
+     * @param event The Event object representing the event to be updated.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include updated event data
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as invalid URL or server errors.
+     */
     public ResponseEntity<?> update(Event event) {
         log.info("update() is called: {}", event.getID());
 
@@ -170,19 +165,16 @@ public class EventService {
     }
 
     /**
-     * Deletes a specific event from the repository.
+     * Deletes an event by making a DELETE request to the
+     * specified API endpoint,
+     * using the provided eventID.
      *
-     * This method sends a DELETE request to the repository to delete an event with
-     * the specified ID. The URL for the repository is constructed by appending
-     * "/events/" and the event ID to the base API URL. If the repository returns an
-     * error, the method catches the HttpClientErrorException and returns a
-     * ResponseEntity with the error message and status code from the exception.
-     *
-     * @param eventID The ID of the event to be deleted.
-     * @return A ResponseEntity containing the response from the repository. If the
-     *         deletion was successful, the status code will be
-     *         HttpStatus.NO_CONTENT. If an error occurred, the status code and
-     *         error message from the HttpClientErrorException will be returned.
+     * @param eventID The UUID of the event to be deleted.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include success information
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> delete(UUID eventID) {
         log.info("delete() is called: {}", eventID);
@@ -201,21 +193,16 @@ public class EventService {
     }
 
     /**
-     * Adds a user to a specific event in the repository.
+     * Adds a user to an event by making a PUT request to the
+     * specified API endpoint.
      *
-     * This method sends a PUT request to the repository to add a user to an event
-     * with the specified IDs. The URL for the repository is constructed by
-     * appending "/events/", the event ID, "/add/", and the user ID to the base API
-     * URL. If the repository returns an error, the method catches the
-     * HttpClientErrorException and returns a ResponseEntity with the error message
-     * and status code from the exception.
-     *
-     * @param eventID The ID of the event to which the user will be added.
-     * @param userID  The ID of the user to be added to the event.
-     * @return A ResponseEntity containing the response from the repository. If the
-     *         addition was successful, the status code will be HttpStatus.OK. If an
-     *         error occurred, the status code and error message from the
-     *         HttpClientErrorException will be returned.
+     * @param eventID The UUID of the event to which the user will be added.
+     * @param userID  The UUID of the user to be added to the event.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include success information
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> addUser(UUID eventID, UUID userID) {
         log.info("addUser() is called: {} and {}", eventID, userID);
@@ -234,21 +221,16 @@ public class EventService {
     }
 
     /**
-     * Removes a user from a specific event in the repository.
+     * Removes a user from an event by making a PUT request to
+     * the specified API endpoint.
      *
-     * This method sends a PUT request to the repository to remove a user from an
-     * event with the specified IDs. The URL for the repository is constructed by
-     * appending "/events/", the event ID, "/remove/", and the user ID to the base
-     * API URL. If the repository returns an error, the method catches the
-     * HttpClientErrorException and returns a ResponseEntity with the error message
-     * and status code from the exception.
-     *
-     * @param eventID The ID of the event from which the user will be removed.
-     * @param userID  The ID of the user to be removed from the event.
-     * @return A ResponseEntity containing the response from the repository. If the
-     *         removal was successful, the status code will be HttpStatus.OK. If an
-     *         error occurred, the status code and error message from the
-     *         HttpClientErrorException will be returned.
+     * @param eventID The UUID of the event from which the user will be removed.
+     * @param userID  The UUID of the user to be removed from the event.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include success information
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> removeUser(UUID eventID, UUID userID) {
         log.info("removeUser() is called: {} and {}", eventID, userID);
@@ -267,19 +249,16 @@ public class EventService {
     }
 
     /**
-     * Removes a user from all events in the repository.
+     * Removes a user from all events where the user is a
+     * participant by making a PUT request
+     * to the specified API endpoint.
      *
-     * This method sends a PUT request to the repository to remove a user from all
-     * events. The URL for the repository is constructed by appending
-     * "/events/remove/" and the user ID to the base API URL. If the repository
-     * returns an error, the method catches the HttpClientErrorException and returns
-     * a ResponseEntity with the error message and status code from the exception.
-     *
-     * @param userID The ID of the user to be removed from all events.
-     * @return A ResponseEntity containing the response from the repository. If the
-     *         removal was successful, the status code will be HttpStatus.OK. If an
-     *         error occurred, the status code and error message from the
-     *         HttpClientErrorException will be returned.
+     * @param userID The UUID of the user to be removed from all events.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include success information
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> removeUserFromAllEvents(UUID userID) {
         log.info("removeUserFromAllEvents() is called: {}", userID);
@@ -298,22 +277,17 @@ public class EventService {
     }
 
     /**
-     * Adds a rating for a specific event from a specific user in the repository.
+     * Adds a rating for a user on a specific event by making a
+     * PUT request to the specified API endpoint.
      *
-     * This method sends a PUT request to the repository to add a rating for an
-     * event with the specified IDs. The URL for the repository is constructed by
-     * appending "/events/", the event ID, the user ID, and the rating to the base
-     * API URL. If the repository returns an error, the method catches the
-     * HttpClientErrorException and returns a ResponseEntity with the error message
-     * and status code from the exception.
-     *
-     * @param eventID The ID of the event to be rated.
-     * @param userID  The ID of the user who is rating the event.
-     * @param rating  The rating to be added.
-     * @return A ResponseEntity containing the response from the repository. If the
-     *         addition was successful, the status code will be HttpStatus.OK. If an
-     *         error occurred, the status code and error message from the
-     *         HttpClientErrorException will be returned.
+     * @param eventID The UUID of the event to which the rating will be added.
+     * @param userID  The UUID of the user for whom the rating is being added.
+     * @param rating  The rating value to be added.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include success information
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> addRating(UUID eventID, UUID userID, int rating) {
         log.info("addRating() is called: {} and {} and {}", eventID, userID, rating);

@@ -2,10 +2,6 @@ package dev.eventcreator.model;
 
 import java.util.UUID;
 
-/**
- * This class represents a Data Transfer Object (DTO) for an event.
- * It includes properties for the event's ID and name.
- */
 public class EventDTO {
 
     private final UUID eventID;

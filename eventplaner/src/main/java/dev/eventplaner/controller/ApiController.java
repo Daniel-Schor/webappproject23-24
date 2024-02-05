@@ -118,7 +118,7 @@ public class ApiController {
     /**
      * Partially updates the details of an existing user.
      *
-     * This method, mapped to the PATCH request at '/users/{userID}', allows for the
+     * Mapped to the PATCH request at '/users/{userID}', allows for the
      * partial
      * updating of a user's details. It consumes and produces JSON. The user to be
      * updated is
@@ -161,10 +161,15 @@ public class ApiController {
 
     /**
      * Handles a POST request to create a new event.
-     * Consumes and produces JSON.
      *
-     * @param event The event to create.
-     * @return A ResponseEntity containing the response from the EventService.
+     * Mapped to the POST request at '/events' and is used to create a new event.
+     * It consumes JSON data representing the event to be created and produces JSON
+     * as the response.
+     *
+     * @param event The event object containing the details of the event to be
+     *              created.
+     * @return A ResponseEntity containing the response from the EventService,
+     *         indicating the result of the creation operation.
      */
     @PostMapping(value = "events", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
@@ -176,7 +181,7 @@ public class ApiController {
     /**
      * Updates an existing event identified by its UUID.
      *
-     * This method, mapped to the PUT request at '/events/{eventID}', updates an
+     * Mapped to the PUT request at '/events/{eventID}', updates an
      * event with new information.
      * It consumes and produces JSON. The event to be updated is identified by
      * eventID, and the new event details
@@ -198,7 +203,7 @@ public class ApiController {
     /**
      * Partially updates the details of an existing event.
      *
-     * This method, mapped to the PATCH request at '/events/{eventID}', partially
+     * Mapped to the PATCH request at '/events/{eventID}', partially
      * updates an
      * event with new information provided in the request body. It is designed to
      * consume
@@ -242,7 +247,7 @@ public class ApiController {
     /**
      * Adds a user as a participant to an event.
      *
-     * This method, mapped to the PUT request at '/events/{eventID}/add/{userID}',
+     * Mapped to the PUT request at '/events/{eventID}/add/{userID}',
      * adds the specified user
      * as a participant to the specified event. It checks if the user exists before
      * adding to the event.
@@ -293,7 +298,7 @@ public class ApiController {
     /**
      * Retrieves all events.
      *
-     * This method, mapped to the GET request at '/events', fetches all available
+     * Mapped to the GET request at '/events', fetches all available
      * events.
      * It delegates the fetching process to the eventService.
      *
@@ -311,7 +316,7 @@ public class ApiController {
     /**
      * Retrieves the details of a specific event identified by its UUID.
      *
-     * This method is mapped to the GET request at '/events/{eventID}' and is
+     * Mapped to the GET request at '/events/{eventID}' and is
      * responsible for fetching
      * the details of a particular event. The event is identified using the eventID
      * passed as a path variable.
