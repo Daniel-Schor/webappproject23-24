@@ -1,133 +1,126 @@
 <!DOCTYPE html>
 <html lang="en-de">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Add Event</title>
-    <style>
-      body {
-        font-family: "Arial", sans-serif;
-        background: linear-gradient(to bottom, #ff6f61, #1e3c72);
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-      }
 
-      nav {
-        background-color: rgba(0, 0, 0, 0.7);
-        overflow: hidden;
-        width: 100%;
-        position: fixed;
-        top: 0;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Event</title>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background: linear-gradient(to bottom, #ff6f61, #1e3c72);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      flex-direction: column;
+    }
 
-      nav a {
-        display: inline-block;
-        color: #fff;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        transition: color 0.3s ease-in-out;
-      }
+    nav {
+      background-color: rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+      width: 100%;
+      position: fixed;
+      top: 0;
+    }
 
-      nav a:hover {
-        background-color: #e07a02;
-      }
+    nav a {
+      display: inline-block;
+      color: #fff;
+      text-align: center;
+      padding: 14px 16px;
+      font-size: 20px;
+      text-decoration: none;
+      transition: color 0.3s ease-in-out;
+    }
 
-      h1 {
-        color: #ffc947;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        text-align: center;
-        margin-bottom: 20px;
-      }
+    nav a:hover {
+      background-color: #000000;
+    }
 
-      form {
-        text-align: center;
-        width: 80%;
-      }
+    h1 {
+      color: #ffc947;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      margin-bottom: 5px;
+    }
 
-      label {
-        display: block;
-        margin: 10px 0;
-        color: #333;
-      }
+    form {
+      text-align: center;
+      width: 80%;
+    }
 
-      input,
-      textarea,
-      select {
-        padding: 8px;
-        margin: 5px 0;
-        box-sizing: border-box;
-      }
+    label {
+      display: block;
+      margin: 10px 0;
+      color: #000000;
+    }
 
-      button {
-        padding: 10px;
-        font-size: 16px;
-        background-color: rgba(0, 0, 0, 0.7);
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-      }
+    input,
+    textarea,
+    select {
+      padding: 3px;
+      margin: 5px 0;
+      box-sizing: border-box;
+    }
 
-      button:hover {
-        background-color: #e07a02;
-        color: white;
-      }
-    </style>
-  </head>
-  <body>
-    <nav>
-      <a href="/web/home">Home</a>
-      <a href="/web/events">Event List</a>
-      <a href="/web/manage">Event Manager</a>
-    </nav>
+    button {
+      padding: 10px;
+      font-size: 16px;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
 
-    <h1>Add Event</h1>
+    button:hover {
+      background-color: #e07a02;
+      color: white;
+    }
 
-    <form action="/web/manage/add-event" method="post">
-      <label for="eventName">Event Name:</label>
-      <input type="text" id="eventName" name="name" required />
+    a:hover {
+      text-decoration: underline;
+      color: #e07a02;
+    }
+  </style>
+</head>
 
-      <label for="eventDescription">Event Description:</label>
-      <textarea
-        id="eventDescription"
-        name="description"
-        rows="4"
-        required
-      ></textarea>
+<body>
+  <nav>
+    <a href="/web/home">Home</a>
+    <a href="/web/events">Event List</a>
+    <a href="/web/manage">Event Manager</a>
+  </nav>
 
-      <label for="eventDateTime">Event Date and Time:</label>
-      <input
-        type="datetime-local"
-        id="eventDateTime"
-        name="dateTime"
-        required
-      />
+  <h1>Add Event</h1>
 
-      <label for="latitude">Latitude:</label>
-      <input type="number" id="latitude" name="latitude" step="any" />
+  <form action="/web/manage/add-event" method="post">
+    <label for="eventName">Event Name:</label>
+    <input type="text" id="eventName" name="name" required />
 
-      <label for="longitude">Longitude:</label>
-      <input type="number" id="longitude" name="longitude" step="any" />
+    <label for="eventDescription">Event Description:</label>
+    <textarea id="eventDescription" name="description" rows="4" required></textarea>
 
-      <label for="maxParticipants">Max Participants:</label>
-      <input
-        type="number"
-        id="maxParticipants"
-        name="maxParticipants"
-        min="1"
-        required
-      />
+    <label for="eventDateTime">Event Date and Time:</label>
+    <input type="datetime-local" id="eventDateTime" name="dateTime" required />
 
-      <label for="organizerUserID">Organizer User ID:</label>
-      <input type="text" id="organizerUserID" name="organizerUserID" />
+    <label for="latitude">Latitude:</label>
+    <input type="number" id="latitude" name="latitude" step="any" />
 
-      <button type="submit">Add Event</button>
-    </form>
-  </body>
+    <label for="longitude">Longitude:</label>
+    <input type="number" id="longitude" name="longitude" step="any" />
+
+    <label for="maxParticipants">Max Participants:</label>
+    <input type="number" id="maxParticipants" name="maxParticipants" min="1" required />
+
+    <label for="organizerUserID">Organizer User ID:</label>
+    <input type="text" id="organizerUserID" name="organizerUserID" />
+
+    <button type="submit">Add Event</button>
+  </form>
+</body>
+
 </html>

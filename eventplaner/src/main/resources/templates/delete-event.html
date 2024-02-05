@@ -1,178 +1,180 @@
 <!DOCTYPE html>
 <html lang="en-de">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Delete Event</title>
-    <style>
-      body {
-        font-family: "Arial", sans-serif;
-        background: linear-gradient(to bottom, #ff6f61, #1e3c72);
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-      }
 
-      nav {
-        background-color: rgba(0, 0, 0, 0.7);
-        overflow: hidden;
-        width: 100%;
-        position: fixed;
-        top: 0;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delete Event</title>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background: linear-gradient(to bottom, #ff6f61, #1e3c72);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
 
-      nav a {
-        display: inline-block;
-        color: #fff;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        transition: color 0.3s ease-in-out;
-      }
+    nav {
+      background-color: rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+      width: 100%;
+      position: fixed;
+      top: 0;
+    }
 
-      nav a:hover {
-        background-color: #e07a02;
-      }
+    nav a {
+      display: inline-block;
+      color: #fff;
+      text-align: center;
+      padding: 14px 16px;
+      font-size: 20px;
+      text-decoration: none;
+      transition: color 0.3s ease-in-out;
+    }
 
-      h1 {
-        color: #ffc947;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        text-align: center;
-        margin-bottom: 20px;
-      }
+    nav a:hover {
+      background-color: #e07a02;
+    }
 
-      form {
-        text-align: center;
-        width: 80%;
-      }
+    h1 {
+      color: #ffc947;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-      label {
-        display: block;
-        margin: 10px 0;
-        color: #333;
-      }
+    form {
+      text-align: center;
+      width: 80%;
+    }
 
-      input {
-        padding: 8px;
-        margin: 5px 0;
-      }
+    label {
+      display: block;
+      margin: 10px 0;
+      color: #070000;
+    }
 
-      button {
-        padding: 10px;
-        font-size: 16px;
-        background-color: rgba(0, 0, 0, 0.7);
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-      }
+    input {
+      padding: 8px;
+      margin: 5px 0;
+    }
 
-      button:hover {
-        background-color: #e07a02;
-        color: white;
-      }
+    button {
+      padding: 10px;
+      font-size: 16px;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
 
-      #confirmation {
-        display: none;
-      }
+    button:hover {
+      background-color: #e07a02;
+      color: white;
+    }
 
-      #confirmation p {
-        color: #fff;
-        text-align: center;
-        margin-bottom: 10px;
-      }
+    #confirmation {
+      display: none;
+    }
 
-      #confirmation button {
-        margin: 0 10px;
-      }
-    </style>
-  </head>
+    #confirmation p {
+      color: #fff;
+      text-align: center;
+      margin-bottom: 10px;
+    }
 
-  <body>
-    <nav>
-      <a href="/web/home">Home</a>
-      <a href="/web/events">Event List</a>
-      <a href="/web/manage">Event Manager</a>
-    </nav>
+    #confirmation button {
+      margin: 0 10px;
+    }
+  </style>
+</head>
 
-    <h1>Delete Event</h1>
+<body>
+  <nav>
+    <a href="/web/home">Home</a>
+    <a href="/web/events">Event List</a>
+    <a href="/web/manage">Event Manager</a>
+  </nav>
 
-    <form id="deleteForm">
-      <label for="eventId">Event ID:</label>
-      <input type="text" id="eventId" name="eventID" required />
-      <br />
-      <button type="button" onclick="checkEvent()">Next</button>
-    </form>
+  <h1>Delete Event</h1>
 
-    <div id="confirmation">
-      <p>Do you really want to delete this event?</p>
-      <button type="button" onclick="deleteEvent()">Yes</button>
-      <button type="button" onclick="cancelDelete()">No</button>
-    </div>
-
+  <form id="deleteForm">
+    <label for="eventId">Event ID:</label>
+    <input type="text" id="eventId" name="eventID" required />
     <br />
-    <a href="/web/manage">Go Back</a>
+    <button type="button" onclick="checkEvent()">Next</button>
+  </form>
 
-    <script>
-      function checkEvent() {
-        var eventId = document.getElementById("eventId").value;
+  <div id="confirmation">
+    <p>Do you really want to delete this event?</p>
+    <button type="button" onclick="deleteEvent()">Yes</button>
+    <button type="button" onclick="cancelDelete()">No</button>
+  </div>
 
-        fetch("/web/manage/check-event/" + eventId, {
-          method: "GET",
+  <br />
+
+  <script>
+    function checkEvent() {
+      var eventId = document.getElementById("eventId").value;
+
+      fetch("/web/manage/check-event/" + eventId, {
+        method: "GET",
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
         })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then((data) => {
-            if (data.exists) {
-              document.getElementById("deleteForm").style.display = "none";
-              document.getElementById("confirmation").style.display = "block";
-            } else {
-              alert("Event doesn't exist!");
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            alert("Something went wrong! " + error.toString());
-          });
-      }
-
-      function deleteEvent() {
-        var eventId = document.getElementById("eventId").value;
-
-        fetch("/web/manage/delete-event/" + eventId, {
-          method: "DELETE",
+        .then((data) => {
+          if (data.exists) {
+            document.getElementById("deleteForm").style.display = "none";
+            document.getElementById("confirmation").style.display = "block";
+          } else {
+            alert("Event doesn't exist!");
+          }
         })
-          .then((response) => {
-            if (!response.ok) {
-              if (response.status === 405) {
-                alert("The event has been deleted!");
-                window.location.href = "/web/events";
-              } else {
-                throw new Error(`HTTP error! status: ${response.status}`);
-              }
-            } else {
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Something went wrong! " + error.toString());
+        });
+    }
+
+    function deleteEvent() {
+      var eventId = document.getElementById("eventId").value;
+
+      fetch("/web/manage/delete-event/" + eventId, {
+        method: "DELETE",
+      })
+        .then((response) => {
+          if (!response.ok) {
+            if (response.status === 405) {
               alert("The event has been deleted!");
               window.location.href = "/web/events";
+            } else {
+              throw new Error(`HTTP error! status: ${response.status}`);
             }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            alert("Something went wrong! " + error.toString());
-          });
-      }
+          } else {
+            alert("The event has been deleted!");
+            window.location.href = "/web/events";
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Something went wrong! " + error.toString());
+        });
+    }
 
-      function cancelDelete() {
-        document.getElementById("deleteForm").style.display = "block";
-        document.getElementById("confirmation").style.display = "none";
-      }
-    </script>
-  </body>
+    function cancelDelete() {
+      document.getElementById("deleteForm").style.display = "block";
+      document.getElementById("confirmation").style.display = "none";
+    }
+  </script>
+</body>
+
 </html>

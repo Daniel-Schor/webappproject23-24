@@ -19,8 +19,8 @@
         }
 
         header {
-            background-color: #333; /* Darker background color for the header */
-            color: #f4f4f4; /* Lighter font color on dark background */
+            background-color: #333;
+            color: #f4f4f4;
             text-align: center;
             padding: 15px 0;
         }
@@ -28,13 +28,14 @@
         .container {
             max-width: 800px;
             margin: 20px auto;
-            background-color: #fff; /* Light background color for the container */
+            background-color: #fff;
             padding: 20px;
-            border-radius: 8px; /* Same rounding as the table */
+            border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        h1, h2 {
+        h1,
+        h2 {
             color: #333;
         }
 
@@ -58,11 +59,12 @@
             display: inline-block;
             position: relative;
             overflow: hidden;
-            flex: 1; /* Equal space for all stars in the container */
+            flex: 1;
         }
 
         .star-container i {
-            color: gold; /* Retain the golden color for the stars */
+            color: gold;
+
         }
 
         .star-container::before {
@@ -72,7 +74,7 @@
             left: 0;
             top: 0;
             width: 0;
-            color: #ccc; /* Lighter background color for unfilled stars */
+            color: #ccc;
             overflow: hidden;
         }
 
@@ -122,9 +124,10 @@
             </ul>
 
             <p>Average Rating:
-                <div class="star-rating">
-                    <div th:each="i : ${#numbers.sequence(1,5)}" class="star-container" th:id="'star' + ${i}"><i class="fas fa-star"></i></div>
-                </div>
+            <div class="star-rating">
+                <div th:each="i : ${#numbers.sequence(1,5)}" class="star-container" th:id="'star' + ${i}"><i
+                        class="fas fa-star"></i></div>
+            </div>
             </p>
 
             <div id="map"></div>
@@ -138,9 +141,8 @@
     </div>
 
     <script th:inline="javascript">
-        /*<![CDATA[*/
         document.addEventListener("DOMContentLoaded", function () {
-            var rating = 4.5; // Replace with the actual rating value
+            var rating = 4.5;
             var totalStars = 5;
 
             for (var i = 1; i <= totalStars; i++) {
@@ -150,7 +152,6 @@
                 starElement.style.width = starPercentageRounded;
             }
         });
-        /*]]>*/
     </script>
 
 </body>
