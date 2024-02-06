@@ -291,30 +291,24 @@ public class WebController {
             @RequestParam(value = "organizerUserID", required = false) UUID organizerUserID,
             Model model) {
 
-        // Create new event instance
         Event event = new Event();
 
         log.info("POST localhost:8080/web/manage/add-event -> addEvent() is called: {}", event.getID());
 
-        // Insert the parameters into the event instance
         event.setName(name);
         event.setDescription(description);
         event.setDateTime(dateTime);
 
-        // Create a geolocation instance and insert it into the event instance
         Geolocation geolocation = new Geolocation(latitude, longitude);
         event.setLocation(geolocation);
 
         event.setMaxParticipants(maxParticipants);
         event.setOrganizerUserID(organizerUserID);
 
-        // Add the event to the event list
         apiController.createEvent(event);
 
-        // Redirect the user to the event overview
         model.addAttribute("events", apiController.getAllEvents());
 
-        // Redirect the user to the event overview
         return "redirect:/web/events";
     }
 
@@ -408,25 +402,20 @@ public class WebController {
             @RequestParam("organizer") boolean organizer,
             Model model) {
 
-        // Create new user instance
         User user = new User();
 
         log.info("POST localhost:8080/web/manage/add-user -> addUser() is called: {}", user.getID());
 
-        // Insert the parameters into the user instance
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEmail(email);
         user.setPassword(password);
         user.setOrganizer(organizer);
 
-        // Add the user to the user list
         apiController.createUser(user);
 
-        // Redirect the user to the user overview
         model.addAttribute("users", apiController.getAllUsers());
 
-        // Redirect the user to the user overview
         return "redirect:/web/users";
     }
 
