@@ -27,12 +27,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 public class ApiController {
 
-    // Logger instance for this class, used to log system messages, warnings, and
-    // errors.
     private static final Logger log = LoggerFactory.getLogger(ApiController.class);
 
-    // UserService
-    // instance into this class.
     @Autowired
     private UserService userService;
 
@@ -49,9 +45,19 @@ public class ApiController {
     }
 
     /**
-     * Retrieves all users from the database.
+     * Retrieves a list of all users.
      *
-     * @return ResponseEntity containing a collection of UserDTO objects
+     * This method is mapped to the GET request at '/users' and returns all
+     * available users.
+     * It produces a response in JSON format. The actual retrieval of users is
+     * delegated to the
+     * userService's 'getAllDTO' method.
+     *
+     * @return A ResponseEntity containing a list of all users in JSON format. The
+     *         response
+     *         includes the appropriate HTTP status code based on the success or
+     *         failure of the
+     *         user retrieval operation.
      */
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -62,11 +68,21 @@ public class ApiController {
     }
 
     /**
-     * Retrieves a user by their ID.
+     * Retrieves information for a specific user based on the provided user ID.
      *
-     * @param userID the ID of the user to retrieve
-     * @return the ResponseEntity containing the user if found, or no content if not
-     *         found
+     * <p>
+     * This method is mapped to the GET request at '/users/{userID}' and returns
+     * information
+     * for the user with the specified ID. It produces a response in JSON format.
+     * The actual retrieval
+     * of user information is delegated to the userService's 'getUser' method.
+     *
+     * @param userID The unique identifier of the user to retrieve information for.
+     * @return A ResponseEntity containing information for the specified user in
+     *         JSON format. The
+     *         response includes the appropriate HTTP status code based on the
+     *         success or failure
+     *         of the user retrieval operation.
      */
     @GetMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -77,11 +93,20 @@ public class ApiController {
     }
 
     /**
-     * Creates a new user.
+     * Creates a new user based on the provided user data.
      *
-     * @param user The user object containing the user details.
-     * @return ResponseEntity<?> The response entity containing the created user or
-     *         an error message.
+     * This method is mapped to the POST request at '/users'. It is responsible for
+     * creating
+     * a new user using the details provided in the request body. The request and
+     * response are
+     * both in JSON format. The user creation process is handled by the
+     * userService's 'create' method.
+     *
+     * @param user The User object containing the information for the new user.
+     * @return A ResponseEntity indicating the outcome of the user creation process.
+     *         The response includes the appropriate HTTP status code and any
+     *         relevant
+     *         user data in JSON format.
      */
     @PostMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -96,12 +121,22 @@ public class ApiController {
     }
 
     /**
-     * Updates a user with the given user ID.
+     * Replaces an existing user with new user data provided in the request body by
+     * making a PUT request.
      *
-     * @param userID The ID of the user to be updated.
-     * @param user   The updated user object.
-     * @return The ResponseEntity containing the updated user object if successful,
-     *         or a not found response if the user does not exist.
+     * This method is mapped to the PUT request at '/users/{userID}' and is
+     * responsible for updating
+     * a user identified by the provided userID with the new user data provided in
+     * the request body.
+     * The response is in JSON format. The actual replacement process is handled by
+     * the userService's 'replace'
+     * method.
+     *
+     * @param userID The UUID of the user to be replaced.
+     * @param user   The User object containing the updated user data.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include updated user data
+     *         or an error message in case of failure.
      */
     @PutMapping(value = "/users/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -115,7 +150,24 @@ public class ApiController {
         return response;
     }
 
-    // TODO javadoc
+    /**
+     * Updates an existing user with new user data provided in the request body by
+     * making a PUT request.
+     *
+     * This method is mapped to the PUT request at '/users/update/{userID}' and is
+     * responsible for updating
+     * a user identified by the provided userID with the new user data provided in
+     * the request body.
+     * The response is in JSON format. The actual update process is handled by the
+     * userService's 'updateUser'
+     * method.
+     *
+     * @param userID The UUID of the user to be updated.
+     * @param user   The User object containing the updated user data.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include updated user data
+     *         or an error message in case of failure.
+     */
     @PutMapping(value = "/users/update/{userID}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> updateUser(@PathVariable("userID") UUID userID, @RequestBody User user) {
@@ -125,10 +177,19 @@ public class ApiController {
     }
 
     /**
-     * Deletes a user event based on the provided userID.
+     * Deletes a user identified by its UUID.
      *
-     * @param userID the ID of the user event to be deleted
-     * @return a ResponseEntity representing the result of the deletion operation
+     * This method responds to a DELETE request at '/users/{userID}'. It is
+     * responsible for deleting
+     * the user corresponding to the given userID. The deletion process is delegated
+     * to the userService's
+     * 'delete' method. The method produces a response in JSON format.
+     *
+     * @param userID The UUID of the user to be deleted.
+     * @return A ResponseEntity indicating the result of the delete operation,
+     *         including the appropriate
+     *         HTTP status code. The response may also include additional
+     *         information about the deletion process.
      */
     @DeleteMapping(value = "/users/{userID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

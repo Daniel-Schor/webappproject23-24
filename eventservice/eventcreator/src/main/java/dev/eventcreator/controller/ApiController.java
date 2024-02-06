@@ -24,20 +24,11 @@ import dev.eventcreator.service.EventService;
 
 import org.springframework.web.bind.annotation.PutMapping;
 
-/**
- * This class is a REST controller for managing events.
- * It includes methods for creating, retrieving, updating, deleting, and rating
- * events, as well as adding and removing participants.
- */
 @RestController
 public class ApiController {
 
-    // Logger instance for this class, used to log system messages, warnings, and
-    // errors.
     private static final Logger log = LoggerFactory.getLogger(ApiController.class);
 
-    // Autowired annotation is used to automatically inject the EventService and
-    // instance into this class.
     @Autowired
     private EventService eventService;
 
