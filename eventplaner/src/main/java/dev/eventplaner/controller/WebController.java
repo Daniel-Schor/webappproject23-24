@@ -79,17 +79,16 @@ public class WebController {
         ResponseEntity<?> eventResponse = apiController.getEvent(eventID);
 
         if (eventResponse.getStatusCode() == HttpStatus.OK) {
-            Event event = Event.eventFromJson(eventResponse.toString());
+            String eventJson = eventResponse.getBody().toString();
+            Event event = Event.eventFromJson(eventJson);
             model.addAttribute("event", event);
         } else {
             log.warn("WebController: Error retrieving event ID: {}. Status code: {}", eventID,
                     eventResponse.getStatusCode());
-
         }
 
         return "event-details";
     }
-
 
     /**
      * Displays all users on the webpage.
