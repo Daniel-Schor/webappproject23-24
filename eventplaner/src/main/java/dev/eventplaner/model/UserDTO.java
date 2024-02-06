@@ -15,11 +15,6 @@ public class UserDTO {
     String firstName, lastName;
     boolean organizer;
 
-    /**
-     * Default constructor for UserDTO.
-     * Initializes the user ID to a random ID, the first name to "John", the last
-     * name to "Doe", and the organizer status to false.
-     */
     public UserDTO() {
         this.userID = UUID.randomUUID();
         this.firstName = "John";
@@ -27,11 +22,6 @@ public class UserDTO {
         this.organizer = false;
     }
 
-    /**
-     * Constructs a UserDTO from a User object.
-     *
-     * @param user The User object.
-     */
     public UserDTO(User user) {
         this.userID = user.getID();
         this.firstName = user.getFirstName();
@@ -39,15 +29,6 @@ public class UserDTO {
         this.organizer = user.isOrganizer();
     }
 
-    /**
-     * Constructs a UserDTO with the specified user ID, first name, last name, and
-     * organizer status.
-     *
-     * @param userID    The unique identifier for the user.
-     * @param firstName The first name of the user.
-     * @param lastName  The last name of the user.
-     * @param organizer The organizer status of the user.
-     */
     public UserDTO(UUID userID, String firstName, String lastName, boolean organizer) {
         this.userID = userID;
         this.firstName = firstName;
