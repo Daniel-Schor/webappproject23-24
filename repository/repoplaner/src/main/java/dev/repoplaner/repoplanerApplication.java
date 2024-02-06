@@ -3,9 +3,6 @@ package dev.repoplaner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * The main class for the repoplaner application.
- */
 @SpringBootApplication
 public class repoplanerApplication {
 

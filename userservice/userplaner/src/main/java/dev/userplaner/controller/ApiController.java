@@ -27,12 +27,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 public class ApiController {
 
-    // Logger instance for this class, used to log system messages, warnings, and
-    // errors.
     private static final Logger log = LoggerFactory.getLogger(ApiController.class);
 
-    // UserService
-    // instance into this class.
     @Autowired
     private UserService userService;
 

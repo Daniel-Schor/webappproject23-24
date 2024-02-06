@@ -22,14 +22,9 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-/**
- * This class represents a service for managing user-related operations.
- */
 @Service
 public class UserService {
 
-    // Logger instance for this class, used to log system messages, warnings, and
-    // errors.
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Value("${repository.url}")

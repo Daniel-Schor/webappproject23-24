@@ -21,28 +21,14 @@ import dev.repoplaner.model.User;
 import dev.repoplaner.model.Event;
 import dev.repoplaner.service.RepositoryService;
 
-/**
- * This class is the controller for the API endpoints related to events and users.
- * It handles the creation, retrieval, update, and deletion of events and users.
- */
 @RestController
 public class ApiController {
 
-    /**
-     * The logger for the ApiController class.
-     */
     private static final Logger log = LoggerFactory.getLogger(ApiController.class);
 
     @Autowired
     private RepositoryService repositoryService;
 
-    /**
-     * Creates a new event.
-     *
-     * @param event the event object to be created
-     * @return the ResponseEntity containing the created event
-     * @throws URISyntaxException if there is an error in the URI syntax
-     */
     @PostMapping(value = "/events")
     public ResponseEntity<?> createEvent(@RequestBody Event event) throws URISyntaxException {
         Event createdEvent = repositoryService.putEvent(event);
