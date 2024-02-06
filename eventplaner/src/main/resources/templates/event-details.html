@@ -101,24 +101,27 @@
                 </td>
             </tr>
             <tr>
-                <td>Average Rating</td>
-                <td>
-                    <div class="star-rating">
-                        <div class="flex-container">
-                            <th:block th:each="i : ${#numbers.sequence(1, 5)}">
-                                <th:block th:if="${event.rating >= i}">
-                                    <i class="fas fa-star"></i>
-                                </th:block>
-                                <th:block th:if="${event.rating >= i-0.5 and event.rating < i}">
-                                    <i class="fas fa-star-half-alt"></i>
-                                </th:block>
-                                <th:block th:unless="${event.rating >= i or event.rating >= i-0.5}">
-                                    <i class="far fa-star"></i>
-                                </th:block>
+                <td>Date & Time</td>
+                <td th:text="${event.dateTime}"></td>
+            </tr>
+            <td>Average Rating</td>
+            <td>
+                <div class="star-rating">
+                    <div class="flex-container">
+                        <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                            <th:block th:if="${event.rating >= i}">
+                                <i class="fas fa-star"></i>
                             </th:block>
-                        </div>
+                            <th:block th:if="${event.rating >= i-0.5 and event.rating < i}">
+                                <i class="fas fa-star-half-alt"></i>
+                            </th:block>
+                            <th:block th:unless="${event.rating >= i or event.rating >= i-0.5}">
+                                <i class="far fa-star"></i>
+                            </th:block>
+                        </th:block>
                     </div>
-                </td>
+                </div>
+            </td>
             </tr>
 
         </tbody>
@@ -127,6 +130,5 @@
     <a href="/web/events">BACK TO EVENT LIST</a>
 
 </body>
-
 
 </html>
