@@ -11,11 +11,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-/**
- * User class represents a user in the system.
- * It contains information about the user such as their ID, name, email,
- * password, and whether they are an organizer.
- */
 public class User {
 
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -27,10 +22,6 @@ public class User {
     private String password;
     private boolean organizer;
 
-    /**
-     * Default constructor for the User class.
-     * Initializes the user with default values.
-     */
     public User() {
         this.userID = UUID.randomUUID();
         this.firstName = "John";
@@ -40,16 +31,6 @@ public class User {
         this.organizer = false;
     }
 
-    /**
-     * Constructor for the User class.
-     * Initializes the user with the specified values.
-     *
-     * @param firstName The first name of the user
-     * @param lastName  The last name of the user
-     * @param email     The email of the user
-     * @param password  The password of the user
-     * @param organizer Whether the user is an organizer
-     */
     public User(String firstName, String lastName, String email, String password, boolean organizer) {
         this.userID = UUID.randomUUID();
         this.firstName = firstName;
@@ -58,16 +39,6 @@ public class User {
         this.setPassword(password);
         this.organizer = organizer;
     }
-
-    /**
-     * Constructor for the User class.
-     * Initializes the user with the specified values.
-     *
-     * @param firstName The first name of the user
-     * @param lastName  The last name of the user
-     * @param email     The email of the user
-     * @param password  The password of the user
-     */
 
     public User(String firstName, String lastName, String email, String password) {
         this(firstName, lastName, email, password, false);

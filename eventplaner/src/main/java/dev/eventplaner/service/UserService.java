@@ -18,8 +18,6 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class UserService {
 
-    // Logger instance for this class, used to log system messages, warnings, and
-    // errors.
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     // Read the URL of the external API from properties file.

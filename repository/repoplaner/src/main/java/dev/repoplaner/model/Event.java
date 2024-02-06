@@ -28,11 +28,6 @@ public class Event {
     private UUID organizerUserID;
     private double rating;
 
-    /**
-     * Default constructor for the Event class. New Address("Nibelungenplatz", "1",
-     * "60318", "Frankfurt am Main", "Deutschland");
-     * Initializes the event with default values.
-     */
     public Event() {
         this.eventID = UUID.randomUUID();
         this.name = "Default Event";
@@ -45,11 +40,6 @@ public class Event {
         this.rating = 0;
     }
 
-    /**
-     * Default constructor for the Event class. New Address("Nibelungenplatz", "1",
-     * "60318", "Frankfurt am Main", "Deutschland");
-     * Initializes the event with default values.
-     */
     public Event(UUID eventID) {
         this.eventID = eventID;
         this.name = "Default Event";
@@ -61,17 +51,6 @@ public class Event {
         this.organizerUserID = null;
     }
 
-    /**
-     * Constructor for the Event class.
-     * Initializes the event with the specified values.
-     * 
-     * @param name            The name of the event.
-     * @param description     The description of the event.
-     * @param dateTime        The date and time of the event.
-     * @param location        The location of the event.
-     * @param maxParticipants The maximum number of participants for the event.
-     * @param organizerUserID The UUID of the organizer user.
-     */
     public Event(String name, String description, LocalDateTime dateTime, Geolocation geolocation, int maxParticipants,
             UUID organizerUserID) {
         this.eventID = UUID.randomUUID();

@@ -28,9 +28,6 @@ public class Event {
     private UUID organizerUserID;
     private double rating;
 
-    /**
-     * Creates a new Event object with default values.
-     */
     public Event() {
         this.eventID = UUID.randomUUID();
         this.name = null;
@@ -43,12 +40,6 @@ public class Event {
         this.rating = 0;
     }
 
-    /**
-     * Creates a new Event object with specified eventID and default values for
-     * other properties.
-     *
-     * @param eventID The UUID to be assigned to the event.
-     */
     public Event(UUID eventID) {
         this.eventID = eventID;
         this.name = "Default Event";
@@ -60,17 +51,6 @@ public class Event {
         this.organizerUserID = null;
     }
 
-    /**
-     * Constructor for the Event class.
-     * Initializes the event with the specified values.
-     * 
-     * @param name            The name of the event.
-     * @param description     The description of the event.
-     * @param dateTime        The date and time of the event.
-     * @param location        The location of the event.
-     * @param maxParticipants The maximum number of participants for the event.
-     * @param organizerUserID The UUID of the organizer user.
-     */
     public Event(String name, String description, LocalDateTime dateTime, Geolocation geolocation, int maxParticipants,
             UUID organizerUserID) {
         this.eventID = UUID.randomUUID();
@@ -209,8 +189,6 @@ public class Event {
         }
         return detail;
     }
-
-    // -- GETTER AND SETTER --
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public UUID getID() {
