@@ -29,6 +29,29 @@ public class ApiController {
     @Autowired
     private RepositoryService repositoryService;
 
+    /**
+     * Creates a new event based on the provided event details.
+     *
+     * This method is mapped to the POST request at '/events'. It is responsible for
+     * creating a new event using the details provided in the request body. The
+     * event
+     * creation process is handled by the repository service's 'putEvent' method.
+     * Upon
+     * successful creation, it logs the event's ID, constructs a URI for the newly
+     * created event, and returns a ResponseEntity with the created status (201) and
+     * the
+     * body containing the created event.
+     *
+     * @param event The Event object containing the information for the new event.
+     *              It
+     *              must not be null.
+     * @return A ResponseEntity<?> object containing the created event and its URI.
+     *         The
+     *         response body includes the created event in JSON format, and the HTTP
+     *         status is set to 201 Created.
+     * @throws URISyntaxException If the URI syntax is incorrect.
+     */
+
     @PostMapping(value = "/events")
     public ResponseEntity<?> createEvent(@RequestBody Event event) throws URISyntaxException {
         Event createdEvent = repositoryService.putEvent(event);
@@ -42,7 +65,8 @@ public class ApiController {
      *
      * @param eventID The ID of the event to be updated.
      * @param event   The updated event object.
-     * @return The ResponseEntity containing the updated event object if successful, or a not found response if the event does not exist.
+     * @return The ResponseEntity containing the updated event object if successful,
+     *         or a not found response if the event does not exist.
      */
     @PutMapping("/events/{eventID}")
     public ResponseEntity<?> updateEvent(@PathVariable UUID eventID, @RequestBody Event event) {
@@ -54,11 +78,11 @@ public class ApiController {
     }
 
     /**
-        * Retrieves all events from the repository.
-        *
-        * @return ResponseEntity containing a collection of Event objects.
-        *         If no events are found, returns a ResponseEntity with no content.
-        */
+     * Retrieves all events from the repository.
+     *
+     * @return ResponseEntity containing a collection of Event objects.
+     *         If no events are found, returns a ResponseEntity with no content.
+     */
     @GetMapping("/events")
     public ResponseEntity<Collection<Event>> getAllEvents() {
         log.info("GET localhost:8082/events -> getAllEvents() is called");
@@ -73,11 +97,12 @@ public class ApiController {
      * Retrieves the event with the specified event ID.
      *
      * @param eventID the ID of the event to retrieve
-     * @return the ResponseEntity containing the event if found, or a not found response if the event does not exist
+     * @return the ResponseEntity containing the event if found, or a not found
+     *         response if the event does not exist
      */
     @GetMapping("/events/{eventID}")
     public ResponseEntity<?> getEvent(@PathVariable UUID eventID) {
-        log.info("GET localhost:8082/events/{} -> getEvent() is called: {}"+eventID, eventID);
+        log.info("GET localhost:8082/events/{} -> getEvent() is called: {}" + eventID, eventID);
         Event event = repositoryService.getEvent(eventID);
         if (event == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
@@ -89,7 +114,9 @@ public class ApiController {
      * Deletes an event with the specified event ID.
      *
      * @param eventID the ID of the event to be deleted
-     * @return a ResponseEntity with no content if the event is successfully deleted, or a ResponseEntity with not found status if the event does not exist
+     * @return a ResponseEntity with no content if the event is successfully
+     *         deleted, or a ResponseEntity with not found status if the event does
+     *         not exist
      */
     @DeleteMapping("/events/{eventID}")
     public ResponseEntity<?> deleteEvent(@PathVariable UUID eventID) {
@@ -116,12 +143,12 @@ public class ApiController {
     }
 
     /**
-        * Updates a user with the given userID.
-        *
-        * @param userID The ID of the user to be updated.
-        * @param user   The updated user object.
-        * @return ResponseEntity<User> The response entity containing the updated user.
-        */
+     * Updates a user with the given userID.
+     *
+     * @param userID The ID of the user to be updated.
+     * @param user   The updated user object.
+     * @return ResponseEntity<User> The response entity containing the updated user.
+     */
     @PutMapping("/users/{userID}")
     public ResponseEntity<?> updateUser(@PathVariable UUID userID, @RequestBody User user) {
         log.info("PUT localhost:8082/users/{} -> updateUser() is called: {}", userID, userID);
@@ -132,10 +159,11 @@ public class ApiController {
     }
 
     /**
-        * Retrieves all users from the repository.
-        *
-        * @return ResponseEntity containing a collection of User objects if users exist, or a no content response if no users are found.
-        */
+     * Retrieves all users from the repository.
+     *
+     * @return ResponseEntity containing a collection of User objects if users
+     *         exist, or a no content response if no users are found.
+     */
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers() {
         log.info("GET localhost:8082/users -> getAllUsers() is called");
@@ -150,7 +178,8 @@ public class ApiController {
      * Retrieves a user with the specified userID.
      *
      * @param userID the unique identifier of the user
-     * @return the ResponseEntity containing the user if found, or a not found response if the user does not exist
+     * @return the ResponseEntity containing the user if found, or a not found
+     *         response if the user does not exist
      */
     @GetMapping("/users/{userID}")
     public ResponseEntity<?> getUsers(@PathVariable UUID userID) {
@@ -161,7 +190,6 @@ public class ApiController {
         }
         return ResponseEntity.ok(user);
     }
-
 
     /**
      * Deletes a user with the specified userID.
