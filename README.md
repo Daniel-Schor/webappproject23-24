@@ -48,4 +48,9 @@
 
 
 **Contribution**
-+ contributors: Mavin-Moris Scholl (MavinScholl) (1439942), Daniel Schor (Daniel-Schor) (187), Yannis Körner (ynnskrnr) (1432965), Davide Pedergnana (Davipede99) (1452903), Tristan Buls (tristanbuls) (187), Esrom Johannes (unigithubacc) (187) 
++ contributors: Mavin-Moris Scholl (MavinScholl) (1439942)
++ Daniel Schor (Daniel-Schor) (187)
++ Yannis Körner (ynnskrnr) (1432965)
++ Davide Pedergnana (Davipede99) (1452903)
++ Tristan Buls (tristanbuls) (187)
++ Esrom Johannes (unigithubacc) (187) 
