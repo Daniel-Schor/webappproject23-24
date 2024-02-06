@@ -1,159 +1,132 @@
 <!DOCTYPE html>
-<html lang="en-de">
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en-de" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8" />
     <title>Event Details</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/style.css}" />
-    <link rel="stylesheet" href="styles.css"> <!-- Add your own CSS styles -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdOSQ-BZeoYcvf2Z6fyGuAWhZ7SpdV3eQ"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-AyB2..." crossorigin="anonymous" />
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: "Arial", sans-serif;
+            background: linear-gradient(to bottom, #ff6f61, #1e3c72);
             margin: 0;
             padding: 0;
-        }
-
-        header {
-            background-color: #333;
-            color: #f4f4f4;
-            text-align: center;
-            padding: 15px 0;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        h1,
-        h2 {
-            color: #333;
-        }
-
-        p {
-            line-height: 1.5;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .star-rating {
-            margin-top: 10px;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
 
-        .star-container {
-            font-size: 24px;
-            display: inline-block;
-            position: relative;
-            overflow: hidden;
-            flex: 1;
+        table {
+            width: 30%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
         }
 
-        .star-container i {
-            color: gold;
-
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            color: white;
         }
 
-        .star-container::before {
-            content: '\f005';
-            font-family: 'FontAwesome';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 0;
-            color: #ccc;
-            overflow: hidden;
+        th {
+            background-color: #1e3c72;
+            color: #ffc947;
+            text-align: center;
         }
 
-        #map {
-            height: 200px;
-            width: 100%;
-            margin-top: 20px;
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #ffc947;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-top: 0;
         }
 
         a {
-            display: block;
-            margin-top: 20px;
-            text-align: center;
-            color: #007BFF;
             text-decoration: none;
+            color: #f5a623;
+            font-weight: bold;
+            font-size: 20px;
+            transition: color 0.3s ease-in-out;
+        }
+
+        a:hover {
+            color: #e07a02;
+        }
+
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .star-rating {
+            font-size: 2em;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
     </style>
-    <script>
-        function initMap(lat, lng) {
-            var eventLocation = { lat: lat, lng: lng };
-            var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 10,
-                center: eventLocation
-            });
-            var marker = new google.maps.Marker({
-                position: eventLocation,
-                map: map
-            });
-        }
-    </script>
 </head>
 
 <body>
+    <h1>EVENT</h1>
 
-    <header>
-        <h1>Event Details</h1>
-    </header>
+    <table>
+        <tbody>
+            <tr>
+                <td>Event ID</td>
+                <td th:text="${event.ID}"></td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td th:text="${event.name}"></td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td th:text="${event.description}"></td>
+            </tr>
+            <tr>
+                <td>Participants</td>
+                <td>
+                    <ul>
+                        <li th:each="participant : ${event.participants}" th:text="${participant.key}"></li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Average Rating</td>
+                <td>
+                    <div class="star-rating">
+                        <div class="flex-container">
+                            <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                                <th:block th:if="${event.rating >= i}">
+                                    <i class="fas fa-star"></i>
+                                </th:block>
+                                <th:block th:if="${event.rating >= i-0.5 and event.rating < i}">
+                                    <i class="fas fa-star-half-alt"></i>
+                                </th:block>
+                                <th:block th:unless="${event.rating >= i or event.rating >= i-0.5}">
+                                    <i class="far fa-star"></i>
+                                </th:block>
+                            </th:block>
+                        </div>
+                    </div>
+                </td>
+            </tr>
 
-    <div class="container">
-        <div th:if="${event}">
-            <h2 th:text="${event.name}"></h2>
-            <p th:text="${event.description}"></p>
+        </tbody>
+    </table>
 
-            <p>Participants:</p>
-            <ul>
-                <li th:each="participant : ${event.participants}" th:text="${participant}"></li>
-            </ul>
-
-            <p>Average Rating:
-            <div class="star-rating">
-                <div th:each="i : ${#numbers.sequence(1,5)}" class="star-container" th:id="'star' + ${i}"><i
-                        class="fas fa-star"></i></div>
-            </div>
-            </p>
-
-            <div id="map"></div>
-
-        </div>
-        <div th:unless="${event}">
-            <p>No event details available</p>
-        </div>
-
-        <a href="/web/events">Back to Event List</a>
-    </div>
-
-    <script th:inline="javascript">
-        document.addEventListener("DOMContentLoaded", function () {
-            var rating = 4.5;
-            var totalStars = 5;
-
-            for (var i = 1; i <= totalStars; i++) {
-                var starElement = document.getElementById('star' + i);
-                var starPercentage = (rating / totalStars) * 100;
-                var starPercentageRounded = `${Math.round(starPercentage / 10) * 10}%`;
-                starElement.style.width = starPercentageRounded;
-            }
-        });
-    </script>
+    <a href="/web/events">BACK TO EVENT LIST</a>
 
 </body>
+
 
 </html>
