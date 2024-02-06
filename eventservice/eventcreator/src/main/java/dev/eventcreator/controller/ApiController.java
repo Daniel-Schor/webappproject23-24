@@ -32,8 +32,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 public class ApiController {
 
-    // Logger instance for this class, used to log system messages, warnings, and
-    // errors.
     private static final Logger log = LoggerFactory.getLogger(ApiController.class);
 
     // Autowired annotation is used to automatically inject the EventService and
