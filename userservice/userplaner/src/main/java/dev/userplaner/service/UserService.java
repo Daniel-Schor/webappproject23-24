@@ -31,11 +31,16 @@ public class UserService {
     String apiUrl;
 
     /**
-     * Retrieves a user by their ID.
+     * Retrieves event information by making a GET request to
+     * the specified API endpoint,
+     * using the provided eventID.
      *
-     * @param userID The ID of the user to retrieve.
-     * @return The User object corresponding to the given ID, or null if no such
-     *         user exists.
+     * @param eventID The UUID of the event to be retrieved.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include event data
+     *         or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> getUser(UUID userID) {
         log.info("get user by userID: {}", userID);
@@ -53,9 +58,13 @@ public class UserService {
     }
 
     /**
-     * Creates a new user.
+     * Creates a new user by making a POST request to the specified API endpoint.
      *
-     * @param user The User object to create.
+     * @param user The User object representing the user to be created.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include created user data or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> create(User user) {
         log.info("User Created: {}", user.getID());
@@ -75,9 +84,14 @@ public class UserService {
     }
 
     /**
-     * Deletes a user by their ID.
+     * Deletes a user by making a DELETE request to the specified API endpoint,
+     * using the provided userID.
      *
-     * @param userID The ID of the user to delete.
+     * @param userID The UUID of the user to be deleted.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include success information or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> delete(UUID userID) {
         log.info("delete userID: {}", userID);
@@ -97,9 +111,22 @@ public class UserService {
     }
 
     /**
-     * Updates a user.
+     * Replaces an existing user with new user data provided in the request body by
+     * making a PUT request.
      *
-     * @param user The User object to update.
+     * This method is mapped to the PUT request at '/users/{userID}' and is
+     * responsible for updating
+     * a user identified by the provided userID with the new user data provided in
+     * the request body.
+     * The response is in JSON format. The actual replacement process is handled by
+     * the userService's 'replace'
+     * method.
+     *
+     * @param user The User object containing the updated user data.
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include updated user data or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> replace(User user) {
         log.info("User Updated: {}", user.getID());
@@ -119,9 +146,18 @@ public class UserService {
     }
 
     /**
-     * Retrieves all users.
+     * Retrieves information for all users by making a GET request to the specified
+     * API endpoint.
      *
-     * @return An Collection of all User objects.
+     * This method is mapped to the GET request at '/users' and is responsible for
+     * retrieving
+     * information for all users. The response is in JSON format.
+     *
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include information
+     *         for all users or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<?> getAll() {
         log.info("getAllUsers");
@@ -140,9 +176,21 @@ public class UserService {
     }
 
     /**
-     * Retrieves all users as DTO (Data Transfer Object).
-     * 
-     * @return ResponseEntity<String> containing the response with the list of users as DTO in the body.
+     * Retrieves a list of User Data Transfer Objects (DTOs) by making a GET request
+     * to the specified API endpoint.
+     *
+     * This method is mapped to the GET request at '/users' and is responsible for
+     * retrieving
+     * information for all users as DTOs. The response is initially checked for a
+     * successful status code,
+     * then converted into a collection of User objects. Finally, these User objects
+     * are transformed
+     * into UserDTOs, and the result is returned as a ResponseEntity in JSON format.
+     *
+     * @return A ResponseEntity containing the response from the server, which may
+     *         include a list of UserDTOs or an error message in case of failure.
+     * @throws HttpClientErrorException If there is an issue with the HTTP request,
+     *                                  such as an invalid URL or server errors.
      */
     public ResponseEntity<String> getAllDTO() {
         log.info("get all Users as DTO");
@@ -157,7 +205,7 @@ public class UserService {
 
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
-            if (response.getStatusCode() != HttpStatus.OK){
+            if (response.getStatusCode() != HttpStatus.OK) {
                 return response;
             }
         } catch (HttpClientErrorException e) {
@@ -204,8 +252,18 @@ public class UserService {
         return jsonString;
     }
 
-    // TODO javadoc
-    public ResponseEntity<?> updateUser(User newUser){
+    /**
+     * Updates an existing user with the information provided in the given User
+     * object.
+     * If the user with the specified ID does not exist, a new user is created.
+     *
+     * @param newUser The User object containing the updated information.
+     * @return A ResponseEntity containing the response from the
+     *         server, which may
+     *         include updated user data or an error message in case of
+     *         failure.
+     */
+    public ResponseEntity<?> updateUser(User newUser) {
         log.info("update User: {}", newUser.getID());
 
         User user = User.userFromJson(getUser(newUser.getID()).getBody().toString());
@@ -216,7 +274,7 @@ public class UserService {
 
         if (newUser.getFirstName() != null) {
             user.setFirstName(newUser.getFirstName());
-        } 
+        }
         if (newUser.getLastName() != null) {
             user.setLastName(newUser.getLastName());
         }
