@@ -103,15 +103,21 @@
       </tr>
     </thead>
     <tbody>
-      <tr th:each="event : ${events}" onclick="getEvent('${event.ID}')">
-        <td><a th:href="@{/web/event-details/(${event.ID})}" th:text="${event.ID}">Event ID ></a></td>
+      <tr th:each="event : ${events}">
+        <td>
+          <a th:href="@{/web/event-details/{eventID}(eventID=${event.ID})}" onclick="getEvent('${event.ID}')">
+            <span th:text="${event.ID}"></span> 
+          </a>
+        </td>
         <td th:text="${event.name}"></td>
       </tr>
     </tbody>
   </table>
+
+
   <script>
     function getEvent(eventID) {
-      fetch(`/web/event-details/${eventID}`)
+      fetch(`/web/events/${eventID}`)
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("eventDetailsContainer").innerHTML = data;
@@ -119,6 +125,7 @@
         .catch((error) => console.error("Error:", error));
     }
   </script>
+
 </body>
 
 </html>
