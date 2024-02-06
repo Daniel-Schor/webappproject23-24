@@ -182,8 +182,6 @@ public class Event {
         return detail;
     }
 
-    // -- GETTER AND SETTER --
-
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public UUID getID() {
         return this.eventID;
