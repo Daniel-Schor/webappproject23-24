@@ -6,6 +6,7 @@
 ### Project Name: Event Planner
 **Description:** This project is a comprehensive event planning application that enables a user to create, manage, and view events also to create, manage and view users. The User has the option to rate the createt event. It includes a web interface as well as a backend API for managing event data and user information.
 
+Presentation: https://studfrauasde-my.sharepoint.com/:p:/g/personal/mavin-moris_scholl_stud_fra-uas_de/Ed9lAp8oBm9Lr1Spitg3x8YBXmXQeO6lmJzJ7H1735h60w?e=eATPdh
 
 **Technology Stack**
 + Java/Spring Boot: Used for backend logic and API endpoints.
