@@ -1,191 +1,193 @@
 <!DOCTYPE html>
 <html lang="en-de">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Delete User</title>
-    <style>
-      body {
-        font-family: "Arial", sans-serif;
-        background: linear-gradient(to bottom, #ff6f61, #1e3c72);
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        color: #fff;
-      }
 
-      nav {
-        background-color: rgba(0, 0, 0, 0.7);
-        overflow: hidden;
-        width: 100%;
-        position: fixed;
-        top: 0;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delete User</title>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background: linear-gradient(to bottom, #e20030, #00216e);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #efefef;
+    }
 
-      nav a {
-        display: inline-block;
-        color: #fff;
-        text-align: center;
-        padding: 14px 16px;
-        font-size: 20px;
-        text-decoration: none;
-        transition: color 0.3s ease-in-out;
-      }
+    nav {
+      background-color: rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+      width: 100%;
+      position: fixed;
+      top: 0;
+    }
 
-      nav a:hover {
-        background-color: #000000;
-      }
+    nav a {
+      display: inline-block;
+      color: #efefef;
+      text-align: center;
+      padding: 14px 16px;
+      font-size: 20px;
+      text-decoration: none;
+      transition: color 0.3s ease-in-out;
+    }
 
-      h1 {
-        color: #ffc947;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        text-align: center;
-        margin: 80px 0 20px;
-      }
+    nav a:hover {
+      background-color: #000000;
+    }
 
-      form {
-        text-align: center;
-        width: 80%;
-        margin: 20px 0;
-      }
+    h1 {
+      color: #ffc947;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      margin: 80px 0 20px;
+    }
 
-      label {
-        display: block;
-        margin: 10px 0;
-        color: #333;
-      }
+    form {
+      text-align: center;
+      width: 80%;
+      margin: 20px 0;
+    }
 
-      input {
-        padding: 8px;
-        margin: 5px 0;
-      }
+    label {
+      display: block;
+      margin: 10px 0;
+      color: #efefef;
+    }
 
-      button {
-        padding: 10px;
-        font-size: 16px;
-        background-color: rgba(0, 0, 0, 0.7);
-        color: #fff;
-        border: none;
-        cursor: pointer;
-        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-      }
+    input {
+      padding: 8px;
+      margin: 5px 0;
+    }
 
-      button:hover {
-        background-color: #e07a02;
-        color: white;
-      }
+    button {
+      padding: 10px;
+      font-size: 16px;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #efefef;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
 
-      #confirmation {
-        display: none;
-      }
+    button:hover {
+      background-color: #e07a02;
+      color: #efefef;
+    }
 
-      #confirmation p {
-        color: #fff;
-        text-align: center;
-        margin-bottom: 10px;
-      }
+    #confirmation {
+      display: none;
+    }
 
-      #confirmation button {
-        margin: 0 10px;
-      }
+    #confirmation p {
+      color: #efefef;
+      text-align: center;
+      margin-bottom: 10px;
+    }
 
-      a {
-        color: #fff;
-        text-decoration: none;
-        transition: color 0.3s ease-in-out;
-      }
+    #confirmation button {
+      margin: 0 10px;
+    }
 
-      a:hover {
-        color: #e07a02;
-      }
-    </style>
-  </head>
+    a {
+      color: #efefef;
+      text-decoration: none;
+      transition: color 0.3s ease-in-out;
+    }
 
-  <body>
-    <nav>
-      <a href="/web/home">Home</a>
-      <a href="/web/users">User List</a>
-      <a href="/web/view-users">User Manager</a>
-    </nav>
+    a:hover {
+      color: #e07a02;
+    }
+  </style>
+</head>
 
-    <h1>Delete User</h1>
+<body>
+  <nav>
+    <a href="/web/home">Home</a>
+    <a href="/web/users">User List</a>
+    <a href="/web/view-users">User Manager</a>
+  </nav>
 
-    <form id="deleteForm">
-      <label for="userID">User ID:</label>
-      <input type="text" id="userID" name="userID" required />
-      <br />
-      <button type="button" onclick="checkUser()">Next</button>
-    </form>
+  <h1>Delete User</h1>
 
-    <div id="confirmation">
-      <p>Do you really want to delete this user?</p>
-      <button type="button" onclick="deleteUser()">Yes</button>
-      <button type="button" onclick="cancelDelete()">No</button>
-    </div>
-
+  <form id="deleteForm">
+    <label for="userID">User ID:</label>
+    <input type="text" id="userID" name="userID" required />
     <br />
-   
+    <button type="button" onclick="checkUser()">Next</button>
+  </form>
 
-    <script>
-      function checkUser() {
-        var userID = document.getElementById("userID").value;
+  <div id="confirmation">
+    <p>Do you really want to delete this user?</p>
+    <button type="button" onclick="deleteUser()">Yes</button>
+    <button type="button" onclick="cancelDelete()">No</button>
+  </div>
 
-        fetch("/web/manage/check-user/" + userID, {
-          method: "GET",
+  <br />
+
+
+  <script>
+    function checkUser() {
+      var userID = document.getElementById("userID").value;
+
+      fetch("/web/manage/check-user/" + userID, {
+        method: "GET",
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
         })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then((data) => {
-            if (data.exists) {
-              document.getElementById("deleteForm").style.display = "none";
-              document.getElementById("confirmation").style.display = "block";
-            } else {
-              alert("User doesn't exist!");
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            alert("Something went wrong! " + error.toString());
-          });
-      }
-
-      function deleteUser() {
-        var userID = document.getElementById("userID").value;
-
-        fetch("/web/manage/delete-user/" + userID, {
-          method: "DELETE",
+        .then((data) => {
+          if (data.exists) {
+            document.getElementById("deleteForm").style.display = "none";
+            document.getElementById("confirmation").style.display = "block";
+          } else {
+            alert("User doesn't exist!");
+          }
         })
-          .then((response) => {
-            if (!response.ok) {
-              if (response.status === 405) {
-                alert("The user has been deleted!");
-                window.location.href = "/web/users";
-              } else {
-                throw new Error(`HTTP error! status: ${response.status}`);
-              }
-            } else {
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Something went wrong! " + error.toString());
+        });
+    }
+
+    function deleteUser() {
+      var userID = document.getElementById("userID").value;
+
+      fetch("/web/manage/delete-user/" + userID, {
+        method: "DELETE",
+      })
+        .then((response) => {
+          if (!response.ok) {
+            if (response.status === 405) {
               alert("The user has been deleted!");
               window.location.href = "/web/users";
+            } else {
+              throw new Error(`HTTP error! status: ${response.status}`);
             }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            alert("Something went wrong! " + error.toString());
-          });
-      }
+          } else {
+            alert("The user has been deleted!");
+            window.location.href = "/web/users";
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Something went wrong! " + error.toString());
+        });
+    }
 
-      function cancelDelete() {
-        document.getElementById("deleteForm").style.display = "block";
-        document.getElementById("confirmation").style.display = "none";
-      }
-    </script>
-  </body>
+    function cancelDelete() {
+      document.getElementById("deleteForm").style.display = "block";
+      document.getElementById("confirmation").style.display = "none";
+    }
+  </script>
+</body>
+
 </html>
