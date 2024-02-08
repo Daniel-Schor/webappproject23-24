@@ -4,53 +4,61 @@
 
 ## Project Overview
 ### Project Name: Event Planner
-**Description:** This project is a comprehensive event planning application that enables a user to create, manage, and view events also to create, manage and view users. The User has the option to rate the createt event. It includes a web interface as well as a backend API for managing event data and user information.
+### Description: 
+This project offers a robust event planning platform that allows users to create, manage, and view events, in addition to creating, managing, and viewing user profiles. Users also have the ability to rate the events they've created. Featuring both a web interface and a backend API, the application facilitates efficient management of event data and user information.
 
 
-**Technology Stack**
-+ Java/Spring Boot: Used for backend logic and API endpoints.
-+ HTML/CSS: Used for frontend design.
-+ Spring Security: Used for authentication and authorization mechanisms.
-+ Thymeleaf: Used as a template engine for HTML pages.
+## Technology Stack
++ Java/Spring Boot: Used for backend logic and API endpoints
++ HTML/CSS: Used for frontend design
++ Spring Security: Used for authentication and authorization mechanisms
++ Thymeleaf: Used as a template engine for HTML pages
 
 
-**Setup and Installation**
-+ Clone the repository to your local machine.
-+ Install Java and Maven.
+## Setup and Installation
++ Clone the repository to your local machine
++ Install Java and Maven
 + Needed Extensions: Spring Boot Extension Pack, -Dashboard, -Tools 
-+ Execute mvn clean install to build the application.
-+ Start the application with the Spring Boot Dashboard by selecting our 4 applications.
++ Execute mvn clean install to build the application
++ Start the application with the Spring Boot Dashboard by selecting our 4 applications
 
 
-**File Structure**
-* ***eventplaner:*** central configuration and launch point for the application using the API Gateway, is responisble for the necessary set up of components and configurations to get the application running, including initializing the application context, and starting the embedded server. communicates with eventservice and userservice.
-* ***eventservice:*** responisble for handling all the business logic and data interaction related to events. It serves as a bridge between the controllers and the database, ensuring that event data is correctly processed, validated, and stored.
-* ***repository:*** part of data access layer, interfacing directly with the database. Simplifies the process of data retrieval and manipulation, allowing other parts of the application to interact with the database without needing to know the underkyung data access implementation. 
-* ***userservice:*** responisble for handling all the business logic and data interaction related to users. It serves as a bridge between the controllers and the database, ensuring that event data is correctly processed, validated, and stored. 
+## File Structure
+* ***eventplaner:*** The API Gateway serves as the central configuration and launch point for the application, responsible for the necessary setup of components and configurations to ensure the application runs smoothly. This includes initializing the application context and starting the embedded server. It facilitates communication between the event service and user service, streamlining operations and enhancing functionality
+* ***eventservice:*** Responsible for managing all business logic and data interactions concerning events, this component acts as a vital bridge between the controllers and the database. It ensures that event data is accurately processed, validated, and stored, maintaining the integrity and efficiency of operations within the system
+* ***repository:*** As a crucial part of the data access layer, this component interfaces directly with the database, significantly simplifying the processes of data retrieval and manipulation. It enables other parts of the application to interact with the database seamlessly, without requiring knowledge of the underlying data access implementation
+* ***userservice:*** Responsible for managing all the business logic and data interactions related to users, this component acts as an essential bridge between the controllers and the database. It ensures that user data is accurately processed, validated, and stored, safeguarding the integrity and efficiency of user-related operations within the system
 
 
-**Usage and Examples**
+## Usage and Examples
 1. start all four applications
-1. opening localhost:8080
-+ Opening the frontpage the user can look at the events or users
-+ Explore Event: on the top right corner the user can either go back to the homepage or the Eventmanager. By clicking on the Event ID ths user can look at all the information given, there the user can return back to the event list.
-+ Event Manager: first option is to add a new Event, there the user needs to provide all the needed information. second option is to delete an existing event using the specific event ID.
-+ Users: a list of all the users and if there an organizer, clicking on the users name, all their information is shown. On the top right corner is the option to open the user manager.
+
+1. **opening localhost:8080/api**
++ The user has direct access to the API controller, where they have control over all the methods available on the frontend. Additionally, navigating to 8080/api forwards to the Swagger UI
+3. **opening localhost:8080**
++ Opening the frontpage the user can look at the events or users, the website is under delopment 
++ Explore Event: on the top right corner the user can either go back to the homepage or the Eventmanager. By clicking on the Event ID ths user can look at all the information given, there the user can return back to the event list
++ Event Manager: first option is to add a new Event, there the user needs to provide all the needed information. second option is to delete an existing event using the specific event ID
++ Users: a list of all the users and if there an organizer, clicking on the users name, all their information is shown. On the top right corner is the option to open the user manager
 + first option is to add a new user, there the user needs to provide all the needed information. second option is to delete an existing user using the specific user ID.
-1. opening localhost:8080/api
-+ the user has direct access to the api-controller, there he has controll over all the methodes that are used on the frontend
-1. opening localhost:8081
+
+**Using the other services**
++ Each of the services listed below is equipped with a Swagger UI, primarily intended for debugging purposes
+
+4. **opening localhost:8081**
 + the user has direct access to the api-controller, the user has the possibility to create, delete an event, recieve the eventID, add / remove a user by it´s ID from a event or all (Removal only with the specific ID), add a rating from a user to a event.
-1. opening localhost:8082
-+ the user has direct access to the api-controller, there the user can create / delete a event and a user. (Deletion only with the specific ID). The user can also recieve the ID for the users and events.
-1. opening localhost:8083
+5. **opening localhost:8082**
++ the user has direct access to the api-controller, there the user can create / delete a event and a user. (Deletion only with the specific ID). The user can also recieve the ID for the users and events 
+6. **opening localhost:8083**
 + the user has direct access to the api-controller, there users can be created / deleted / updated or the userID can be recieved
 
 
-**Contribution**
-+ contributors: Mavin-Moris Scholl (MavinScholl) (1439942)
-+ Daniel Schor (Daniel-Schor) (187)
+## Contribution
+
+contributors: 
++ Mavin-Moris Scholl (MavinScholl) (1439942)
++ Daniel Schor (Daniel-Schor) (1435234)
 + Yannis Körner (ynnskrnr) (1432965)
 + Davide Pedergnana (Davipede99) (1452903)
-+ Tristan Buls (tristanbuls) (187)
-+ Esrom Johannes (unigithubacc) (187) 
++ Tristan Buls (tristanbuls) (1440643)
++ Esrom Johannes (unigithubacc) (1457115) 
