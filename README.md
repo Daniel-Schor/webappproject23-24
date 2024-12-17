@@ -1,5 +1,3 @@
-![grafik](https://github.com/Web-based-Application-Systems-FRA-UAS/webappproject23-24-devteam/assets/126953115/48a1b3b5-82f2-4fe7-a0ff-08ba8bd95dd6)[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/-yaTGY9V)
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-7f7980b617ed060a017424585567c406b6ee15c891e84e1186181d67ecf80aa0.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=13201784)
 # Web-basierte Anwendungssysteme Projekt 2023/24​
 
 ## Project Overview
@@ -56,9 +54,9 @@ This project offers a robust event planning platform that allows users to create
 ## Contribution
 
 contributors: 
-+ Mavin-Moris Scholl (MavinScholl) (1439942)
-+ Daniel Schor (Daniel-Schor) (1435234)
-+ Yannis Körner (ynnskrnr) (1432965)
-+ Davide Pedergnana (Davipede99) (1452903)
-+ Tristan Buls (tristanbuls) (1440643)
-+ Esrom Johannes (unigithubacc) (1457115) 
++ Mavin-Moris Scholl (MavinScholl)
++ Daniel Schor (Daniel-Schor)
++ Yannis Körner (ynnskrnr)
++ Davide Pedergnana (Davipede99)
++ Tristan Buls (tristanbuls)
++ Esrom Johannes (unigithubacc)
